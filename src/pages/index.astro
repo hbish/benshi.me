@@ -1,0 +1,49 @@
+---
+import Container from '../layouts/Container.astro';
+import {getCollection} from 'astro:content';
+
+const posts = (await getCollection('posts')).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+    .filter(p => !p.data.draft);
+const postsByYear = new Map()
+posts.forEach((p) => {
+    const fullYear = p.data.date.getFullYear();
+    if (postsByYear.get(fullYear)) {
+        postsByYear.set(
+            fullYear,
+            postsByYear.get(fullYear).concat(p)
+        )
+    } else {
+        postsByYear.set(fullYear, [p])
+    }
+})
+---
+
+<Container>
+    <div class="section-title text-center text-2xl my-2">Posts</div>
+    <section class="text-center">
+        {
+            Array.from(postsByYear).map(([year, yearPosts]) => {
+                return yearPosts.map((p, index) => {
+                    return (
+                            <div key={`${p.data.slug}`}>
+                                {index === 0 && <h3 class="text-xl my-6">{year}</h3>}
+                                <div class={'row my-2'}>
+                                    <div class={'column'}>
+                                        <a href=`/${p.slug}`>{p.data.title}</a>
+                                        ::{' '}
+                                        <strong>{p.data.date.toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}</strong>
+                                    </div>
+                                    <div>
+                                    <!--span class={'time-to-read'}>
+                                    {`~${p.data.minutesRead} min read`}
+                                    </span-->
+                                    </div>
+                                </div>
+                            </div>
+                    )
+                })
+            })
+        }
+    </section>
+</Container>

@@ -1,0 +1,83 @@
+---
+import { Image } from '@astrojs/image/components';
+import profilePhoto from '../assets/profile-pic.png'
+import twitterLogo from '../assets/svg/twitter.inline.svg'
+import githubLogo from '../assets/svg/github.inline.svg'
+import keybaseLogo from '../assets/svg/keybase.inline.svg'
+import mailLogo from '../assets/svg/mail.inline.svg'
+import linkedinLogo from '../assets/svg/linkedin.inline.svg'
+
+const today = new Date();
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<div class="sidebar text-center content-center">
+    <div class="h-card">
+        <Image class="w-20 h-20 lg:w-40 lg:h-40 rounded-full mx-auto" src={profilePhoto} aria-labelledby="title" alt="Ben Shi" />
+        <a href="/" class="p-name u-url text-center text-2xl lg:text-5xl">
+            <h1 class="mx-auto my-2 lg:my-6">Ben Shi</h1>
+        </a>
+        <p class="p-note text-center hidden lg:block my-2">
+            👋 I'm a software engineer from Sydney, Australia. I love solving
+            complex problems.
+        </p>
+        <p class="p-note text-center hidden lg:block my-2">
+            I write about software engineering, agile practices and self
+            development & learning.
+        </p>
+        <nav class="flex flex-row lg:flex-col items-center justify-center lg:justify-start my-2">
+            <a href="/about/" class="block lg:inline-block lg:mt-0  mr-4 my-2">
+                /about
+            </a>
+            <a href="/now/" class="block lg:inline-block lg:mt-0  mr-4 my-2">
+                /now
+            </a>
+            <a href="/work/" class="block lg:inline-block lg:mt-0  mr-4 my-2">
+                /work
+            </a>
+            <a href="/talks/" class="block lg:inline-block lg:mt-0  mr-4 my-2">
+                /talks
+            </a>
+            <a href="/uses/" class="block lg:inline-block lg:mt-0  mr-4 my-2">
+                /uses
+            </a>
+            <a href="/notes/" class="block lg:inline-block lg:mt-0 mr-4 my-2">
+                /notes
+            </a>
+        </nav>
+        <div class="social flex gap-4 justify-center my-4">
+            <a href="https://twitter.com/hbish" title={'tweet ben'} rel={'me'}>
+                <Image src={twitterLogo} aria-labelledby={'title'} />
+            </a>
+            <a
+                    href="https://au.linkedin.com/in/benshi"
+                    title={'connect with ben on linkedin'}
+                    rel={'me'}
+            >
+                <Image src={linkedinLogo} aria-labelledby={'title'} />
+            </a>
+            <a
+                    href="https://github.com/hbish"
+                    title={'follow ben on github'}
+                    rel={'me'}
+            >
+                <Image src={githubLogo} aria-labelledby={'title'} />
+            </a>
+            <a
+                    href="mailto:ben@hbish.com"
+                    title={'email ben'}
+                    rel={'me'}
+                    class={'u-email'}
+            >
+                <Image src={mailLogo} aria-labelledby={'title'} />
+            </a>
+            <a
+                    href="https://keybase.io/hbish"
+                    title={'auth me on keybase'}
+                    rel={'me'}
+            >
+                <Image src={keybaseLogo} aria-labelledby={'title'} />
+            </a>
+        </div>
+    </div>
+</div>
