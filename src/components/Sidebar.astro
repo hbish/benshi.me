@@ -1,5 +1,5 @@
 ---
-import { Image } from '@astrojs/image/components';
+import { Image } from 'astro:assets';
 import profilePhoto from '../assets/profile-pic.png'
 import twitterLogo from '../assets/svg/twitter.inline.svg'
 import githubLogo from '../assets/svg/github.inline.svg'
@@ -47,21 +47,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         </nav>
         <div class="social flex gap-4 justify-center my-4">
             <a href="https://twitter.com/hbish" title={'tweet ben'} rel={'me'}>
-                <Image src={twitterLogo} aria-labelledby={'title'} />
+                <Image src={twitterLogo} alt="twitter" aria-labelledby={'title'} />
             </a>
             <a
                     href="https://au.linkedin.com/in/benshi"
                     title={'connect with ben on linkedin'}
                     rel={'me'}
             >
-                <Image src={linkedinLogo} aria-labelledby={'title'} />
+                <Image src={linkedinLogo} alt="linkedin" aria-labelledby={'title'} />
             </a>
             <a
                     href="https://github.com/hbish"
                     title={'follow ben on github'}
                     rel={'me'}
             >
-                <Image src={githubLogo} aria-labelledby={'title'} />
+                <Image src={githubLogo} alt="github" aria-labelledby={'title'} />
             </a>
             <a
                     href="mailto:ben@hbish.com"
@@ -69,14 +69,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
                     rel={'me'}
                     class={'u-email'}
             >
-                <Image src={mailLogo} aria-labelledby={'title'} />
+                <Image src={mailLogo} alt="email" aria-labelledby={'title'} />
             </a>
             <a
                     href="https://keybase.io/hbish"
                     title={'auth me on keybase'}
                     rel={'me'}
             >
-                <Image src={keybaseLogo} aria-labelledby={'title'} />
+                <Image src={keybaseLogo} alt="keybase" aria-labelledby={'title'} />
             </a>
         </div>
     </div>
