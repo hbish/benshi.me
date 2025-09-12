@@ -4,40 +4,56 @@ import { CollectionEntry, getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
     const posts = await getCollection('posts');
-    return posts.map((post) => ({
+    const notes = await getCollection('notes');
+    
+    const postPaths = posts.map((post) => ({
         params: { slug: post.slug },
-        props: post
+        props: { content: post, type: 'post' }
     }));
+    
+    const notePaths = notes.map((note) => ({
+        params: { slug: `notes/${note.slug}` },
+        props: { content: note, type: 'note' }
+    }));
+    
+    return [...postPaths, ...notePaths];
 }
-type Props = CollectionEntry<'posts'>;
 
-const post = Astro.props;
-const { Content, remarkPluginFrontmatter } = await post.render();
-console.log(remarkPluginFrontmatter)
+type Props = {
+    content: CollectionEntry<'posts'> | CollectionEntry<'notes'>;
+    type: 'post' | 'note';
+};
+
+const { content, type } = Astro.props;
+const { Content, remarkPluginFrontmatter } = await content.render();
 ---
 
 <Container>
     <div class="content">
-        <div class="section-title">Blog Post</div>
+        <div class="section-title">{type === 'post' ? 'Blog Post' : 'Note'}</div>
         <section>
             <article class="h-entry">
-                <h1 class="p-name">{post.data.title}</h1>
+                <h1 class="p-name">{content.data.title}</h1>
                 <div>
-                        🗓 <span class="dt-published">{post.data.date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span> ::
-                        🕑 ~{remarkPluginFrontmatter.minutesRead}
+                        🗓 <span class="dt-published">{content.data.date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                        {remarkPluginFrontmatter?.minutesRead && (
+                            <> :: 🕑 ~{remarkPluginFrontmatter.minutesRead}</>
+                        )}
                 </div>
             <Content />
             </article>
-            <div class="comments">
-                <div id="cusdis_thread"
-                     data-host="https://cusdis.com"
-                     data-app-id="ec698304-b2fd-4f80-bf18-3867119d076d"
-                     data-page-id="{{ PAGE_ID }}"
-                     data-page-url="{{ PAGE_URL }}"
-                     data-page-title="{{ PAGE_TITLE }}"
-                     data-theme="auto"
-                ></div>
-            </div>
+            {type === 'post' && (
+                <div class="comments">
+                    <div id="cusdis_thread"
+                         data-host="https://cusdis.com"
+                         data-app-id="ec698304-b2fd-4f80-bf18-3867119d076d"
+                         data-page-id="{{ PAGE_ID }}"
+                         data-page-url="{{ PAGE_URL }}"
+                         data-page-title="{{ PAGE_TITLE }}"
+                         data-theme="auto"
+                    ></div>
+                </div>
+            )}
         </section>
     </div>
 </Container>

@@ -35,11 +35,18 @@ posts.forEach((p) => {
                                         <strong>{p.data.date.toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}</strong>
                                     </div>
                                     <div>
-                                    <!--span class={'time-to-read'}>
-                                    {`~${p.data.minutesRead} min read`}
-                                    </span-->
+                                        {p.data.minutesRead && (
+                                            <span class={'time-to-read'}>
+                                                ~{p.data.minutesRead} min read
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
+                                {p.data.description && (
+                                    <div class="post-excerpt text-left my-3 px-4">
+                                        {p.data.description}
+                                    </div>
+                                )}
                             </div>
                     )
                 })

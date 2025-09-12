@@ -1,0 +1,52 @@
+---
+import Container from '../layouts/Container.astro';
+import { getCollection } from 'astro:content';
+
+const notes = (await getCollection('notes')).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const notesByYear = new Map();
+notes.forEach((note) => {
+    const fullYear = note.data.date.getFullYear();
+    if (notesByYear.get(fullYear)) {
+        notesByYear.set(
+            fullYear,
+            notesByYear.get(fullYear).concat(note)
+        );
+    } else {
+        notesByYear.set(fullYear, [note]);
+    }
+});
+---
+
+<Container>
+    <div class="section-title text-center text-2xl my-2">Notes</div>
+    <section class="text-center">
+        {
+            Array.from(notesByYear).map(([year, yearNotes]) => {
+                return yearNotes.map((note, index) => {
+                    return (
+                        <div key={`${note.slug}`}>
+                            {index === 0 && <h3 class="text-xl my-6">{year}</h3>}
+                            <div class={'row my-2'}>
+                                <div class={'column'}>
+                                    <a href={`/notes/${note.slug}`}>{note.data.title}</a>
+                                    ::{' '}
+                                    <strong>{note.data.date.toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}</strong>
+                                </div>
+                                <div>
+                                    {note.data.minutesRead && (
+                                        <span class={'time-to-read'}>
+                                            ~{note.data.minutesRead} min read
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    );
+                });
+            })
+        }
+    </section>
+</Container>
