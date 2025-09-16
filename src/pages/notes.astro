@@ -21,8 +21,8 @@ notes.forEach((note) => {
 ---
 
 <Container>
-    <div class="section-title text-center text-2xl my-2">Notes</div>
-    <section class="text-center">
+    <div class="section-title text-center text-2xl my-2 px-4 sm:px-0">Notes</div>
+    <section class="text-center px-4 sm:px-0">
         {
             Array.from(notesByYear).map(([year, yearNotes]) => {
                 return yearNotes.map((note, index) => {

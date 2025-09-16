@@ -14,7 +14,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 <div class="sidebar text-center content-center">
     <div class="h-card">
-        <Image class="w-20 h-20 lg:w-40 lg:h-40 rounded-full mx-auto" src={profilePhoto} aria-labelledby="title" alt="Ben Shi" />
+        <a href="/" class="block">
+            <Image class="w-20 h-20 lg:w-40 lg:h-40 rounded-full mx-auto" src={profilePhoto} aria-labelledby="title" alt="Ben Shi" />
+        </a>
         <a href="/" class="p-name u-url text-center text-2xl lg:text-5xl">
             <h1 class="mx-auto my-2 lg:my-6">Ben Shi</h1>
         </a>
@@ -44,6 +46,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
             </a>
             <a href="/notes/" class="block lg:inline-block lg:mt-0 mr-4 my-2">
                 /notes
+            </a>
+            <a href="/archive/" class="block lg:inline-block lg:mt-0 mr-4 my-2">
+                /archive
             </a>
         </nav>
         <div class="social flex gap-4 justify-center my-4">

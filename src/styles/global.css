@@ -157,10 +157,23 @@ a:hover {
   --tw-prose-td-borders: var(--color-border);
 }
 
+/* Waterfall element */
+.waterfall {
+  background-image: linear-gradient(to bottom, var(--color-accent) 0%, transparent 100%);
+  bottom: 0;
+  left: 0;
+  min-width: 10px;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  width: 10px;
+  z-index: -1;
+}
+
 /* Enhanced Typography */
 body {
   font-family: 'Cardo', 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   line-height: 1.6;
   letter-spacing: 0.01em;
   font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
@@ -274,13 +287,20 @@ button:hover, select:hover {
 }
 
 /* Improved Sidebar Styling */
-.social-icons a {
+.social a {
   transition: all 0.2s ease;
 }
 
-.social-icons a:hover {
+.social a:hover {
   transform: translateY(-2px);
   opacity: 0.8;
+}
+
+/* Social icons should inherit text color for theme compatibility */
+.social svg {
+  fill: var(--color-text);
+  margin: 0 0 0 .8rem;
+  transition: fill 0.3s ease;
 }
 
 /* Enhanced Theme Toggle Styling */
@@ -307,6 +327,31 @@ button:hover, select:hover {
   margin-top: 2em;
   margin-bottom: 0.75em;
   line-height: 1.25;
+}
+
+/* Center images and videos in blog posts */
+.prose img,
+.prose video,
+.prose iframe {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.prose figure {
+  text-align: center;
+}
+
+.prose figure img {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Image border styling like hbish.com */
+.prose a img {
+  border: 0.3rem solid;
+  border-image-slice: 60 30;
+  border-image-source: linear-gradient(140deg, var(--color-accent) 0%, var(--color-bg) 80%);
 }
 
 /* Article metadata styling */

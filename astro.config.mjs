@@ -4,6 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwind from "@astrojs/tailwind";
 
 import { remarkReadingTime } from './remark-plugins/remark-reading-time.mjs';
+import { remarkAutoLinkImages } from './remark-plugins/remark-auto-link-images.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -14,7 +15,7 @@ export default defineConfig({
         tailwind(),
     ],
     markdown: {
-        remarkPlugins: [remarkReadingTime]
+        remarkPlugins: [remarkReadingTime, remarkAutoLinkImages]
     },
     image: {
         // Enable image optimization for better performance
