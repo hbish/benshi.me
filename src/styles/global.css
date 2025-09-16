@@ -160,7 +160,7 @@ a:hover {
 /* Enhanced Typography */
 body {
   font-family: 'Cardo', 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   line-height: 1.6;
   letter-spacing: 0.01em;
   font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
@@ -254,7 +254,7 @@ button:hover, select:hover {
 
 @media (max-width: 768px) {
   body {
-    font-size: 14px;
+    font-size: 1.2rem;
     line-height: 1.5;
   }
   
