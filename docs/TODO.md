@@ -1,122 +1,138 @@
-# TODO: Replicate hbish.com Blog in Astro
+# TODO: benshi.me Post-Migration Improvements
 
-Based on analysis of the current Astro codebase and comparison with the target hbish.com blog, here are the tasks needed to complete the migration:
+Now that the core migration from hbish.com to Astro is complete, here are the next steps to improve the site's development experience, performance, and functionality.
 
 ## High Priority
 
-### 🚀 Content Collections & Migration
-- [x] **Set up proper content collections for posts, pages, and notes** ✅ COMPLETED
-  - ✅ Update `src/content/config.ts` to include pages and notes collections
-  - ✅ Define proper schemas for each content type
-  - ✅ Ensure frontmatter consistency across all content
+### 🔧 Development & Code Quality
+- [ ] **Add proper linting configuration (ESLint/Prettier setup)**
+  - Configure ESLint for TypeScript and Astro files
+  - Set up Prettier for consistent code formatting
+  - Add pre-commit hooks for code quality
+  - Configure VS Code settings for the project
 
-### 🔗 Page Routing
-- [x] **Create proper page routing for /about, /now, /work, /talks, /uses, /notes** ✅ COMPLETED
-  - ✅ Set up dynamic routing for pages collection
-  - ✅ Create individual page templates
-  - ✅ Ensure proper URL structure matches hbish.com
+### 📱 User Experience
+- [ ] **Add proper error pages (404, 500)**
+  - Create custom 404 page with site navigation
+  - Add proper error handling for build failures
+  - Include helpful links and search functionality
 
-### 📝 Notes Collection
-- [x] **Add notes collection to content config and create notes listing page** ✅ COMPLETED
-  - ✅ Configure notes collection in config.ts
-  - ✅ Create `/notes` page with chronological listing
-  - ✅ Set up proper routing for individual notes
-  - ✅ Handle notes organized by year folders
-
-### 🏠 Homepage Layout
-- [x] **Fix homepage layout to match hbish.com styling and structure** ✅ COMPLETED
-  - ✅ Improve post listing layout and typography
-  - ✅ Add proper year grouping for posts
-  - ✅ Enhanced reading time display
-  - ✅ Added post descriptions/excerpts
+- [ ] **Implement proper mobile navigation improvements**
+  - Improve hamburger menu for mobile devices
+  - Optimize touch targets and spacing
+  - Test navigation flow on various device sizes
 
 ## Medium Priority
 
-### 📄 Post Template Enhancement
-- [✅] **Enhance post template with proper metadata and reading time** ✅ COMPLETED
-  - ✅ Improve post header with date formatting
-  - ✅ Fix reading time display integration
-  - ✅ Add proper article schema markup
-  - ✅ Enhance typography and spacing
+### 🚀 Performance & Optimization
+- [ ] **Optimize image loading and implement lazy loading**
+  - Set up Astro's Image component properly
+  - Implement progressive image loading
+  - Optimize image sizes and formats (WebP, AVIF)
+  - Add proper alt text and accessibility
 
-### 🎨 Theme System
-- [✅] **Implement theme switcher (light/dark/gruv-light/gruv-dark)** ✅ COMPLETED
-  - ✅ Create theme toggle component
-  - ✅ Implement CSS custom properties for themes
-  - ✅ Add theme persistence (localStorage)
-  - ✅ Match hbish.com theme variants
+- [ ] **Add TypeScript strict mode configuration**
+  - Enable strict TypeScript checking
+  - Fix any type errors that surface
+  - Add proper type definitions for components
 
-### 💬 Comments System
-- [✅] **Fix and properly configure Cusdis commenting system** ✅ COMPLETED
-  - ✅ Configure proper page IDs and URLs
-  - ✅ Test comment functionality
-  - ✅ Style comment section to match site design
-  - ✅ Add dynamic theme synchronization
+- [ ] **Optimize bundle size and Core Web Vitals**
+  - Analyze bundle composition
+  - Implement code splitting where beneficial
+  - Optimize font loading strategy
+  - Improve Lighthouse scores
 
-### 📡 RSS Feed
-- [✅] **Set up RSS feed generation** ✅ COMPLETED
-  - ✅ Configure @astrojs/rss integration
-  - ✅ Create RSS endpoint at /rss.xml
-  - ✅ Include proper metadata and content
-  - ✅ Add RSS link to site header
+### 🔍 Quality Assurance
+- [ ] **Add automated testing setup (unit and e2e)**
+  - Configure Vitest for unit testing
+  - Set up Playwright for end-to-end testing
+  - Test critical user journeys
+  - Add component testing for Astro components
 
-### 🔍 SEO Optimization
-- [✅] **Add proper SEO meta tags and schema markup** ✅ COMPLETED
-  - ✅ Implement OpenGraph tags
-  - ✅ Add Twitter Card metadata
-  - ✅ Include structured data (JSON-LD)
-  - ✅ Optimize meta descriptions and titles
-  - ✅ Add site-wide WebSite schema
-  - ✅ Enhance article-level schema markup
+- [ ] **Configure CI/CD pipeline for automated checks**
+  - Set up GitHub Actions for automated testing
+  - Add build verification and deployment checks
+  - Configure automated security scanning
+  - Add performance regression testing
 
 ## Low Priority
 
-### 🎨 Styling Refinement
-- [ ] **Refine CSS styling to match hbish.com aesthetic**
-  - Fine-tune typography and spacing
-  - Improve mobile responsiveness
-  - Add subtle animations and transitions
-  - Polish sidebar and navigation styling
+### 💬 Features & Integrations
+- [ ] **Implement comment system integration (Cusdis)**
+  - Configure Cusdis properly with site themes
+  - Test comment functionality across all pages
+  - Add comment moderation workflow
 
-### ⚡ Performance Optimization
-- [ ] **Optimize images and performance**
-  - Implement proper image optimization
-  - Add lazy loading for images
-  - Optimize bundle size
-  - Improve Core Web Vitals scores
+- [ ] **Implement search functionality for posts and notes**
+  - Add client-side search with Fuse.js or similar
+  - Create search results page
+  - Include search in navigation
+
+- [ ] **Add analytics integration (privacy-friendly)**
+  - Research privacy-friendly analytics options
+  - Implement chosen solution (Plausible, Fathom, etc.)
+  - Configure tracking without cookies
+
+### 🎨 Content & SEO
+- [ ] **Implement proper Open Graph and Twitter Card images**
+  - Generate dynamic social media cards
+  - Add proper meta image generation
+  - Test social sharing across platforms
+
+- [ ] **Add RSS feed validation and testing**
+  - Validate RSS feed XML structure
+  - Test feed in various RSS readers
+  - Add JSON Feed as alternative
+
+- [ ] **Add content validation for frontmatter consistency**
+  - Create schema validation for all content types
+  - Add automated checks for required fields
+  - Validate date formats and tag consistency
+
+## Current State Analysis
+
+### ✅ What's Working Well
+- Theme switching system is fully functional
+- Content collections properly configured
+- Build process is fast and reliable
+- RSS feed generation working
+- Mobile responsive design in place
+- Reading time calculation working
+
+### 🚧 Areas Needing Attention
+- No linting configuration (code quality could be improved)
+- Missing error pages (users see default browser errors)
+- No automated testing (quality assurance gaps)
+- Bundle size not optimized (could be smaller)
+- Limited TypeScript strictness (potential runtime errors)
+
+### 🎯 Success Metrics
+- Lighthouse scores: Aim for 95+ in all categories
+- Build time: Keep under 30 seconds
+- Bundle size: Main JS bundle under 50KB
+- Core Web Vitals: All green scores
+- Test coverage: 80%+ for critical components
+
+### 📋 Development Workflow
+1. Prioritize high-priority items first
+2. Set up proper development tooling early
+3. Add testing as features are implemented
+4. Monitor performance throughout development
+5. Regular code reviews and quality checks
 
 ## Notes
 
-### Current State Analysis
-- ✅ Basic Astro setup with posts collection working
-- ✅ Sidebar with profile and navigation configured
-- ✅ Reading time plugin functional
-- ✅ Basic responsive layout in place
-- ✅ Some content already migrated from hbish.com
-- ✅ **Content collections properly configured for posts, pages, and notes**
-- ✅ **All static pages properly routed and functional**
-- ✅ **Notes collection configured with chronological listing**
-- ✅ **Homepage layout improved with reading time and excerpts**
+### Project Health Indicators
+- ✅ Dependencies are up to date
+- ✅ Build succeeds without errors
+- ✅ All content renders correctly
+- ❌ No linting or code quality checks
+- ❌ No automated testing
+- ❌ No proper error handling
 
-### Key Missing Features
-- ❌ Theme switcher functionality missing
-- ❌ RSS feed not set up
-- ❌ Enhanced SEO and metadata missing
-- ❌ Comments system needs configuration
-- ❌ Some styling refinements needed
-
-### Technical Considerations
-- The site uses Tailwind CSS for styling
-- Reading time is calculated via remark plugin
-- Content is organized by year in folders
-- Images are stored in `/public/media/`
-- Currently using Cusdis for comments
-
-### Target Features from hbish.com
-- Theme switcher with 4 variants
-- Clean, minimal design
-- Chronological post and notes listing
-- Proper metadata and reading times
-- IndieWeb microformats
-- RSS feed
-- Comment system integration
+### Recommended Next Steps
+1. Start with ESLint/Prettier setup for immediate code quality improvement
+2. Add error pages for better user experience
+3. Set up basic testing framework
+4. Focus on performance optimization
+5. Add missing features incrementally
