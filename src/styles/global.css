@@ -153,3 +153,168 @@ a:hover {
   --tw-prose-th-borders: var(--color-border);
   --tw-prose-td-borders: var(--color-border);
 }
+
+/* Enhanced Typography */
+body {
+  line-height: 1.6;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Improved Focus States */
+a:focus,
+button:focus,
+select:focus,
+input:focus,
+textarea:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* Smooth Animations */
+* {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced Image Styling */
+img {
+  border-radius: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Better Code Block Styling */
+pre {
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+code {
+  background-color: var(--color-bg-secondary);
+  padding: 0.125rem 0.25rem;
+  border-radius: 4px;
+  font-size: 0.875em;
+  border: 1px solid var(--color-border);
+}
+
+pre code {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+
+/* Enhanced Button and Interactive Elements */
+button, select {
+  transition: all 0.2s ease;
+  border-radius: 6px;
+}
+
+button:hover, select:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Improved Mobile Responsiveness */
+@media (max-width: 1024px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  /* Force mobile layout */
+  .flex.flex-col {
+    flex-direction: column !important;
+  }
+  
+  /* Full width on mobile */
+  .w-full {
+    margin: 0 0 2rem 0 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.25rem; }
+}
+
+/* Subtle Loading Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.content > * {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Improved Sidebar Styling */
+.social-icons a {
+  transition: all 0.2s ease;
+}
+
+.social-icons a:hover {
+  transform: translateY(-2px);
+  opacity: 0.8;
+}
+
+/* Enhanced Theme Toggle Styling */
+.theme-section select {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.theme-section select:hover {
+  background-color: var(--color-bg);
+  border-color: var(--color-accent);
+}
+
+/* Better spacing and rhythm */
+.prose > * + * {
+  margin-top: 1.5em;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  margin-top: 2em;
+  margin-bottom: 0.75em;
+  line-height: 1.25;
+}
+
+/* Article metadata styling */
+.article-meta {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.article-meta svg {
+  flex-shrink: 0;
+}
+
+/* Comments section enhancement */
+.comments {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.comments h3 {
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}

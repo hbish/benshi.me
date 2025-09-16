@@ -16,4 +16,24 @@ export default defineConfig({
     markdown: {
         remarkPlugins: [remarkReadingTime]
     },
+    image: {
+        // Enable image optimization for better performance
+        domains: ['hbish.com'],
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname: "**.hbish.com",
+            },
+        ],
+    },
+    build: {
+        // Inline small assets for better performance
+        inlineStylesheets: 'auto',
+    },
+    vite: {
+        build: {
+            // Enable CSS code splitting for better loading
+            cssCodeSplit: true,
+        },
+    },
 });
