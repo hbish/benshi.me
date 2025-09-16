@@ -112,6 +112,7 @@ const currentUrl = new URL(Astro.url.pathname, Astro.site);
                      data-page-url={currentUrl.toString()}
                      data-page-title={content.data.title}
                      data-theme="auto"
+                     style="margin-top: 1rem;"
                 ></div>
             </div>
         )}
@@ -150,6 +151,35 @@ const currentUrl = new URL(Astro.url.pathname, Astro.site);
     
     <!-- Load Cusdis Comments Script -->
     {type === 'post' && (
-        <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
+        <>
+            <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
+            <script>
+                // Sync Cusdis theme with our theme system
+                document.addEventListener('DOMContentLoaded', function() {
+                    function updateCusdisTheme() {
+                        const currentTheme = document.documentElement.className;
+                        const cusdisFrame = document.querySelector('#cusdis_thread iframe');
+                        
+                        if (cusdisFrame) {
+                            const isDark = currentTheme.includes('dark') || currentTheme.includes('gruv-dark');
+                            cusdisFrame.contentWindow?.postMessage({
+                                type: 'setTheme',
+                                theme: isDark ? 'dark' : 'light'
+                            }, 'https://cusdis.com');
+                        }
+                    }
+                    
+                    // Update theme on load
+                    setTimeout(updateCusdisTheme, 1000);
+                    
+                    // Watch for theme changes
+                    const observer = new MutationObserver(updateCusdisTheme);
+                    observer.observe(document.documentElement, { 
+                        attributes: true, 
+                        attributeFilter: ['class'] 
+                    });
+                });
+            </script>
+        </>
     )}
 </Container>
