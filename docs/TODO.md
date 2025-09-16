@@ -33,7 +33,7 @@ Based on analysis of the current Astro codebase and comparison with the target h
 ## Medium Priority
 
 ### 📄 Post Template Enhancement
-- [ ] **Enhance post template with proper metadata and reading time**
+- [🔄] **Enhance post template with proper metadata and reading time** [IN PROGRESS - using context7]
   - Improve post header with date formatting
   - Fix reading time display integration
   - Add proper article schema markup
