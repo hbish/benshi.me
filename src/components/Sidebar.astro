@@ -6,6 +6,7 @@ import githubLogo from '../assets/svg/github.inline.svg'
 import keybaseLogo from '../assets/svg/keybase.inline.svg'
 import mailLogo from '../assets/svg/mail.inline.svg'
 import linkedinLogo from '../assets/svg/linkedin.inline.svg'
+import ThemeToggle from './ThemeToggle.astro'
 
 const today = new Date();
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -78,6 +79,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
             >
                 <Image src={keybaseLogo} alt="keybase" aria-labelledby={'title'} />
             </a>
+        </div>
+        
+        <!-- Theme Toggle -->
+        <div class="theme-section my-4">
+            <div class="text-xs uppercase tracking-wide text-theme-muted mb-2">theme</div>
+            <ThemeToggle />
         </div>
     </div>
 </div>

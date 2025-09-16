@@ -48,19 +48,19 @@ const currentUrl = new URL(Astro.url.pathname, Astro.site);
 
 <Container>
     <div class="content">
-        <div class="section-title text-sm uppercase tracking-wide text-gray-600 dark:text-gray-400 mb-6">
+        <div class="section-title text-sm uppercase tracking-wide text-theme-muted mb-6">
             {type === 'post' ? 'Blog Post' : 'Note'}
         </div>
         
         <article class="h-entry prose prose-lg dark:prose-invert max-w-none">
             <!-- Article Header -->
-            <header class="mb-8 border-b border-gray-200 dark:border-gray-700 pb-6">
-                <h1 class="p-name text-3xl lg:text-4xl font-bold leading-tight mb-4 text-gray-900 dark:text-gray-100">
+            <header class="mb-8 border-b border-theme pb-6">
+                <h1 class="p-name text-3xl lg:text-4xl font-bold leading-tight mb-4 text-theme">
                     {content.data.title}
                 </h1>
                 
                 <!-- Article Metadata -->
-                <div class="flex flex-wrap items-center text-sm text-gray-600 dark:text-gray-400 space-x-4">
+                <div class="flex flex-wrap items-center text-sm text-theme-muted space-x-4">
                     <div class="flex items-center">
                         <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
@@ -90,7 +90,7 @@ const currentUrl = new URL(Astro.url.pathname, Astro.site);
                 </div>
                 
                 {content.data.description && (
-                    <p class="text-lg text-gray-700 dark:text-gray-300 mt-4 leading-relaxed">
+                    <p class="text-lg text-theme-secondary mt-4 leading-relaxed">
                         {content.data.description}
                     </p>
                 )}
@@ -103,8 +103,8 @@ const currentUrl = new URL(Astro.url.pathname, Astro.site);
         </article>
         
         {type === 'post' && (
-            <div class="comments mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
-                <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100">Comments</h3>
+            <div class="comments mt-12 pt-8 border-t border-theme">
+                <h3 class="text-xl font-semibold mb-6 text-theme">Comments</h3>
                 <div id="cusdis_thread"
                      data-host="https://cusdis.com"
                      data-app-id="ec698304-b2fd-4f80-bf18-3867119d076d"
