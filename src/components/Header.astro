@@ -23,6 +23,9 @@ const { title, description, image = '/placeholder-social.jpg' } = Astro.props;
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
 
+<!-- RSS Feed -->
+<link rel="alternate" type="application/rss+xml" title={title} href="/rss.xml" />
+
 <!-- Primary Meta Tags -->
 <title>{title}</title>
 <link
@@ -40,6 +43,8 @@ const { title, description, image = '/placeholder-social.jpg' } = Astro.props;
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:site_name" content="Ben Shi" />
+<meta property="og:locale" content="en_US" />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
@@ -47,6 +52,15 @@ const { title, description, image = '/placeholder-social.jpg' } = Astro.props;
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
+<meta property="twitter:creator" content="@hbish" />
+<meta property="twitter:site" content="@hbish" />
+
+<!-- Additional SEO Meta Tags -->
+<meta name="robots" content="index, follow" />
+<meta name="author" content="Ben Shi" />
+<meta name="theme-color" content="#103fea" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
 
 <!-- Goatcounter -->
 <script

@@ -1,0 +1,9 @@
+---
+import { getEntry } from 'astro:content';
+import Page from '../layouts/Page.astro';
+
+const page = await getEntry('pages', 'now');
+if (!page) throw new Error('Now page not found');
+---
+
+<Page page={page} />

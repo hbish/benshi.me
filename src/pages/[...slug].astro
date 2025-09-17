@@ -1,43 +1,212 @@
 ---
 import Container from '../layouts/Container.astro';
 import { CollectionEntry, getCollection } from 'astro:content';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 export async function getStaticPaths() {
     const posts = await getCollection('posts');
-    return posts.map((post) => ({
-        params: { slug: post.slug },
-        props: post
-    }));
-}
-type Props = CollectionEntry<'posts'>;
+    const notes = await getCollection('notes');
 
-const post = Astro.props;
-const { Content, remarkPluginFrontmatter } = await post.render();
-console.log(remarkPluginFrontmatter)
+    const postPaths = posts.map((post) => ({
+        params: { slug: post.slug },
+        props: { content: post, type: 'post' }
+    }));
+
+    const notePaths = notes.map((note) => ({
+        params: { slug: `notes/${note.slug}` },
+        props: { content: note, type: 'note' }
+    }));
+
+    return [...postPaths, ...notePaths];
+}
+
+type Props = {
+    content: CollectionEntry<'posts'> | CollectionEntry<'notes'>;
+    type: 'post' | 'note';
+};
+
+const { content, type } = Astro.props;
+const { Content, remarkPluginFrontmatter } = await content.render();
+
+// Format date for display
+const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+};
+
+// Format date for machine reading (ISO format)
+const formatISODate = (date: Date) => {
+    return date.toISOString();
+};
+
+// Current page URL for schema markup
+const currentUrl = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <Container>
-    <div class="content">
-        <div class="section-title">Blog Post</div>
-        <section>
-            <article class="h-entry">
-                <h1 class="p-name">{post.data.title}</h1>
-                <div>
-                        🗓 <span class="dt-published">{post.data.date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span> ::
-                        🕑 ~{remarkPluginFrontmatter.minutesRead}
+    <div class="content px-4 sm:px-0">
+        <div class="section-title uppercase tracking-wide text-theme-muted mb-2 text-center">
+            {type === 'post' ? 'Blog Post' : 'Note'}
+        </div>
+
+        <article class="h-entry prose prose-lg dark:prose-invert max-w-none">
+            <!-- Article Header -->
+            <header class="mb-8 border-b border-theme pb-6">
+                <h1 class="p-name text-3xl lg:text-4xl font-bold leading-tight mb-4 text-theme text-center">
+                    {content.data.title}
+                </h1>
+
+                <!-- Article Metadata -->
+                <div class="flex flex-wrap items-center justify-center text-sm text-theme-muted space-x-4 mb-4">
+                    <div class="flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                        </svg>
+                        <time class="dt-published" datetime={formatISODate(content.data.date)}>
+                            {formatDate(content.data.date)}
+                        </time>
+                    </div>
+
+                    {remarkPluginFrontmatter?.minutesRead && (
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>{remarkPluginFrontmatter.minutesRead} read</span>
+                        </div>
+                    )}
                 </div>
-            <Content />
-            </article>
-            <div class="comments">
+
+                    {content.data.tags && content.data.tags.length > 0 && (
+                        <div class="flex items-center flex-wrap gap-2 justify-center">
+                            <svg class="w-4 h-4 text-theme-muted" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path>
+                            </svg>
+                            {content.data.tags.map((tag: string) => (
+                                <a 
+                                    key={tag}
+                                    href={`/tags/${tag}`}
+                                    class="inline-block px-2 py-1 text-xs font-medium bg-theme-secondary text-theme-accent border border-theme rounded-full hover:bg-theme-accent hover:text-white transition-all duration-200 hover:scale-105"
+                                >
+                                    {tag}
+                                </a>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {content.data.description && (
+                    <p class="text-lg text-theme-secondary mt-4 leading-relaxed">
+                        {content.data.description}
+                    </p>
+                )}
+            </header>
+
+            <!-- Article Content -->
+            <div class="e-content prose prose-lg dark:prose-invert max-w-none">
+                <Content />
+            </div>
+        </article>
+
+        {type === 'post' && (
+            <div class="comments mt-12 pt-8 border-t border-theme">
+                <h3 class="text-xl font-semibold mb-6 text-theme">Comments</h3>
                 <div id="cusdis_thread"
                      data-host="https://cusdis.com"
                      data-app-id="ec698304-b2fd-4f80-bf18-3867119d076d"
-                     data-page-id="{{ PAGE_ID }}"
-                     data-page-url="{{ PAGE_URL }}"
-                     data-page-title="{{ PAGE_TITLE }}"
+                     data-page-id={content.slug}
+                     data-page-url={currentUrl.toString()}
+                     data-page-title={content.data.title}
                      data-theme="auto"
+                     style="margin-top: 1rem; min-height: 600px;"
                 ></div>
             </div>
-        </section>
+        )}
     </div>
+
+    <!-- JSON-LD Schema Markup -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": type === 'post' ? "BlogPosting" : "Article",
+        "headline": content.data.title,
+        "description": content.data.description || content.data.title,
+        "author": {
+            "@type": "Person",
+            "name": content.data.author
+        },
+        "datePublished": formatISODate(content.data.date),
+        "dateModified": formatISODate(content.data.date),
+        "url": currentUrl.toString(),
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": currentUrl.toString()
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": SITE_TITLE,
+            "url": Astro.site?.toString()
+        },
+        ...(remarkPluginFrontmatter?.minutesRead && {
+            "timeRequired": `PT${remarkPluginFrontmatter.minutesRead.replace(/\D/g, '')}M`
+        }),
+        ...(content.data.tags && {
+            "keywords": content.data.tags.join(', ')
+        })
+    })}>
+    </script>
+
+    <!-- Load Cusdis Comments Script -->
+    {type === 'post' && (
+        <>
+            <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
+            <script>
+                // Sync Cusdis theme with our theme system and set iframe height
+                document.addEventListener('DOMContentLoaded', function() {
+                    function updateCusdisTheme() {
+                        const currentTheme = document.documentElement.className;
+                        const cusdisFrame = document.querySelector('#cusdis_thread iframe');
+
+                        if (cusdisFrame) {
+                            const isDark = currentTheme.includes('dark') || currentTheme.includes('gruv-dark');
+                            cusdisFrame.contentWindow?.postMessage({
+                                type: 'setTheme',
+                                theme: isDark ? 'dark' : 'light'
+                            }, 'https://cusdis.com');
+                        }
+                    }
+
+                    function setCusdisHeight() {
+                        const cusdisFrame = document.querySelector('#cusdis_thread iframe');
+                        if (cusdisFrame) {
+                            cusdisFrame.style.height = '400px';
+                            cusdisFrame.style.minHeight = '400px';
+                        }
+                    }
+
+                    // Update theme and height on load
+                    setTimeout(() => {
+                        updateCusdisTheme();
+                        setCusdisHeight();
+                    }, 1000);
+
+                    // Watch for iframe creation and theme changes
+                    const observer = new MutationObserver(() => {
+                        updateCusdisTheme();
+                        setCusdisHeight();
+                    });
+                    observer.observe(document.querySelector('#cusdis_thread'), {
+                        childList: true,
+                        subtree: true
+                    });
+                    observer.observe(document.documentElement, {
+                        attributes: true,
+                        attributeFilter: ['class']
+                    });
+                });
+            </script>
+        </>
+    )}
 </Container>

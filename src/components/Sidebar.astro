@@ -1,83 +1,116 @@
 ---
-import { Image } from 'astro:assets';
+import { Image } from 'astro:assets'
 import profilePhoto from '../assets/profile-pic.png'
-import twitterLogo from '../assets/svg/twitter.inline.svg'
+import xLogo from '../assets/svg/x.inline.svg'
 import githubLogo from '../assets/svg/github.inline.svg'
 import keybaseLogo from '../assets/svg/keybase.inline.svg'
 import mailLogo from '../assets/svg/mail.inline.svg'
 import linkedinLogo from '../assets/svg/linkedin.inline.svg'
+import ThemeToggle from './ThemeToggle.astro'
 
-const today = new Date();
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const today = new Date()
+const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 ---
 
 <div class="sidebar text-center content-center">
     <div class="h-card">
-        <Image class="w-20 h-20 lg:w-40 lg:h-40 rounded-full mx-auto" src={profilePhoto} aria-labelledby="title" alt="Ben Shi" />
+        <a href="/" class="block">
+            <Image
+                class="w-20 h-20 lg:w-40 lg:h-40 rounded-full mx-auto"
+                src={profilePhoto}
+                aria-labelledby="title"
+                alt="Ben Shi"
+            />
+        </a>
         <a href="/" class="p-name u-url text-center text-2xl lg:text-5xl">
             <h1 class="mx-auto my-2 lg:my-6">Ben Shi</h1>
         </a>
         <p class="p-note text-center hidden lg:block my-2">
-            👋 I'm a software engineer from Sydney, Australia. I love solving
-            complex problems.
+            👋 I'm a technologist from Sydney, Australia. I love solving complex
+            problems.
         </p>
         <p class="p-note text-center hidden lg:block my-2">
             I write about software engineering, agile practices and self
             development & learning.
         </p>
-        <nav class="flex flex-row lg:flex-col items-center justify-center lg:justify-start my-2">
-            <a href="/about/" class="block lg:inline-block lg:mt-0  mr-4 my-2">
+        <nav
+            class="flex flex-row lg:flex-col items-center justify-center lg:justify-start my-2"
+        >
+            <a href="/about/" class="block lg:inline-block lg:mt-0 mr-4 my-2">
                 /about
             </a>
-            <a href="/now/" class="block lg:inline-block lg:mt-0  mr-4 my-2">
+            <a href="/now/" class="block lg:inline-block lg:mt-0 mr-4 my-2">
                 /now
             </a>
-            <a href="/work/" class="block lg:inline-block lg:mt-0  mr-4 my-2">
+            <a href="/work/" class="block lg:inline-block lg:mt-0 mr-4 my-2">
                 /work
             </a>
-            <a href="/talks/" class="block lg:inline-block lg:mt-0  mr-4 my-2">
+            <a href="/talks/" class="block lg:inline-block lg:mt-0 mr-4 my-2">
                 /talks
             </a>
-            <a href="/uses/" class="block lg:inline-block lg:mt-0  mr-4 my-2">
+            <a href="/uses/" class="block lg:inline-block lg:mt-0 mr-4 my-2">
                 /uses
             </a>
             <a href="/notes/" class="block lg:inline-block lg:mt-0 mr-4 my-2">
                 /notes
             </a>
+            <a href="/archive/" class="block lg:inline-block lg:mt-0 mr-4 my-2">
+                /archive
+            </a>
         </nav>
         <div class="social flex gap-4 justify-center my-4">
-            <a href="https://twitter.com/hbish" title={'tweet ben'} rel={'me'}>
-                <Image src={twitterLogo} alt="twitter" aria-labelledby={'title'} />
+            <a href="https://x.com/hbish" title={'follow ben on x'} rel={'me'}>
+                <Image src={xLogo} alt="x" aria-labelledby={'title'} />
             </a>
             <a
-                    href="https://au.linkedin.com/in/benshi"
-                    title={'connect with ben on linkedin'}
-                    rel={'me'}
+                href="https://au.linkedin.com/in/benshi"
+                title={'connect with ben on linkedin'}
+                rel={'me'}
             >
-                <Image src={linkedinLogo} alt="linkedin" aria-labelledby={'title'} />
+                <Image
+                    src={linkedinLogo}
+                    alt="linkedin"
+                    aria-labelledby={'title'}
+                />
             </a>
             <a
-                    href="https://github.com/hbish"
-                    title={'follow ben on github'}
-                    rel={'me'}
+                href="https://github.com/hbish"
+                title={'follow ben on github'}
+                rel={'me'}
             >
-                <Image src={githubLogo} alt="github" aria-labelledby={'title'} />
+                <Image
+                    src={githubLogo}
+                    alt="github"
+                    aria-labelledby={'title'}
+                />
             </a>
             <a
-                    href="mailto:ben@hbish.com"
-                    title={'email ben'}
-                    rel={'me'}
-                    class={'u-email'}
+                href="mailto:ben@hbish.com"
+                title={'email ben'}
+                rel={'me'}
+                class={'u-email'}
             >
                 <Image src={mailLogo} alt="email" aria-labelledby={'title'} />
             </a>
             <a
-                    href="https://keybase.io/hbish"
-                    title={'auth me on keybase'}
-                    rel={'me'}
+                href="https://keybase.io/hbish"
+                title={'auth me on keybase'}
+                rel={'me'}
             >
-                <Image src={keybaseLogo} alt="keybase" aria-labelledby={'title'} />
+                <Image
+                    src={keybaseLogo}
+                    alt="keybase"
+                    aria-labelledby={'title'}
+                />
             </a>
+        </div>
+
+        <!-- Theme Toggle -->
+        <div class="theme-section my-4">
+            <div class="text-xs uppercase tracking-wide text-theme-muted mb-2">
+                theme
+            </div>
+            <ThemeToggle />
         </div>
     </div>
 </div>

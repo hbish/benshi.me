@@ -4,7 +4,8 @@ module.exports = {
 	darkMode: 'class',
 	theme: {
 		fontFamily: {
-
+			'sans': ['Cardo', 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+			'serif': ['Playfair Display', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
 		},
 		extend: {},
 	},

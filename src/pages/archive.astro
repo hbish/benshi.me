@@ -8,7 +8,8 @@ twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
 const posts = (await getCollection('posts')).sort(
     (a, b) => b.data.date.valueOf() - a.data.date.valueOf())
     .filter(p => !p.data.draft)
-    .filter(p => p.data.date >= twoYearsAgo);
+    .filter(p => p.data.date < twoYearsAgo);
+
 const postsByYear = new Map()
 posts.forEach((p) => {
     const fullYear = p.data.date.getFullYear();
@@ -24,18 +25,12 @@ posts.forEach((p) => {
 ---
 
 <Container>
-    <div class="section-title text-center text-2xl my-2 px-4 sm:px-0">Posts</div>
+    <div class="section-title text-center text-2xl my-2 px-4 sm:px-0">Archive</div>
+    <div class="text-center mb-4 px-4 sm:px-0">
+        <p class="text-gray-600">Posts older than 2 years</p>
+    </div>
     <section class="text-center px-4 sm:px-0">
-        {posts.length === 0 ? (
-            <div class="text-center my-8">
-                <div class="text-lg mb-4">🌵</div>
-                <p class="text-gray-600 mb-2">Oops! I haven't written anything recently.</p>
-                <p class="text-gray-600 mb-4">I'm probably busy coding or exploring new ideas!</p>
-                <a href="/archive/" class="text-blue-600 hover:text-blue-800 underline">
-                    Check out the archive for older posts →
-                </a>
-            </div>
-        ) : (
+        {
             Array.from(postsByYear).map(([year, yearPosts]) => {
                 return yearPosts.map((p, index) => {
                     return (
@@ -64,6 +59,11 @@ posts.forEach((p) => {
                     )
                 })
             })
+        }
+        {posts.length === 0 && (
+            <div class="text-gray-500 text-center my-8">
+                No archived posts found.
+            </div>
         )}
     </section>
 </Container>
