@@ -180,8 +180,8 @@ const { target } = Astro.props
             <time class="interaction-date">${published}</time>
           </div>
           
-          <div class="interaction-content">
-            <div class="interaction-author">
+          <div class="interaction-main">
+            <div class="interaction-author-column">
               <img src="${this.escapeHtml(photo)}" 
                    alt="${this.escapeHtml(name)}"
                    class="interaction-avatar"
@@ -195,7 +195,7 @@ const { target } = Astro.props
               </a>
             </div>
             
-            <div class="interaction-body">
+            <div class="interaction-content-column">
               ${
                 content
                   ? `
@@ -203,7 +203,11 @@ const { target } = Astro.props
                   ${this.sanitizeContent(content)}
                 </div>
               `
-                  : ''
+                  : `
+                <div class="interaction-no-content">
+                  <em>No additional content</em>
+                </div>
+              `
               }
               
               <a href="${this.escapeHtml(mention.url || url)}" 
@@ -437,16 +441,16 @@ const { target } = Astro.props
     color: var(--color-text-muted);
   }
 
-  .interaction-content {
+  .interaction-main {
     @apply flex gap-4;
   }
 
-  .interaction-author {
+  .interaction-author-column {
     @apply flex flex-col items-center gap-2 flex-shrink-0;
     min-width: 80px;
   }
 
-  .interaction-body {
+  .interaction-content-column {
     @apply flex-1 space-y-2;
   }
 
@@ -467,6 +471,11 @@ const { target } = Astro.props
   .interaction-text {
     @apply text-base leading-relaxed;
     color: var(--color-text);
+  }
+
+  .interaction-no-content {
+    @apply text-sm italic;
+    color: var(--color-text-muted);
   }
 
   .interaction-source {
@@ -492,11 +501,11 @@ const { target } = Astro.props
       @apply p-3;
     }
 
-    .interaction-content {
+    .interaction-main {
       @apply flex-col gap-3;
     }
 
-    .interaction-author {
+    .interaction-author-column {
       @apply flex-row items-center justify-start;
       min-width: auto;
     }
