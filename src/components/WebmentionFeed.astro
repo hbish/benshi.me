@@ -195,22 +195,24 @@ const { target } = Astro.props
               </a>
             </div>
             
-            ${
-              content
-                ? `
-              <div class="interaction-text">
-                ${this.sanitizeContent(content)}
-              </div>
-            `
-                : ''
-            }
-            
-            <a href="${this.escapeHtml(mention.url || url)}" 
-               class="interaction-source"
-               target="_blank"
-               rel="noopener noreferrer">
-              View original →
-            </a>
+            <div class="interaction-body">
+              ${
+                content
+                  ? `
+                <div class="interaction-text">
+                  ${this.sanitizeContent(content)}
+                </div>
+              `
+                  : ''
+              }
+              
+              <a href="${this.escapeHtml(mention.url || url)}" 
+                 class="interaction-source"
+                 target="_blank"
+                 rel="noopener noreferrer">
+                View original →
+              </a>
+            </div>
           </div>
         </div>
       `
@@ -436,11 +438,16 @@ const { target } = Astro.props
   }
 
   .interaction-content {
-    @apply space-y-3;
+    @apply flex gap-4;
   }
 
   .interaction-author {
-    @apply flex items-center gap-3;
+    @apply flex flex-col items-center gap-2 flex-shrink-0;
+    min-width: 80px;
+  }
+
+  .interaction-body {
+    @apply flex-1 space-y-2;
   }
 
   .interaction-avatar {
@@ -449,7 +456,7 @@ const { target } = Astro.props
   }
 
   .interaction-author-name {
-    @apply font-medium transition-colors;
+    @apply text-sm font-medium transition-colors text-center;
     color: var(--color-text);
   }
 
@@ -483,6 +490,19 @@ const { target } = Astro.props
 
     .interaction-item {
       @apply p-3;
+    }
+
+    .interaction-content {
+      @apply flex-col gap-3;
+    }
+
+    .interaction-author {
+      @apply flex-row items-center justify-start;
+      min-width: auto;
+    }
+
+    .interaction-author-name {
+      @apply text-left;
     }
 
     .interactions-title {
