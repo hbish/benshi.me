@@ -1,10 +1,12 @@
 # TODO: benshi.me Post-Migration Improvements
 
-Now that the core migration from hbish.com to Astro is complete, here are the next steps to improve the site's development experience, performance, and functionality.
+Now that the core migration from hbish.com to Astro is complete, here are the next steps to improve
+the site's development experience, performance, and functionality.
 
 ## High Priority
 
 ### 🔧 Development & Code Quality
+
 - [ ] **Add proper linting configuration (ESLint/Prettier setup)**
   - Configure ESLint for TypeScript and Astro files
   - Set up Prettier for consistent code formatting
@@ -12,6 +14,7 @@ Now that the core migration from hbish.com to Astro is complete, here are the ne
   - Configure VS Code settings for the project
 
 ### 📱 User Experience
+
 - [ ] **Add proper error pages (404, 500)**
   - Create custom 404 page with site navigation
   - Add proper error handling for build failures
@@ -25,6 +28,7 @@ Now that the core migration from hbish.com to Astro is complete, here are the ne
 ## Medium Priority
 
 ### 🚀 Performance & Optimization
+
 - [ ] **Optimize image loading and implement lazy loading**
   - Set up Astro's Image component properly
   - Implement progressive image loading
@@ -43,6 +47,7 @@ Now that the core migration from hbish.com to Astro is complete, here are the ne
   - Improve Lighthouse scores
 
 ### 🔍 Quality Assurance
+
 - [ ] **Add automated testing setup (unit and e2e)**
   - Configure Vitest for unit testing
   - Set up Playwright for end-to-end testing
@@ -58,6 +63,7 @@ Now that the core migration from hbish.com to Astro is complete, here are the ne
 ## Low Priority
 
 ### 💬 Features & Integrations
+
 - [ ] **Implement comment system integration (Cusdis)**
   - Configure Cusdis properly with site themes
   - Test comment functionality across all pages
@@ -74,6 +80,7 @@ Now that the core migration from hbish.com to Astro is complete, here are the ne
   - Configure tracking without cookies
 
 ### 🎨 Content & SEO
+
 - [ ] **Implement proper Open Graph and Twitter Card images**
   - Generate dynamic social media cards
   - Add proper meta image generation
@@ -92,6 +99,7 @@ Now that the core migration from hbish.com to Astro is complete, here are the ne
 ## Current State Analysis
 
 ### ✅ What's Working Well
+
 - Theme switching system is fully functional
 - Content collections properly configured
 - Build process is fast and reliable
@@ -100,6 +108,7 @@ Now that the core migration from hbish.com to Astro is complete, here are the ne
 - Reading time calculation working
 
 ### 🚧 Areas Needing Attention
+
 - No linting configuration (code quality could be improved)
 - Missing error pages (users see default browser errors)
 - No automated testing (quality assurance gaps)
@@ -107,6 +116,7 @@ Now that the core migration from hbish.com to Astro is complete, here are the ne
 - Limited TypeScript strictness (potential runtime errors)
 
 ### 🎯 Success Metrics
+
 - Lighthouse scores: Aim for 95+ in all categories
 - Build time: Keep under 30 seconds
 - Bundle size: Main JS bundle under 50KB
@@ -114,6 +124,7 @@ Now that the core migration from hbish.com to Astro is complete, here are the ne
 - Test coverage: 80%+ for critical components
 
 ### 📋 Development Workflow
+
 1. Prioritize high-priority items first
 2. Set up proper development tooling early
 3. Add testing as features are implemented
@@ -123,6 +134,7 @@ Now that the core migration from hbish.com to Astro is complete, here are the ne
 ## Notes
 
 ### Project Health Indicators
+
 - ✅ Dependencies are up to date
 - ✅ Build succeeds without errors
 - ✅ All content renders correctly
@@ -131,6 +143,7 @@ Now that the core migration from hbish.com to Astro is complete, here are the ne
 - ❌ No proper error handling
 
 ### Recommended Next Steps
+
 1. Start with ESLint/Prettier setup for immediate code quality improvement
 2. Add error pages for better user experience
 3. Set up basic testing framework

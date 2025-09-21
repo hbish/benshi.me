@@ -14,9 +14,12 @@ tags:
   - vba
 ---
 
-I have been bugged by the fact that you cannot autofit a cell's height after it has been merged with other cells. This has been a problem with Microsoft Excel for a while now.
+I have been bugged by the fact that you cannot autofit a cell's height after it has been merged with
+other cells. This has been a problem with Microsoft Excel for a while now.
 
-I use to have a macro where I just selected the cells I want to merge and it will auto size the height before it merge the selected the cell. I came across a better script by Jim Rech where I can just autofit any cell to my liking.
+I use to have a macro where I just selected the cells I want to merge and it will auto size the
+height before it merge the selected the cell. I came across a better script by Jim Rech where I can
+just autofit any cell to my liking.
 
 ```visual-basic
 Dim CurrentRowHeight As Single, MergedCellRgWidth As Single

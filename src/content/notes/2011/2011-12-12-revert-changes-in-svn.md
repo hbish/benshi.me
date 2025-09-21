@@ -18,7 +18,8 @@ There is
 svn revert -R
 ```
 
-But sometimes after a svn merge, I see a lot of files are marked as modified because their property has changed. There is a way of reverting them separately.
+But sometimes after a svn merge, I see a lot of files are marked as modified because their property
+has changed. There is a way of reverting them separately.
 
 Reverting all file changes
 

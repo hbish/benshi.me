@@ -1,69 +1,66 @@
 ---
-import Container from '../layouts/Container.astro';
-import {getCollection} from 'astro:content';
+import Container from '../layouts/Container.astro'
+import { getCollection } from 'astro:content'
 
-const twoYearsAgo = new Date();
-twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
+const twoYearsAgo = new Date()
+twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2)
 
-const posts = (await getCollection('posts')).sort(
-    (a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-    .filter(p => !p.data.draft)
-    .filter(p => p.data.date >= twoYearsAgo);
+const posts = (await getCollection('posts'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .filter(p => !p.data.draft)
+  .filter(p => p.data.date >= twoYearsAgo)
 const postsByYear = new Map()
-posts.forEach((p) => {
-    const fullYear = p.data.date.getFullYear();
-    if (postsByYear.get(fullYear)) {
-        postsByYear.set(
-            fullYear,
-            postsByYear.get(fullYear).concat(p)
-        )
-    } else {
-        postsByYear.set(fullYear, [p])
-    }
+posts.forEach(p => {
+  const fullYear = p.data.date.getFullYear()
+  if (postsByYear.get(fullYear)) {
+    postsByYear.set(fullYear, postsByYear.get(fullYear).concat(p))
+  } else {
+    postsByYear.set(fullYear, [p])
+  }
 })
 ---
 
 <Container>
-    <div class="section-title text-center text-2xl my-2 px-4 sm:px-0">Posts</div>
-    <section class="text-center px-4 sm:px-0">
-        {posts.length === 0 ? (
-            <div class="text-center my-8">
-                <div class="text-lg mb-4">🌵</div>
-                <p class="text-gray-600 mb-2">Oops! I haven't written anything recently.</p>
-                <p class="text-gray-600 mb-4">I'm probably busy coding or exploring new ideas!</p>
-                <a href="/archive/" class="text-blue-600 hover:text-blue-800 underline">
-                    Check out the archive for older posts →
-                </a>
-            </div>
-        ) : (
-            Array.from(postsByYear).map(([year, yearPosts]) => {
-                return yearPosts.map((p, index) => {
-                    return (
-                            <div key={`${p.data.slug}`}>
-                                {index === 0 && <h3 class="text-xl my-6">{year}</h3>}
-                                <div class={'row my-2'}>
-                                    <div class={'column'}>
-                                        <a href=`/${p.slug}`>{p.data.title}</a>
-                                        ::{' '}
-                                        <strong>{p.data.date.toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}</strong>
-                                    </div>
-                                    <div>
-                                        {p.data.minutesRead && (
-                                            <span class={'time-to-read'}>
-                                                ~{p.data.minutesRead} min read
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-                                {p.data.description && (
-                                    <div class="post-excerpt text-left my-3 px-4">
-                                        {p.data.description}
-                                    </div>
-                                )}
-                            </div>
-                    )
-                })
-            })
-        )}
-    </section>
+  <div class="section-title text-center text-2xl my-2 px-4 sm:px-0">Posts</div>
+  <section class="text-center px-4 sm:px-0">
+    {
+      posts.length === 0 ? (
+        <div class="text-center my-8">
+          <div class="text-lg mb-4">🌵</div>
+          <p class="text-theme-muted mb-2">Oops! I haven't written anything recently.</p>
+          <p class="text-theme-muted mb-4">I'm probably busy coding or exploring new ideas!</p>
+          <a href="/archive/" class="text-blue-600 hover:text-blue-800 underline">
+            Check out the archive for older posts →
+          </a>
+        </div>
+      ) : (
+        Array.from(postsByYear).map(([year, yearPosts]) => {
+          return yearPosts.map((p, index) => {
+            return (
+              <div key={`${p.data.slug}`}>
+                {index === 0 && <h3 class="text-xl my-6">{year}</h3>}
+                <div class={'row my-2'}>
+                  <div class={'column'}>
+                    <a href={`/${p.slug}`}>{p.data.title}</a>
+                    ::{' '}
+                    <strong>
+                      {p.data.date.toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}
+                    </strong>
+                  </div>
+                  <div>
+                    {p.data.minutesRead && (
+                      <span class={'time-to-read'}>~{p.data.minutesRead} min read</span>
+                    )}
+                  </div>
+                </div>
+                {p.data.description && (
+                  <div class="post-excerpt text-left my-3 px-4">{p.data.description}</div>
+                )}
+              </div>
+            )
+          })
+        })
+      )
+    }
+  </section>
 </Container>

@@ -1,10 +1,13 @@
 # benshi.me
 
-Version 8 of hbish.com / benshi.me - A complete rewrite using Astro to replicate the existing hbish.com blog.
+Version 8 of hbish.com / benshi.me - A complete rewrite using Astro to replicate the existing
+hbish.com blog.
 
 ## Overview
 
-This is Ben Shi's personal website and blog, featuring posts about software engineering, agile practices, and self-development. The site includes a comprehensive archive of technical notes and posts dating back to 2011.
+This is Ben Shi's personal website and blog, featuring posts about software engineering, agile
+practices, and self-development. The site includes a comprehensive archive of technical notes and
+posts dating back to 2011.
 
 ## The Stack
 
@@ -30,12 +33,16 @@ This is Ben Shi's personal website and blog, featuring posts about software engi
 ## Content Collections
 
 ### Posts (`/src/content/posts/`)
-Main blog posts with frontmatter including title, author, date, tags, and auto-generated reading time.
 
-### Notes (`/src/content/notes/`)  
+Main blog posts with frontmatter including title, author, date, tags, and auto-generated reading
+time.
+
+### Notes (`/src/content/notes/`)
+
 Technical notes and shorter posts organized by year folders (2011-2020).
 
 ### Pages (`/src/content/pages/`)
+
 Static pages like About, Now, Work, Talks, Uses, and Versions.
 
 ## Development
@@ -68,7 +75,7 @@ src/
 │   └── Content.astro
 ├── content/            # Content collections
 │   ├── posts/          # Blog posts by year
-│   ├── notes/          # Technical notes by year  
+│   ├── notes/          # Technical notes by year
 │   ├── pages/          # Static pages
 │   └── config.ts       # Content collection schemas
 ├── layouts/            # Page layouts
@@ -81,7 +88,8 @@ src/
 
 ## Content Migration Status
 
-This project is migrating content from the existing hbish.com blog built with Gatsby. See `docs/TODO.md` for current migration progress and remaining tasks.
+This project is migrating content from the existing hbish.com blog built with Gatsby. See
+`docs/TODO.md` for current migration progress and remaining tasks.
 
 ## Deployment
 

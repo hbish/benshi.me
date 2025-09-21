@@ -12,9 +12,13 @@ tags:
   - programming
 ---
 
-A couple weeks ago, I attended the [UTS Programming Competition][1] as a group of three. Although we didn't go quiet as well but it wasn't too bad either. We had four hours to solve as many questions from the 8 questions given and the time we took to solve them were accumulated into points. It was definitely an interesting experiences and I would definitely attend it again.
+A couple weeks ago, I attended the [UTS Programming Competition][1] as a group of three. Although we
+didn't go quiet as well but it wasn't too bad either. We had four hours to solve as many questions
+from the 8 questions given and the time we took to solve them were accumulated into points. It was
+definitely an interesting experiences and I would definitely attend it again.
 
-Below are the questions from this years Programming Competition and my solution for the first three questions implemented in Java. Will post up rest of my solutions in a another post.
+Below are the questions from this years Programming Competition and my solution for the first three
+questions implemented in Java. Will post up rest of my solutions in a another post.
 
 **Question 1**
 
