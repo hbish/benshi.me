@@ -13,7 +13,10 @@
     "lint:check": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "validate:rss": "node scripts/validate-rss.js",
+    "validate:json-feed": "node scripts/validate-json-feed.js",
+    "validate:feeds": "node scripts/validate-feeds.js"
   },
   "lint-staged": {
     "*.{js,mjs,ts,tsx,astro}": [
@@ -48,10 +51,12 @@
     "eslint": "^9.36.0",
     "eslint-parser-plain": "^0.1.1",
     "eslint-plugin-astro": "^1.3.1",
+    "fast-xml-parser": "^5.2.5",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.6",
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1",
+    "rss-parser": "^3.13.0",
     "typescript-eslint": "^8.44.0"
   }
 }

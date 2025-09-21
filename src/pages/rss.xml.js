@@ -10,6 +10,10 @@ export async function GET(context) {
     (a, b) => new Date(b.data.date) - new Date(a.data.date)
   )
 
+  // Get the latest post date for lastBuildDate
+  const latestPostDate =
+    sortedPosts.length > 0 ? sortedPosts[0].data.date : new Date()
+
   return rss({
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
@@ -24,6 +28,11 @@ export async function GET(context) {
         categories: post.data.tags,
       }),
     })),
-    customData: `<language>en-us</language>`,
+    customData: `<language>en-us</language>
+    <lastBuildDate>${latestPostDate.toUTCString()}</lastBuildDate>
+    <managingEditor>benshi@hbish.com (Ben Shi)</managingEditor>
+    <webMaster>benshi@hbish.com (Ben Shi)</webMaster>
+    <ttl>1440</ttl>
+    <generator>Astro v4.x with @astrojs/rss</generator>`,
   })
 }

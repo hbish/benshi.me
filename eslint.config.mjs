@@ -84,6 +84,7 @@ export default [
         __filename: 'readonly',
         module: 'readonly',
         require: 'readonly',
+        Response: 'readonly', // For Astro API routes
       },
     },
     rules: {
