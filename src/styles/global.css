@@ -289,6 +289,127 @@ select:hover {
   }
 }
 
+/* Mobile Navigation Enhancements */
+@media (max-width: 1024px) {
+  /* Mobile navigation toggle button */
+  #mobile-nav-toggle {
+    min-height: 44px;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  /* Mobile navigation menu */
+  #mobile-nav-menu {
+    animation: slideDown 0.2s ease-out;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  #mobile-nav-menu.hidden {
+    animation: slideUp 0.2s ease-out;
+  }
+
+  /* Ensure adequate touch targets for mobile navigation */
+  #mobile-nav-menu a {
+    min-height: 44px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-decoration: none;
+    position: relative;
+  }
+
+  /* Mobile social icons in hamburger menu */
+  #mobile-nav-menu .social a {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  #mobile-nav-menu .social a:hover {
+    background-color: var(--color-bg-secondary);
+    transform: translateY(-1px);
+  }
+
+  /* Active page indicator */
+  #mobile-nav-menu a[aria-current='page'],
+  #mobile-nav-menu a.active {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  /* Improved hover states for mobile navigation links */
+  #mobile-nav-menu .space-y-2 a:hover {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  /* Theme toggle in mobile menu */
+  #mobile-nav-menu .theme-section select {
+    min-height: 44px;
+    font-size: 1rem;
+    padding: 12px;
+    min-width: 120px;
+  }
+}
+
+/* Slide animations for mobile menu */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 1;
+    max-height: 500px;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+}
+
+/* Enhanced touch targets for all interactive elements */
+@media (max-width: 1024px) {
+  /* Social icons touch targets */
+  .social a {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+  }
+
+  /* Theme toggle touch target */
+  .theme-section select {
+    min-height: 44px;
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  /* Ensure profile image is large enough for touch */
+  .h-card a:first-child {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
 @media (max-width: 768px) {
   body {
     font-size: 0.875rem;
@@ -303,11 +424,6 @@ select:hover {
   }
   h3 {
     font-size: 1rem;
-  }
-
-  /* Hide theme switcher on mobile */
-  .theme-section {
-    display: none;
   }
 }
 
