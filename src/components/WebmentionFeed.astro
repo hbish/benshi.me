@@ -191,8 +191,9 @@ const { target } = Astro.props
   }
 
   .liked-by img {
-    @apply w-12 h-12 rounded-full border-2 transition-colors;
+    @apply w-8 h-8 rounded-full border-2 transition-colors;
     border-color: var(--color-accent);
+    border-radius: 50% !important;
   }
 
   .liked-by img:hover {
@@ -219,7 +220,8 @@ const { target } = Astro.props
   }
 
   .reply-avatar {
-    @apply w-10 h-10 rounded-full;
+    @apply w-8 h-8 rounded-full;
+    border-radius: 50% !important;
   }
 
   .reply-meta {
