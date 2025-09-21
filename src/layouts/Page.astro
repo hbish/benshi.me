@@ -1,6 +1,6 @@
 ---
 import Container from './Container.astro'
-import { CollectionEntry } from 'astro:content'
+import { type CollectionEntry } from 'astro:content'
 
 export interface Props {
   page: CollectionEntry<'pages'>
@@ -10,7 +10,7 @@ const { page } = Astro.props
 const { Content } = await page.render()
 ---
 
-<Container>
+<Container title={page.data.title}>
   <div class="content px-4 sm:px-0">
     <section>
       <article class="h-entry">

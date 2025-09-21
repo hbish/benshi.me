@@ -7,9 +7,6 @@ import keybaseLogo from '../assets/svg/keybase.inline.svg'
 import mailLogo from '../assets/svg/mail.inline.svg'
 import linkedinLogo from '../assets/svg/linkedin.inline.svg'
 import ThemeToggle from './ThemeToggle.astro'
-
-const today = new Date()
-const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 ---
 
 <div class="sidebar text-center content-center">
@@ -18,8 +15,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
       <Image
         class="w-20 h-20 lg:w-40 lg:h-40 rounded-full mx-auto border-2 border-white"
         src={profilePhoto}
-        aria-labelledby="title"
-        alt="Ben Shi"
+        alt="Ben Shi - Software Engineer and Technologist from Sydney, Australia"
+        widths={[80, 160, 320]}
+        sizes="(max-width: 1024px) 80px, 160px"
+        loading="eager"
+        decoding="sync"
+        format="webp"
+        quality={90}
       />
     </a>
     <a href="/" class="p-name u-url text-center text-2xl lg:text-5xl">
@@ -226,7 +228,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
       mobileMenu.classList.toggle('hidden')
 
       // Update aria-expanded
-      toggleButton.setAttribute('aria-expanded', !isExpanded)
+      toggleButton.setAttribute('aria-expanded', String(!isExpanded))
 
       // Rotate icon
       if (isExpanded) {

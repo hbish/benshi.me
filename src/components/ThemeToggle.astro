@@ -44,6 +44,10 @@
 <script>
   // Theme management script
   class ThemeManager {
+    themeKey: string
+    defaultTheme: string
+    themes: string[]
+
     constructor() {
       this.themeKey = 'hbish-theme'
       this.defaultTheme = 'light'
