@@ -1,0 +1,260 @@
+---
+export interface Props {
+  target: string
+}
+
+const { target } = Astro.props
+---
+
+<div class="webmention-feed" data-target={target}>
+  <div class="webmention-likes">
+    <div class="likes-header" style="display: none;">
+      <span class="likes-title">👏 Liked by</span>
+    </div>
+    <div class="likes-container"></div>
+  </div>
+
+  <div class="webmention-replies">
+    <div class="replies-header" style="display: none;">
+      <h4 class="replies-title">💬 Mentions & Replies</h4>
+    </div>
+    <div class="replies-container"></div>
+  </div>
+</div>
+
+<script>
+  class WebmentionFeed {
+    constructor(element) {
+      this.element = element
+      this.target = element.dataset.target
+      this.page = 0
+      this.perPage = 50
+      this.fetchWebmentions()
+    }
+
+    async fetchWebmentions() {
+      if (!this.target) return
+
+      try {
+        const response = await fetch(
+          `https://webmention.io/api/mentions.jf2?target=${encodeURIComponent(this.target)}&per-page=${this.perPage}&page=${this.page}`
+        )
+        const data = await response.json()
+
+        this.renderWebmentions(data.children || [])
+      } catch (error) {
+        console.warn('Failed to fetch webmentions:', error)
+      }
+    }
+
+    renderWebmentions(webmentions) {
+      const likes = webmentions.filter(
+        wm => wm['wm-property'] === 'like-of' || wm['wm-property'] === 'repost-of'
+      )
+      const replies = webmentions.filter(
+        wm => wm['wm-property'] === 'mention-of' || wm['wm-property'] === 'in-reply-to'
+      )
+
+      if (likes.length > 0) {
+        this.renderLikes(likes)
+      }
+
+      if (replies.length > 0) {
+        this.renderReplies(replies)
+      }
+    }
+
+    renderLikes(likes) {
+      const likesHeader = this.element.querySelector('.likes-header')
+      const likesContainer = this.element.querySelector('.likes-container')
+
+      if (likesHeader) likesHeader.style.display = 'block'
+
+      if (likesContainer) {
+        likesContainer.innerHTML = likes
+          .map(like => {
+            const author = like.author || {}
+            const name = author.name || 'Anonymous'
+            const photo = author.photo || '/android-chrome-192x192.png'
+            const url = author.url || like.url || '#'
+
+            return `
+              <a href="${this.escapeHtml(url)}" 
+                 class="liked-by" 
+                 title="Liked by ${this.escapeHtml(name)}"
+                 target="_blank"
+                 rel="noopener noreferrer">
+                <img src="${this.escapeHtml(photo)}" 
+                     alt="${this.escapeHtml(name)}"
+                     onerror="this.src='/android-chrome-192x192.png'"
+                     loading="lazy" />
+              </a>
+            `
+          })
+          .join('')
+      }
+    }
+
+    renderReplies(replies) {
+      const repliesHeader = this.element.querySelector('.replies-header')
+      const repliesContainer = this.element.querySelector('.replies-container')
+
+      if (repliesHeader) repliesHeader.style.display = 'block'
+
+      if (repliesContainer) {
+        repliesContainer.innerHTML = replies
+          .map(reply => {
+            const author = reply.author || {}
+            const name = author.name || 'Anonymous'
+            const photo = author.photo || '/android-chrome-192x192.png'
+            const url = author.url || reply.url || '#'
+            const content = reply.content?.text || reply.content?.html || 'No content'
+            const publishedRaw = reply.published || reply['wm-received']
+            const published = publishedRaw ? new Date(publishedRaw).toLocaleDateString() : ''
+
+            return `
+              <div class="webmention-reply">
+                <div class="reply-author">
+                  <img src="${this.escapeHtml(photo)}" 
+                       alt="${this.escapeHtml(name)}"
+                       class="reply-avatar"
+                       onerror="this.src='/android-chrome-192x192.png'"
+                       loading="lazy" />
+                  <div class="reply-meta">
+                    <a href="${this.escapeHtml(url)}" 
+                       class="reply-author-name"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                      ${this.escapeHtml(name)}
+                    </a>
+                    ${published ? `<time class="reply-date">${published}</time>` : ''}
+                  </div>
+                </div>
+                <div class="reply-content">
+                  ${this.sanitizeContent(content)}
+                </div>
+              </div>
+            `
+          })
+          .join('')
+      }
+    }
+
+    escapeHtml(unsafe) {
+      return unsafe
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+    }
+
+    sanitizeContent(content) {
+      // Basic content sanitization - strip dangerous tags but keep basic formatting
+      return content
+        .replace(/<script[^>]*>.*?<\/script>/gi, '')
+        .replace(/<iframe[^>]*>.*?<\/iframe>/gi, '')
+        .replace(/<object[^>]*>.*?<\/object>/gi, '')
+        .replace(/<embed[^>]*>/gi, '')
+        .replace(/<form[^>]*>.*?<\/form>/gi, '')
+        .replace(/on\w+\s*=\s*"[^"]*"/gi, '')
+        .replace(/on\w+\s*=\s*'[^']*'/gi, '')
+        .replace(/javascript:/gi, '')
+        .substring(0, 500) // Limit content length
+    }
+  }
+
+  // Initialize webmention feeds
+  document.addEventListener('DOMContentLoaded', () => {
+    const elements = document.querySelectorAll('.webmention-feed')
+    elements.forEach(element => new WebmentionFeed(element))
+  })
+</script>
+
+<style>
+  .webmention-feed {
+    @apply mt-8 space-y-6;
+  }
+
+  /* Likes Section */
+  .webmention-likes .likes-title {
+    @apply text-lg font-medium mb-4 block;
+    color: var(--color-text);
+  }
+
+  .likes-container {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .liked-by {
+    @apply block;
+  }
+
+  .liked-by img {
+    @apply w-12 h-12 rounded-full border-2 transition-colors;
+    border-color: var(--color-accent);
+  }
+
+  .liked-by img:hover {
+    border-color: var(--color-accent-hover);
+  }
+
+  /* Replies Section */
+  .webmention-replies .replies-title {
+    @apply text-lg font-medium mb-4;
+    color: var(--color-text);
+  }
+
+  .replies-container {
+    @apply space-y-4;
+  }
+
+  .webmention-reply {
+    @apply rounded-lg p-4;
+    border: 1px solid var(--color-border);
+  }
+
+  .reply-author {
+    @apply flex items-center gap-3 mb-3;
+  }
+
+  .reply-avatar {
+    @apply w-10 h-10 rounded-full;
+  }
+
+  .reply-meta {
+    @apply flex flex-col;
+  }
+
+  .reply-author-name {
+    @apply font-medium transition-colors;
+    color: var(--color-text);
+  }
+
+  .reply-author-name:hover {
+    color: var(--color-accent);
+  }
+
+  .reply-date {
+    @apply text-sm;
+    color: var(--color-text-muted);
+  }
+
+  .reply-content {
+    @apply prose prose-sm dark:prose-invert max-w-none;
+    color: var(--color-text);
+  }
+
+  .reply-content p {
+    @apply mb-2 last:mb-0;
+  }
+
+  .reply-content a {
+    @apply transition-colors;
+    color: var(--color-accent);
+  }
+
+  .reply-content a:hover {
+    color: var(--color-accent-hover);
+  }
+</style>
