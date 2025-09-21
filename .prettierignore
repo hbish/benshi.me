@@ -1,0 +1,12 @@
+# Prettier ignore patterns
+
+# Temporary ignore for Astro files with parsing issues
+src/layouts/Container.astro
+src/pages/\[...slug\].astro
+
+# Build output
+dist/
+.astro/
+
+# Dependencies
+node_modules/

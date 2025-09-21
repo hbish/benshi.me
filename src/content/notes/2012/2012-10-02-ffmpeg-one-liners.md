@@ -14,7 +14,8 @@ tags:
 
 [ffmpeg][1] is a cross-platform library for videos and audio files.
 
-ffmpeg just hit version 1.0 couple days ago and I thought its a good time to blog about some useful one liners I use every now and then.
+ffmpeg just hit version 1.0 couple days ago and I thought its a good time to blog about some useful
+one liners I use every now and then.
 
 ```bash
 # Get infomation for a audio/video

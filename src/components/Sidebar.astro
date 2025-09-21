@@ -7,110 +7,268 @@ import keybaseLogo from '../assets/svg/keybase.inline.svg'
 import mailLogo from '../assets/svg/mail.inline.svg'
 import linkedinLogo from '../assets/svg/linkedin.inline.svg'
 import ThemeToggle from './ThemeToggle.astro'
-
-const today = new Date()
-const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 ---
 
 <div class="sidebar text-center content-center">
-    <div class="h-card">
-        <a href="/" class="block">
-            <Image
-                class="w-20 h-20 lg:w-40 lg:h-40 rounded-full mx-auto"
-                src={profilePhoto}
-                aria-labelledby="title"
-                alt="Ben Shi"
-            />
-        </a>
-        <a href="/" class="p-name u-url text-center text-2xl lg:text-5xl">
-            <h1 class="mx-auto my-2 lg:my-6">Ben Shi</h1>
-        </a>
-        <p class="p-note text-center hidden lg:block my-2">
-            👋 I'm a technologist from Sydney, Australia. I love solving complex
-            problems.
-        </p>
-        <p class="p-note text-center hidden lg:block my-2">
-            I write about software engineering, agile practices and self
-            development & learning.
-        </p>
-        <nav
-            class="flex flex-row lg:flex-col items-center justify-center lg:justify-start my-2"
-        >
-            <a href="/about/" class="block lg:inline-block lg:mt-0 mr-4 my-2">
-                /about
-            </a>
-            <a href="/now/" class="block lg:inline-block lg:mt-0 mr-4 my-2">
-                /now
-            </a>
-            <a href="/work/" class="block lg:inline-block lg:mt-0 mr-4 my-2">
-                /work
-            </a>
-            <a href="/talks/" class="block lg:inline-block lg:mt-0 mr-4 my-2">
-                /talks
-            </a>
-            <a href="/uses/" class="block lg:inline-block lg:mt-0 mr-4 my-2">
-                /uses
-            </a>
-            <a href="/notes/" class="block lg:inline-block lg:mt-0 mr-4 my-2">
-                /notes
-            </a>
-            <a href="/archive/" class="block lg:inline-block lg:mt-0 mr-4 my-2">
-                /archive
-            </a>
-        </nav>
-        <div class="social flex gap-4 justify-center my-4">
-            <a href="https://x.com/hbish" title={'follow ben on x'} rel={'me'}>
-                <Image src={xLogo} alt="x" aria-labelledby={'title'} />
-            </a>
-            <a
-                href="https://au.linkedin.com/in/benshi"
-                title={'connect with ben on linkedin'}
-                rel={'me'}
-            >
-                <Image
-                    src={linkedinLogo}
-                    alt="linkedin"
-                    aria-labelledby={'title'}
-                />
-            </a>
-            <a
-                href="https://github.com/hbish"
-                title={'follow ben on github'}
-                rel={'me'}
-            >
-                <Image
-                    src={githubLogo}
-                    alt="github"
-                    aria-labelledby={'title'}
-                />
-            </a>
-            <a
-                href="mailto:ben@hbish.com"
-                title={'email ben'}
-                rel={'me'}
-                class={'u-email'}
-            >
-                <Image src={mailLogo} alt="email" aria-labelledby={'title'} />
-            </a>
-            <a
-                href="https://keybase.io/hbish"
-                title={'auth me on keybase'}
-                rel={'me'}
-            >
-                <Image
-                    src={keybaseLogo}
-                    alt="keybase"
-                    aria-labelledby={'title'}
-                />
-            </a>
+  <div class="h-card">
+    <a href="/" class="block">
+      <Image
+        class="w-20 h-20 lg:w-40 lg:h-40 rounded-full mx-auto border-2 border-white"
+        src={profilePhoto}
+        alt="Ben Shi - Software Engineer and Technologist from Sydney, Australia"
+        widths={[80, 160, 320]}
+        sizes="(max-width: 1024px) 80px, 160px"
+        loading="eager"
+        decoding="sync"
+        format="webp"
+        quality={90}
+      />
+    </a>
+    <a href="/" class="p-name u-url text-center text-2xl lg:text-5xl">
+      <h1 class="mx-auto my-1 lg:my-3">Ben Shi</h1>
+    </a>
+    <p class="p-note text-center hidden lg:block my-2">
+      👋 I'm a technologist from Sydney, Australia. I love solving complex problems.
+    </p>
+    <p class="p-note text-center hidden lg:block my-2">
+      I write about software engineering, agile practices and self development & learning.
+    </p>
+    <!-- Mobile Navigation Toggle -->
+    <div class="lg:hidden my-4">
+      <button
+        id="mobile-nav-toggle"
+        class="w-full px-4 py-2 bg-theme-secondary border border-theme rounded-lg text-theme hover:bg-theme transition-colors duration-200"
+        aria-expanded="false"
+        aria-controls="mobile-nav-menu"
+        aria-label="Toggle navigation menu"
+      >
+        <span class="flex items-center justify-between">
+          <span>Menu</span>
+          <svg
+            id="nav-icon"
+            class="w-5 h-5 transition-transform duration-200"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </span>
+      </button>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="my-2">
+      <!-- Mobile Navigation Menu (hidden by default) -->
+      <div
+        id="mobile-nav-menu"
+        class="lg:hidden hidden flex-col space-y-3 py-4 border-t border-theme mt-4"
+        role="navigation"
+        aria-label="Main navigation"
+      >
+        <!-- Navigation Links -->
+        <div class="space-y-2 mb-6">
+          <a
+            href="/about/"
+            class="block px-4 py-3 text-center hover:bg-theme-secondary rounded-lg transition-colors duration-200 min-h-[44px] flex items-center justify-center"
+          >
+            /about
+          </a>
+          <a
+            href="/now/"
+            class="block px-4 py-3 text-center hover:bg-theme-secondary rounded-lg transition-colors duration-200 min-h-[44px] flex items-center justify-center"
+          >
+            /now
+          </a>
+          <a
+            href="/work/"
+            class="block px-4 py-3 text-center hover:bg-theme-secondary rounded-lg transition-colors duration-200 min-h-[44px] flex items-center justify-center"
+          >
+            /work
+          </a>
+          <a
+            href="/talks/"
+            class="block px-4 py-3 text-center hover:bg-theme-secondary rounded-lg transition-colors duration-200 min-h-[44px] flex items-center justify-center"
+          >
+            /talks
+          </a>
+          <a
+            href="/uses/"
+            class="block px-4 py-3 text-center hover:bg-theme-secondary rounded-lg transition-colors duration-200 min-h-[44px] flex items-center justify-center"
+          >
+            /uses
+          </a>
+          <a
+            href="/notes/"
+            class="block px-4 py-3 text-center hover:bg-theme-secondary rounded-lg transition-colors duration-200 min-h-[44px] flex items-center justify-center"
+          >
+            /notes
+          </a>
+          <a
+            href="/archive/"
+            class="block px-4 py-3 text-center hover:bg-theme-secondary rounded-lg transition-colors duration-200 min-h-[44px] flex items-center justify-center"
+          >
+            /archive
+          </a>
         </div>
 
-        <!-- Theme Toggle -->
-        <div class="theme-section my-4">
-            <div class="text-xs uppercase tracking-wide text-theme-muted mb-2">
-                theme
-            </div>
-            <ThemeToggle />
+        <!-- Social Icons Section -->
+        <div class="border-t border-theme pt-4 mb-4">
+          <div class="text-xs uppercase tracking-wide text-theme-muted mb-3 text-center">
+            Connect
+          </div>
+          <div class="flex gap-4 justify-center">
+            <a
+              href="https://x.com/hbish"
+              title={'follow ben on x'}
+              rel={'me'}
+              class="min-h-[44px] min-w-[44px] flex items-center justify-center"
+            >
+              <Image src={xLogo} alt="x" aria-labelledby={'title'} />
+            </a>
+            <a
+              href="https://au.linkedin.com/in/benshi"
+              title={'connect with ben on linkedin'}
+              rel={'me'}
+              class="min-h-[44px] min-w-[44px] flex items-center justify-center"
+            >
+              <Image src={linkedinLogo} alt="linkedin" aria-labelledby={'title'} />
+            </a>
+            <a
+              href="https://github.com/hbish"
+              title={'follow ben on github'}
+              rel={'me'}
+              class="min-h-[44px] min-w-[44px] flex items-center justify-center"
+            >
+              <Image src={githubLogo} alt="github" aria-labelledby={'title'} />
+            </a>
+            <a
+              href="mailto:ben@hbish.com"
+              title={'email ben'}
+              rel={'me'}
+              class={'u-email min-h-[44px] min-w-[44px] flex items-center justify-center'}
+            >
+              <Image src={mailLogo} alt="email" aria-labelledby={'title'} />
+            </a>
+            <a
+              href="https://keybase.io/hbish"
+              title={'auth me on keybase'}
+              rel={'me'}
+              class="min-h-[44px] min-w-[44px] flex items-center justify-center"
+            >
+              <Image src={keybaseLogo} alt="keybase" aria-labelledby={'title'} />
+            </a>
+          </div>
         </div>
+
+        <!-- Theme Toggle Section -->
+        <div class="border-t border-theme pt-4">
+          <div class="text-xs uppercase tracking-wide text-theme-muted mb-3 text-center">Theme</div>
+          <div class="flex justify-center">
+            <ThemeToggle />
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Navigation (visible on lg and up) -->
+      <div class="hidden lg:flex lg:flex-col items-center justify-start">
+        <a href="/about/" class="block lg:inline-block lg:mt-0 mr-4 my-2"> /about </a>
+        <a href="/now/" class="block lg:inline-block lg:mt-0 mr-4 my-2"> /now </a>
+        <a href="/work/" class="block lg:inline-block lg:mt-0 mr-4 my-2"> /work </a>
+        <a href="/talks/" class="block lg:inline-block lg:mt-0 mr-4 my-2"> /talks </a>
+        <a href="/uses/" class="block lg:inline-block lg:mt-0 mr-4 my-2"> /uses </a>
+        <a href="/notes/" class="block lg:inline-block lg:mt-0 mr-4 my-2"> /notes </a>
+        <a href="/archive/" class="block lg:inline-block lg:mt-0 mr-4 my-2"> /archive </a>
+      </div>
+    </nav>
+    <!-- Social Icons - Desktop Only -->
+    <div class="social hidden lg:flex gap-4 justify-center my-4">
+      <a href="https://x.com/hbish" title={'follow ben on x'} rel={'me'}>
+        <Image src={xLogo} alt="x" aria-labelledby={'title'} />
+      </a>
+      <a href="https://au.linkedin.com/in/benshi" title={'connect with ben on linkedin'} rel={'me'}>
+        <Image src={linkedinLogo} alt="linkedin" aria-labelledby={'title'} />
+      </a>
+      <a href="https://github.com/hbish" title={'follow ben on github'} rel={'me'}>
+        <Image src={githubLogo} alt="github" aria-labelledby={'title'} />
+      </a>
+      <a href="mailto:ben@hbish.com" title={'email ben'} rel={'me'} class={'u-email'}>
+        <Image src={mailLogo} alt="email" aria-labelledby={'title'} />
+      </a>
+      <a href="https://keybase.io/hbish" title={'auth me on keybase'} rel={'me'}>
+        <Image src={keybaseLogo} alt="keybase" aria-labelledby={'title'} />
+      </a>
     </div>
+
+    <!-- Theme Toggle - Desktop Only -->
+    <div class="theme-section hidden lg:block my-4">
+      <div class="text-xs uppercase tracking-wide text-theme-muted mb-2">theme</div>
+      <ThemeToggle />
+    </div>
+  </div>
 </div>
+
+<script>
+  // Mobile navigation toggle functionality
+  function setupMobileNav() {
+    const toggleButton = document.getElementById('mobile-nav-toggle')
+    const mobileMenu = document.getElementById('mobile-nav-menu')
+    const navIcon = document.getElementById('nav-icon')
+
+    if (!toggleButton || !mobileMenu || !navIcon) return
+
+    toggleButton.addEventListener('click', () => {
+      const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true'
+
+      // Toggle menu visibility
+      mobileMenu.classList.toggle('hidden')
+
+      // Update aria-expanded
+      toggleButton.setAttribute('aria-expanded', String(!isExpanded))
+
+      // Rotate icon
+      if (isExpanded) {
+        navIcon.style.transform = 'rotate(0deg)'
+        navIcon.innerHTML =
+          '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />'
+      } else {
+        navIcon.style.transform = 'rotate(90deg)'
+        navIcon.innerHTML =
+          '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />'
+      }
+    })
+
+    // Close mobile menu when clicking navigation links
+    const mobileNavLinks = mobileMenu.querySelectorAll('a')
+    mobileNavLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden')
+        toggleButton.setAttribute('aria-expanded', 'false')
+        navIcon.style.transform = 'rotate(0deg)'
+        navIcon.innerHTML =
+          '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />'
+      })
+    })
+
+    // Close mobile menu on window resize to desktop size
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024) {
+        mobileMenu.classList.add('hidden')
+        toggleButton.setAttribute('aria-expanded', 'false')
+        navIcon.style.transform = 'rotate(0deg)'
+        navIcon.innerHTML =
+          '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />'
+      }
+    })
+  }
+
+  // Initialize on page load
+  setupMobileNav()
+
+  // Reinitialize on Astro view transitions (if used)
+  document.addEventListener('astro:page-load', setupMobileNav)
+</script>

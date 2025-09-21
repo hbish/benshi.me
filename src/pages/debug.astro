@@ -1,17 +1,22 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection } from 'astro:content'
 
-const pages = await getCollection('pages');
-console.log('Available pages:', pages.map(p => p.id));
+const pages = await getCollection('pages')
+console.log(
+  'Available pages:',
+  pages.map(p => p.id)
+)
 ---
 
 <div>
-    <h1>Debug Pages</h1>
-    {pages.map(page => (
-        <div>
-            <p>ID: {page.id}</p>
-            <p>Title: {page.data.title}</p>
-            <p>Slug: {page.data.slug}</p>
-        </div>
-    ))}
+  <h1>Debug Pages</h1>
+  {
+    pages.map(page => (
+      <div>
+        <p>ID: {page.id}</p>
+        <p>Title: {page.data.title}</p>
+        <p>Slug: {page.data.slug}</p>
+      </div>
+    ))
+  }
 </div>

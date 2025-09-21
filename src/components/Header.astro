@@ -1,17 +1,17 @@
 ---
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
-import '../styles/global.css';
+import '../styles/global.css'
 
 export interface Props {
-    title: string;
-    description: string;
-    image?: string;
+  title: string
+  description: string
+  image?: string
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 
-const { title, description, image = '/placeholder-social.jpg' } = Astro.props;
+const { title, description, image = '/placeholder-social.jpg' } = Astro.props
 ---
 
 <!-- Global Metadata -->
@@ -28,10 +28,7 @@ const { title, description, image = '/placeholder-social.jpg' } = Astro.props;
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
-<link
-        rel="webmention"
-        href="https://webmention.io/hbish.com/webmention"
-/>
+<link rel="webmention" href="https://webmention.io/hbish.com/webmention" />
 <link rel="pingback" href="https://webmention.io/hbish.com/xmlrpc" />
 
 <meta name="title" content={title} />
@@ -63,11 +60,8 @@ const { title, description, image = '/placeholder-social.jpg' } = Astro.props;
 <link rel="manifest" href="/site.webmanifest" />
 
 <!-- Goatcounter -->
-<script
-        data-goatcounter="https://hbish.goatcounter.com/count"
-        async
-        src="//gc.zgo.at/count.js"
-/>
+<script data-goatcounter="https://hbish.goatcounter.com/count" async src="//gc.zgo.at/count.js"
+></script>
 
 <!-- Comments -->
 <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>

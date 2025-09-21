@@ -12,7 +12,9 @@ tags:
   - unix
 ---
 
-Text: Found it on archlinux forum earlier tonight. This bash script will only sync one way, so it will come in handy during backup or offloading data from my old servers. I mean if I ever wanted bi-directional syncing, there is always (link: https://everythinglinux.org/rsync/ text: rsync).
+Text: Found it on archlinux forum earlier tonight. This bash script will only sync one way, so it
+will come in handy during backup or offloading data from my old servers. I mean if I ever wanted
+bi-directional syncing, there is always (link: https://everythinglinux.org/rsync/ text: rsync).
 
 To sync, just run:
 

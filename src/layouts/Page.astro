@@ -1,24 +1,24 @@
 ---
-import Container from './Container.astro';
-import { CollectionEntry } from 'astro:content';
+import Container from './Container.astro'
+import { type CollectionEntry } from 'astro:content'
 
 export interface Props {
-    page: CollectionEntry<'pages'>;
+  page: CollectionEntry<'pages'>
 }
 
-const { page } = Astro.props;
-const { Content } = await page.render();
+const { page } = Astro.props
+const { Content } = await page.render()
 ---
 
-<Container>
-    <div class="content px-4 sm:px-0">
-        <section>
-            <article class="h-entry">
-                <h1 class="p-name text-3xl font-bold mb-6 text-theme">{page.data.title}</h1>
-                <div class="prose prose-lg dark:prose-invert max-w-none">
-                    <Content />
-                </div>
-            </article>
-        </section>
-    </div>
+<Container title={page.data.title}>
+  <div class="content px-4 sm:px-0">
+    <section>
+      <article class="h-entry">
+        <h1 class="p-name text-3xl font-bold mb-6 text-theme">{page.data.title}</h1>
+        <div class="prose prose-lg dark:prose-invert max-w-none">
+          <Content />
+        </div>
+      </article>
+    </section>
+  </div>
 </Container>

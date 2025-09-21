@@ -1,0 +1,31 @@
+---
+import Container from '../layouts/Container.astro'
+---
+
+<Container title="Server Error - Ben Shi">
+  <div class="section-title text-center text-3xl my-8 px-4 sm:px-0">500 - Server Error</div>
+
+  <section class="text-center px-4 sm:px-0 max-w-2xl mx-auto">
+    <div class="text-6xl mb-6">⚠️</div>
+
+    <div class="mb-8">
+      <p class="text-lg mb-4">
+        Oops! Something went wrong on our end. The server encountered an internal error or
+        misconfiguration.
+      </p>
+      <p class="text-gray-600 mb-6">
+        This is likely a temporary issue. Please try again in a few moments.
+      </p>
+    </div>
+  </section>
+
+  <script>
+    // Set the current time for error reporting
+    document.addEventListener('DOMContentLoaded', () => {
+      const timeElement = document.getElementById('error-time')
+      if (timeElement) {
+        timeElement.textContent = new Date().toLocaleString()
+      }
+    })
+  </script>
+</Container>

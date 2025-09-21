@@ -6,7 +6,8 @@ slug: now
 description: What Ben is doing now
 ---
 
-This page is inspired by Derek Sivers’ [nownownow](https://nownownow.com/) and the [now page movement](https://sive.rs/nowff).
+This page is inspired by Derek Sivers’ [nownownow](https://nownownow.com/) and the
+[now page movement](https://sive.rs/nowff).
 
 ### What I'm focused on now
 

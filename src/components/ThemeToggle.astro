@@ -3,123 +3,127 @@
 ---
 
 <div class="theme-toggle">
-    <label for="theme-select" class="sr-only">Select theme</label>
-    <select 
-        id="theme-select" 
-        class="theme-selector bg-theme border border-theme rounded px-2 py-1 text-sm text-theme-secondary focus:outline-none focus:ring-2 focus:ring-accent-theme"
-    >
-        <option value="light">light</option>
-        <option value="dark">dark</option>
-        <option value="gruv-light">gruv-light</option>
-        <option value="gruv-dark">gruv-dark</option>
-    </select>
+  <label for="theme-select" class="sr-only">Select theme</label>
+  <select
+    id="theme-select"
+    class="theme-selector bg-theme border border-theme rounded px-2 py-1 text-sm text-theme-secondary focus:outline-none focus:ring-2 focus:ring-accent-theme"
+  >
+    <option value="light">light</option>
+    <option value="dark">dark</option>
+    <option value="gruv-light">gruv-light</option>
+    <option value="gruv-dark">gruv-dark</option>
+  </select>
 </div>
 
 <style>
-    .theme-selector {
-        font-family: inherit;
-        font-size: 0.875rem;
-        background-color: var(--color-bg);
-        color: var(--color-text-secondary);
-        border-color: var(--color-border);
-        transition: all 0.2s ease;
-    }
-    
-    .theme-selector:focus {
-        outline: 2px solid var(--color-accent);
-        outline-offset: 2px;
-        border-color: var(--color-accent);
-    }
-    
-    .theme-selector:hover {
-        border-color: var(--color-accent);
-    }
-    
-    .theme-selector option {
-        background-color: var(--color-bg);
-        color: var(--color-text);
-    }
+  .theme-selector {
+    font-family: inherit;
+    font-size: 0.875rem;
+    background-color: var(--color-bg);
+    color: var(--color-text-secondary);
+    border-color: var(--color-border);
+    transition: all 0.2s ease;
+  }
+
+  .theme-selector:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-color: var(--color-accent);
+  }
+
+  .theme-selector:hover {
+    border-color: var(--color-accent);
+  }
+
+  .theme-selector option {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
 </style>
 
 <script>
-    // Theme management script
-    class ThemeManager {
-        constructor() {
-            this.themeKey = 'hbish-theme';
-            this.defaultTheme = 'light';
-            this.themes = ['light', 'dark', 'gruv-light', 'gruv-dark'];
-            this.init();
-        }
+  // Theme management script
+  class ThemeManager {
+    themeKey: string
+    defaultTheme: string
+    themes: string[]
 
-        init() {
-            // Get saved theme or default
-            const savedTheme = this.getSavedTheme();
-            this.setTheme(savedTheme);
-            
-            // Set up the selector
-            const selector = document.getElementById('theme-select') as HTMLSelectElement;
-            if (selector) {
-                selector.value = savedTheme;
-                selector.addEventListener('change', (e) => {
-                    const target = e.target as HTMLSelectElement;
-                    this.setTheme(target.value);
-                });
-            }
-        }
-
-        getSavedTheme(): string {
-            if (typeof localStorage !== 'undefined') {
-                const saved = localStorage.getItem(this.themeKey);
-                if (saved && this.themes.includes(saved)) {
-                    return saved;
-                }
-            }
-            
-            // Fallback to system preference for light/dark
-            if (typeof window !== 'undefined' && window.matchMedia) {
-                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            }
-            
-            return this.defaultTheme;
-        }
-
-        setTheme(theme: string) {
-            if (!this.themes.includes(theme)) return;
-            
-            const html = document.documentElement;
-            
-            // Remove all theme classes
-            this.themes.forEach(t => {
-                html.classList.remove(t);
-            });
-            
-            // Add the selected theme class
-            html.classList.add(theme);
-            
-            // Save to localStorage
-            if (typeof localStorage !== 'undefined') {
-                localStorage.setItem(this.themeKey, theme);
-            }
-            
-            // Update the selector if it exists
-            const selector = document.getElementById('theme-select') as HTMLSelectElement;
-            if (selector && selector.value !== theme) {
-                selector.value = theme;
-            }
-        }
+    constructor() {
+      this.themeKey = 'hbish-theme'
+      this.defaultTheme = 'light'
+      this.themes = ['light', 'dark', 'gruv-light', 'gruv-dark']
+      this.init()
     }
 
-    // Initialize theme manager on page load
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            new ThemeManager();
-        });
-    } else {
-        new ThemeManager();
+    init() {
+      // Get saved theme or default
+      const savedTheme = this.getSavedTheme()
+      this.setTheme(savedTheme)
+
+      // Set up the selector
+      const selector = document.getElementById('theme-select') as HTMLSelectElement
+      if (selector) {
+        selector.value = savedTheme
+        selector.addEventListener('change', e => {
+          const target = e.target as HTMLSelectElement
+          this.setTheme(target.value)
+        })
+      }
     }
-    
-    // Handle page navigation (for Astro view transitions)
-    document.addEventListener('astro:page-load', () => {
-        new ThemeManager();
-    });
+
+    getSavedTheme(): string {
+      if (typeof localStorage !== 'undefined') {
+        const saved = localStorage.getItem(this.themeKey)
+        if (saved && this.themes.includes(saved)) {
+          return saved
+        }
+      }
+
+      // Fallback to system preference for light/dark
+      if (typeof window !== 'undefined' && window.matchMedia) {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      }
+
+      return this.defaultTheme
+    }
+
+    setTheme(theme: string) {
+      if (!this.themes.includes(theme)) return
+
+      const html = document.documentElement
+
+      // Remove all theme classes
+      this.themes.forEach(t => {
+        html.classList.remove(t)
+      })
+
+      // Add the selected theme class
+      html.classList.add(theme)
+
+      // Save to localStorage
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem(this.themeKey, theme)
+      }
+
+      // Update the selector if it exists
+      const selector = document.getElementById('theme-select') as HTMLSelectElement
+      if (selector && selector.value !== theme) {
+        selector.value = theme
+      }
+    }
+  }
+
+  // Initialize theme manager on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      new ThemeManager()
+    })
+  } else {
+    new ThemeManager()
+  }
+
+  // Handle page navigation (for Astro view transitions)
+  document.addEventListener('astro:page-load', () => {
+    new ThemeManager()
+  })
 </script>

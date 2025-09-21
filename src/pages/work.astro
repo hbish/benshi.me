@@ -1,9 +1,9 @@
 ---
-import { getEntry } from 'astro:content';
-import Page from '../layouts/Page.astro';
+import { getEntry } from 'astro:content'
+import Page from '../layouts/Page.astro'
 
-const page = await getEntry('pages', 'work');
-if (!page) throw new Error('Work page not found');
+const page = await getEntry('pages', 'work')
+if (!page) throw new Error('Work page not found')
 ---
 
 <Page page={page} />

@@ -71,7 +71,9 @@
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* Selection styling */
@@ -159,7 +161,11 @@ a:hover {
 
 /* Waterfall element */
 .waterfall {
-  background-image: linear-gradient(to bottom, var(--color-accent) 0%, transparent 100%);
+  background-image: linear-gradient(
+    to bottom,
+    var(--color-accent) 0%,
+    transparent 100%
+  );
   bottom: 0;
   left: 0;
   min-width: 10px;
@@ -172,19 +178,29 @@ a:hover {
 
 /* Enhanced Typography */
 body {
-  font-family: 'Cardo', 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  font-family:
+    'Cardo', 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   font-size: 1.2rem;
   line-height: 1.6;
   letter-spacing: 0.01em;
-  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  font-feature-settings:
+    'kern' 1,
+    'liga' 1,
+    'calt' 1;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 /* Headings use Playfair Display like hbish.com */
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Playfair Display', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family:
+    'Playfair Display', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   font-weight: 400;
   letter-spacing: -0.1rem;
 }
@@ -208,7 +224,9 @@ textarea:focus {
 /* Enhanced Image Styling */
 img {
   border-radius: 8px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 img:hover {
@@ -242,12 +260,14 @@ pre code {
 }
 
 /* Enhanced Button and Interactive Elements */
-button, select {
+button,
+select {
   transition: all 0.2s ease;
   border-radius: 6px;
 }
 
-button:hover, select:hover {
+button:hover,
+select:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -257,15 +277,136 @@ button:hover, select:hover {
   .container {
     padding: 1rem;
   }
-  
+
   /* Force mobile layout */
   .flex.flex-col {
     flex-direction: column !important;
   }
-  
+
   /* Full width on mobile */
   .w-full {
     margin: 0 0 2rem 0 !important;
+  }
+}
+
+/* Mobile Navigation Enhancements */
+@media (max-width: 1024px) {
+  /* Mobile navigation toggle button */
+  #mobile-nav-toggle {
+    min-height: 44px;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  /* Mobile navigation menu */
+  #mobile-nav-menu {
+    animation: slideDown 0.2s ease-out;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  #mobile-nav-menu.hidden {
+    animation: slideUp 0.2s ease-out;
+  }
+
+  /* Ensure adequate touch targets for mobile navigation */
+  #mobile-nav-menu a {
+    min-height: 44px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-decoration: none;
+    position: relative;
+  }
+
+  /* Mobile social icons in hamburger menu */
+  #mobile-nav-menu .social a {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  #mobile-nav-menu .social a:hover {
+    background-color: var(--color-bg-secondary);
+    transform: translateY(-1px);
+  }
+
+  /* Active page indicator */
+  #mobile-nav-menu a[aria-current='page'],
+  #mobile-nav-menu a.active {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  /* Improved hover states for mobile navigation links */
+  #mobile-nav-menu .space-y-2 a:hover {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  /* Theme toggle in mobile menu */
+  #mobile-nav-menu .theme-section select {
+    min-height: 44px;
+    font-size: 1rem;
+    padding: 12px;
+    min-width: 120px;
+  }
+}
+
+/* Slide animations for mobile menu */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 1;
+    max-height: 500px;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+}
+
+/* Enhanced touch targets for all interactive elements */
+@media (max-width: 1024px) {
+  /* Social icons touch targets */
+  .social a {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+  }
+
+  /* Theme toggle touch target */
+  .theme-section select {
+    min-height: 44px;
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  /* Ensure profile image is large enough for touch */
+  .h-card a:first-child {
+    min-height: 44px;
+    min-width: 44px;
   }
 }
 
@@ -274,21 +415,28 @@ button:hover, select:hover {
     font-size: 0.875rem;
     line-height: 1.5;
   }
-  
-  h1 { font-size: 1.25rem; }
-  h2 { font-size: 1.125rem; }
-  h3 { font-size: 1rem; }
-  
-  /* Hide theme switcher on mobile */
-  .theme-section {
-    display: none;
+
+  h1 {
+    font-size: 1.25rem;
+  }
+  h2 {
+    font-size: 1.125rem;
+  }
+  h3 {
+    font-size: 1rem;
   }
 }
 
 /* Subtle Loading Animation */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .content > * {
@@ -308,7 +456,7 @@ button:hover, select:hover {
 /* Social icons should inherit text color for theme compatibility */
 .social svg {
   fill: var(--color-text);
-  margin: 0 0 0 .8rem;
+  margin: 0 0 0 0.8rem;
   transition: fill 0.3s ease;
 }
 
@@ -345,7 +493,10 @@ button:hover, select:hover {
   margin-top: 1.5em;
 }
 
-.prose h1, .prose h2, .prose h3, .prose h4 {
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
   margin-top: 2em;
   margin-bottom: 0.75em;
   line-height: 1.25;
@@ -375,7 +526,11 @@ button:hover, select:hover {
 .prose a img {
   border: 0.3rem solid;
   border-image-slice: 60 30;
-  border-image-source: linear-gradient(140deg, var(--color-accent) 0%, var(--color-bg) 80%);
+  border-image-source: linear-gradient(
+    140deg,
+    var(--color-accent) 0%,
+    var(--color-bg) 80%
+  );
 }
 
 /* Article metadata styling */

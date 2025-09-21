@@ -1,19 +1,15 @@
 ---
-const today = new Date();
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const today = new Date()
 ---
 
 <!-- Footer -->
 <footer class={'text-center text-xs'}>
-    &copy; 2009 - {today.getFullYear()} <a href="/"> - Ben Shi</a>
-    <br />
-    :: <a href="/versions/">v8</a> updated at {today.toLocaleDateString()} ::
-    <br />
-    <a href="https://xn--sr8hvo.ws/%F0%9F%8D%B7%F0%9F%8E%87%E2%8F%AF/previous">
-        ←
-    </a>
-    🕸💍
-    <a href="https://xn--sr8hvo.ws/%F0%9F%8D%B7%F0%9F%8E%87%E2%8F%AF/next">
-        →
-    </a>
+  &copy; 2009 - {today.getFullYear()}
+  <a href="/"> - Ben Shi</a>
+  <br />
+  :: <a href="/versions/">v8</a> updated at {today.toLocaleDateString()} ::
+  <br />
+  <a href="https://xn--sr8hvo.ws/%F0%9F%8D%B7%F0%9F%8E%87%E2%8F%AF/previous"> ← </a>
+  🕸💍
+  <a href="https://xn--sr8hvo.ws/%F0%9F%8D%B7%F0%9F%8E%87%E2%8F%AF/next"> → </a>
 </footer>
