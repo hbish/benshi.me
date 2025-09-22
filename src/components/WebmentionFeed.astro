@@ -7,7 +7,27 @@ const { target } = Astro.props
 ---
 
 <div class="webmentions" data-target={target}>
-  <div class="webmentions-container"></div>
+  <!-- Test webmention for styling verification -->
+  <div class="webmentions-container">
+    <div class="webmention-simple">
+      <a href="#" target="_blank" title="Test User liked this">
+        <img src="https://github.com/hbish.png" alt="Test User" class="webmention-avatar" />
+      </a>
+    </div>
+    <div class="webmention">
+      <div class="webmention-header">
+        <img src="https://github.com/hbish.png" alt="Test User" class="webmention-avatar" />
+        <div class="webmention-meta">
+          <strong><a href="#" target="_blank">Test User</a></strong>
+          <span class="webmention-action">replied on Jan 1, 2024</span>
+        </div>
+      </div>
+      <p class="webmention-content">
+        This is a test comment to verify the styling is working properly.
+      </p>
+      <a href="#" target="_blank" class="webmention-link">View original →</a>
+    </div>
+  </div>
   <div class="webmentions-empty" style="display: none;">
     <p>No interactions yet.</p>
   </div>
@@ -46,12 +66,45 @@ const { target } = Astro.props
       const empty = this.element.querySelector('.webmentions-empty')
 
       const sortedMentions = webmentions.sort((a, b) => {
+        const typeA = a['wm-property']
+        const typeB = b['wm-property']
+
+        // Priority order: likes and reposts first, then comments
+        const priorityOrder = { 'like-of': 0, 'repost-of': 1, 'in-reply-to': 2, 'mention-of': 3 }
+        const priorityA = priorityOrder[typeA] ?? 999
+        const priorityB = priorityOrder[typeB] ?? 999
+
+        if (priorityA !== priorityB) {
+          return priorityA - priorityB
+        }
+
+        // Within same type, sort by date (newest first)
         const dateA = new Date(a.published || a['wm-received'] || 0)
         const dateB = new Date(b.published || b['wm-received'] || 0)
         return dateB - dateA
       })
 
-      container.innerHTML = sortedMentions.map(mention => this.renderMention(mention)).join('')
+      // Separate simple webmentions (likes/reposts) from full webmentions
+      const simpleWebmentions = sortedMentions.filter(
+        mention => mention['wm-property'] === 'like-of' || mention['wm-property'] === 'repost-of'
+      )
+      const fullWebmentions = sortedMentions.filter(
+        mention => mention['wm-property'] !== 'like-of' && mention['wm-property'] !== 'repost-of'
+      )
+
+      let html = ''
+
+      // Add avatars section if there are simple webmentions
+      if (simpleWebmentions.length > 0) {
+        html += '<div class="webmentions-avatars">'
+        html += simpleWebmentions.map(mention => this.renderMention(mention)).join('')
+        html += '</div>'
+      }
+
+      // Add full webmentions
+      html += fullWebmentions.map(mention => this.renderMention(mention)).join('')
+
+      container.innerHTML = html
       empty.style.display = 'none'
     }
 
@@ -60,6 +113,7 @@ const { target } = Astro.props
       const author = mention.author || {}
       const name = author.name || 'Anonymous'
       const url = author.url || mention.url || '#'
+      const avatar = author.photo || ''
       const content = mention.content?.text || mention.content?.html || ''
       const published = mention.published || mention['wm-received']
       const date = published ? new Date(published).toLocaleDateString() : ''
@@ -72,12 +126,33 @@ const { target } = Astro.props
           'mention-of': 'mentioned this',
         }[type] || 'interacted'
 
+      // For likes and reposts, show only the linked avatar
+      if (type === 'like-of' || type === 'repost-of') {
+        return `
+          <div class="webmention webmention-simple">
+            ${
+              avatar
+                ? `<a href="${this.escapeHtml(mention.url || url)}" target="_blank" title="${this.escapeHtml(name)} ${typeLabel}">
+                <img src="${this.escapeHtml(avatar)}" alt="${this.escapeHtml(name)}" class="webmention-avatar">
+              </a>`
+                : `<a href="${this.escapeHtml(mention.url || url)}" target="_blank" class="webmention-fallback">${this.escapeHtml(name)}</a>`
+            }
+          </div>
+        `
+      }
+
+      // For comments and mentions, show full layout
       return `
         <div class="webmention">
-          <strong><a href="${this.escapeHtml(url)}" target="_blank">${this.escapeHtml(name)}</a></strong>
-          ${typeLabel}${date ? ` on ${date}` : ''}
-          ${content ? `<p>${this.escapeHtml(content.substring(0, 200))}${content.length > 200 ? '...' : ''}</p>` : ''}
-          <a href="${this.escapeHtml(mention.url || url)}" target="_blank">View original →</a>
+          <div class="webmention-header">
+            ${avatar ? `<img src="${this.escapeHtml(avatar)}" alt="${this.escapeHtml(name)}" class="webmention-avatar">` : ''}
+            <div class="webmention-meta">
+              <strong><a href="${this.escapeHtml(url)}" target="_blank">${this.escapeHtml(name)}</a></strong>
+              <span class="webmention-action">${typeLabel}${date ? ` on ${date}` : ''}</span>
+            </div>
+          </div>
+          ${content ? `<p class="webmention-content">${this.escapeHtml(content.substring(0, 200))}${content.length > 200 ? '...' : ''}</p>` : ''}
+          <a href="${this.escapeHtml(mention.url || url)}" target="_blank" class="webmention-link">View original →</a>
         </div>
       `
     }
@@ -104,61 +179,3 @@ const { target } = Astro.props
     elements.forEach(element => new WebmentionFeed(element))
   })
 </script>
-
-<style>
-  .webmentions {
-    margin-top: 2rem;
-  }
-
-  .webmentions-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .webmention {
-    padding: 1rem;
-    border: 1px solid var(--color-border);
-    border-radius: 0.5rem;
-    background: var(--color-bg);
-  }
-
-  .webmention p {
-    margin: 0.5rem 0;
-    color: var(--color-text-muted);
-  }
-
-  .webmention a {
-    color: var(--color-accent);
-    text-decoration: none;
-  }
-
-  .webmention a:hover {
-    color: var(--color-accent-hover);
-  }
-
-  .webmentions-empty {
-    text-align: center;
-    padding: 2rem;
-    color: var(--color-text-muted);
-  }
-
-  /* Responsive flex layout */
-  @media (min-width: 768px) {
-    .webmentions-container {
-      flex-direction: row;
-      flex-wrap: wrap;
-    }
-
-    .webmention {
-      flex: 1 1 calc(50% - 0.5rem);
-      min-width: 0;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .webmention {
-      flex: 1 1 calc(33.333% - 0.67rem);
-    }
-  }
-</style>
