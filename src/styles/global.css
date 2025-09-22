@@ -731,6 +731,39 @@ select:hover {
   color: var(--color-text-muted);
 }
 
+/* Threaded comment styles */
+.webmention-replies {
+  margin-left: 2rem;
+  margin-top: 0.5rem;
+  border-left: 2px solid var(--color-border);
+  padding-left: 1rem;
+}
+
+.webmention-depth-1 {
+  margin-left: 1rem;
+}
+
+.webmention-depth-2 {
+  margin-left: 2rem;
+}
+
+.webmention-depth-3 {
+  margin-left: 3rem;
+}
+
+@media (max-width: 768px) {
+  .webmention-replies {
+    margin-left: 1rem;
+    padding-left: 0.5rem;
+  }
+
+  .webmention-depth-1,
+  .webmention-depth-2,
+  .webmention-depth-3 {
+    margin-left: 0.5rem;
+  }
+}
+
 /* Responsive flex layout */
 @media (min-width: 768px) {
   .webmentions-container {

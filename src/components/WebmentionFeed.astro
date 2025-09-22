@@ -29,6 +29,20 @@ const { target } = Astro.props
         This is a test comment to verify the styling is working properly.
       </p>
     </div>
+    <div class="webmention-replies">
+      <div class="webmention webmention-depth-1">
+        <div class="webmention-header">
+          <img src="https://github.com/hbish.png" alt="Reply User" class="webmention-avatar" />
+          <div class="webmention-meta">
+            <strong><a href="#" target="_blank">Reply User</a></strong>
+            <span class="webmention-action"
+              ><a href="#" target="_blank">replied</a> on Jan 2, 2024</span
+            >
+          </div>
+        </div>
+        <p class="webmention-content">This is a threaded reply to demonstrate nesting.</p>
+      </div>
+    </div>
   </div>
   <div class="webmentions-empty" style="display: none;">
     <p>No interactions yet.</p>
@@ -94,6 +108,9 @@ const { target } = Astro.props
         mention => mention['wm-property'] !== 'like-of' && mention['wm-property'] !== 'repost-of'
       )
 
+      // Build comment tree for threading
+      const commentTree = this.buildCommentTree(fullWebmentions)
+
       let html = ''
 
       // Add avatars section if there are simple webmentions
@@ -103,14 +120,60 @@ const { target } = Astro.props
         html += '</div>'
       }
 
-      // Add full webmentions
-      html += fullWebmentions.map(mention => this.renderMention(mention)).join('')
+      // Add threaded webmentions
+      html += this.renderCommentTree(commentTree)
 
       container.innerHTML = html
       empty.style.display = 'none'
     }
 
-    renderMention(mention) {
+    buildCommentTree(webmentions) {
+      const topLevel = []
+      const byUrl = new Map()
+
+      // Index all webmentions by their URL
+      webmentions.forEach(mention => {
+        const url = mention.url || mention['wm-source']
+        if (url) {
+          byUrl.set(url, mention)
+        }
+      })
+
+      webmentions.forEach(mention => {
+        mention.replies = []
+
+        // Check if this is a reply to another webmention
+        const inReplyTo = mention['in-reply-to']
+        if (inReplyTo) {
+          const parent = byUrl.get(inReplyTo)
+          if (parent) {
+            parent.replies = parent.replies || []
+            parent.replies.push(mention)
+            return
+          }
+        }
+
+        // If not a reply to another webmention, it's top-level
+        topLevel.push(mention)
+      })
+
+      return topLevel
+    }
+
+    renderCommentTree(comments, depth = 0) {
+      return comments
+        .map(comment => {
+          const commentHtml = this.renderMention(comment, depth)
+          const repliesHtml =
+            comment.replies && comment.replies.length > 0
+              ? `<div class="webmention-replies">${this.renderCommentTree(comment.replies, depth + 1)}</div>`
+              : ''
+          return commentHtml + repliesHtml
+        })
+        .join('')
+    }
+
+    renderMention(mention, depth = 0) {
       const type = mention['wm-property']
       const author = mention.author || {}
       const name = author.name || 'Anonymous'
@@ -145,9 +208,10 @@ const { target } = Astro.props
         `
       }
 
-      // For comments and mentions, show full layout
+      // For comments and mentions, show full layout with depth-based styling
+      const depthClass = depth > 0 ? ` webmention-depth-${Math.min(depth, 3)}` : ''
       return `
-        <div class="webmention">
+        <div class="webmention${depthClass}">
           <div class="webmention-header">
             ${avatar ? `<img src="${this.escapeHtml(avatar)}" alt="${this.escapeHtml(name)}" class="webmention-avatar">` : ''}
             <div class="webmention-meta">
