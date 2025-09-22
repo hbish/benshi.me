@@ -57,7 +57,13 @@ const { target } = Astro.props
 
   <!-- Unified Interactions Feed -->
   <div class="interactions-feed">
-    <h4 class="feed-title">Social Interactions</h4>
+    <div class="feed-header">
+      <h4 class="feed-title">Social Interactions</h4>
+      <!-- Development debug controls -->
+      <div class="debug-controls" style="display: none;">
+        <button class="debug-toggle" title="Toggle mock data">🧪 Debug</button>
+      </div>
+    </div>
     <div class="interactions-container"></div>
     <div class="interactions-empty" style="display: none;">
       <p>No interactions yet. Be the first to share your thoughts!</p>
@@ -72,8 +78,31 @@ const { target } = Astro.props
       this.target = element.dataset.target
       this.page = 0
       this.perPage = 50
+      this.debugMode = false
       this.initSharingButtons()
+      this.initDebugControls()
       this.fetchWebmentions()
+    }
+
+    initDebugControls() {
+      const isDev =
+        window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+
+      if (isDev) {
+        const debugControls = this.element.querySelector('.debug-controls')
+        const debugToggle = this.element.querySelector('.debug-toggle')
+
+        if (debugControls && debugToggle) {
+          debugControls.style.display = 'block'
+
+          debugToggle.addEventListener('click', () => {
+            this.debugMode = !this.debugMode
+            debugToggle.textContent = this.debugMode ? '🔧 Real Data' : '🧪 Debug'
+            debugToggle.title = this.debugMode ? 'Switch to real data' : 'Switch to mock data'
+            this.fetchWebmentions()
+          })
+        }
+      }
     }
 
     initSharingButtons() {
@@ -125,17 +154,103 @@ const { target } = Astro.props
     async fetchWebmentions() {
       if (!this.target) return
 
+      const isDev =
+        window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+
+      // Force mock data in debug mode
+      if (this.debugMode) {
+        this.renderInteractions(this.getMockWebmentions())
+        return
+      }
+
       try {
         const response = await fetch(
           `https://webmention.io/api/mentions.jf2?target=${encodeURIComponent(this.target)}&per-page=${this.perPage}&page=${this.page}`
         )
         const data = await response.json()
 
-        this.renderInteractions(data.children || [])
+        if (data.children && data.children.length > 0) {
+          this.renderInteractions(data.children)
+        } else if (isDev) {
+          // Show mock data in development when no real data exists
+          this.renderInteractions(this.getMockWebmentions())
+        } else {
+          this.showEmptyState()
+        }
       } catch (error) {
         console.warn('Failed to fetch webmentions:', error)
-        this.showEmptyState()
+
+        if (isDev) {
+          // Show mock data if fetch fails in development
+          this.renderInteractions(this.getMockWebmentions())
+        } else {
+          this.showEmptyState()
+        }
       }
+    }
+
+    getMockWebmentions() {
+      return [
+        {
+          'wm-property': 'like-of',
+          author: {
+            name: 'Alice Johnson',
+            photo: 'https://github.com/alice.png',
+            url: 'https://alice.dev',
+          },
+          published: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days ago
+          url: 'https://alice.dev/posts/123',
+        },
+        {
+          'wm-property': 'in-reply-to',
+          author: {
+            name: 'Bob Smith',
+            photo: 'https://github.com/bob.png',
+            url: 'https://bob.blog',
+          },
+          content: {
+            text: 'Great post! I had a similar experience when I was working on my project. The approach you described really helped me solve a tricky problem.',
+          },
+          published: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days ago
+          url: 'https://bob.blog/reply/456',
+        },
+        {
+          'wm-property': 'repost-of',
+          author: {
+            name: 'Carol Chen',
+            photo: 'https://github.com/carol.png',
+            url: 'https://carol.social',
+          },
+          content: {
+            text: 'This is exactly what I needed to read today. Sharing with my team!',
+          },
+          published: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 1 week ago
+          url: 'https://carol.social/repost/789',
+        },
+        {
+          'wm-property': 'mention-of',
+          author: {
+            name: 'David Kim',
+            photo: 'https://github.com/david.png',
+            url: 'https://david.tech',
+          },
+          content: {
+            text: 'Found this article really insightful. The section about best practices was particularly useful for our current project architecture.',
+          },
+          published: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), // 10 days ago
+          url: 'https://david.tech/mentions/101',
+        },
+        {
+          'wm-property': 'like-of',
+          author: {
+            name: 'Eve Martinez',
+            photo: 'https://github.com/eve.png',
+            url: 'https://eve.codes',
+          },
+          published: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(), // 2 weeks ago
+          url: 'https://eve.codes/likes/202',
+        },
+      ]
     }
 
     renderInteractions(webmentions) {
@@ -390,11 +505,33 @@ const { target } = Astro.props
     @apply space-y-6;
   }
 
-  .feed-title {
-    @apply text-lg font-medium pb-4 border-b;
-    color: var(--color-text);
+  .feed-header {
+    @apply flex items-center justify-between pb-4 border-b;
     border-color: var(--color-border);
+  }
+
+  .feed-title {
+    @apply text-lg font-medium;
+    color: var(--color-text);
     font-family: 'Playfair Display', serif;
+  }
+
+  .debug-controls {
+    @apply flex items-center gap-2;
+  }
+
+  .debug-toggle {
+    @apply px-2 py-1 text-xs rounded border transition-colors;
+    background: var(--color-bg-secondary);
+    border-color: var(--color-border);
+    color: var(--color-text-muted);
+    cursor: pointer;
+  }
+
+  .debug-toggle:hover {
+    background: var(--color-accent);
+    color: var(--color-bg);
+    border-color: var(--color-accent);
   }
 
   .interactions-container {
