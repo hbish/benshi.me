@@ -20,13 +20,14 @@ const { target } = Astro.props
         <img src="https://github.com/hbish.png" alt="Test User" class="webmention-avatar" />
         <div class="webmention-meta">
           <strong><a href="#" target="_blank">Test User</a></strong>
-          <span class="webmention-action">replied on Jan 1, 2024</span>
+          <span class="webmention-action"
+            ><a href="#" target="_blank">replied</a> on Jan 1, 2024</span
+          >
         </div>
       </div>
       <p class="webmention-content">
         This is a test comment to verify the styling is working properly.
       </p>
-      <a href="#" target="_blank" class="webmention-link">View original →</a>
     </div>
   </div>
   <div class="webmentions-empty" style="display: none;">
@@ -151,11 +152,10 @@ const { target } = Astro.props
             ${avatar ? `<img src="${this.escapeHtml(avatar)}" alt="${this.escapeHtml(name)}" class="webmention-avatar">` : ''}
             <div class="webmention-meta">
               <strong><a href="${this.escapeHtml(url)}" target="_blank">${this.escapeHtml(name)}</a></strong>
-              <span class="webmention-action">${typeLabel}${date ? ` on ${date}` : ''}</span>
+              <span class="webmention-action"><a href="${this.escapeHtml(mention.url || url)}" target="_blank">${typeLabel}</a>${date ? ` on ${date}` : ''}</span>
             </div>
           </div>
           ${content ? `<p class="webmention-content">${this.escapeHtml(content.substring(0, 200))}${content.length > 200 ? '...' : ''}</p>` : ''}
-          <a href="${this.escapeHtml(mention.url || url)}" target="_blank" class="webmention-link">View original →</a>
         </div>
       `
     }

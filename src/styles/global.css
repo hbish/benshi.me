@@ -716,10 +716,6 @@ select:hover {
   color: var(--color-text-muted);
 }
 
-.webmention-link {
-  font-size: 0.875rem;
-}
-
 .webmention a {
   color: var(--color-accent);
   text-decoration: none;
