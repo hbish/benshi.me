@@ -62,8 +62,8 @@ const { target } = Astro.props
         this.toggleVisibility('.interaction-stat:first-child', likesCount > 0)
         this.toggleVisibility('.interaction-stat:nth-child(2)', repliesCount > 0)
         this.toggleVisibility('.interaction-stat:last-child', totalCount > 0)
-      } catch (error) {
-        console.warn('Failed to fetch webmention counts:', error)
+      } catch {
+        // Silently handle fetch errors for webmention counts
       }
     }
 
