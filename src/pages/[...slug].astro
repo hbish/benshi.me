@@ -1,5 +1,7 @@
 ---
 import Container from '../layouts/Container.astro';
+import WebmentionCount from '../components/WebmentionCount.astro';
+import WebmentionFeed from '../components/WebmentionFeed.astro';
 import { type CollectionEntry, getCollection } from 'astro:content';
 import { SITE_TITLE } from '../consts';
 
@@ -78,6 +80,10 @@ const currentUrl = new URL(Astro.url.pathname, Astro.site);
                             <span>{remarkPluginFrontmatter.minutesRead} read</span>
                         </div>
                     )}
+
+                    {type === 'post' && (
+                        <WebmentionCount target={currentUrl.toString()} />
+                    )}
                 </div>
 
                     {content.data.tags && content.data.tags.length > 0 && (
@@ -110,17 +116,9 @@ const currentUrl = new URL(Astro.url.pathname, Astro.site);
         </article>
 
         {type === 'post' && (
-            <div class="comments mt-12 pt-8 border-t border-theme">
-                <h3 class="text-xl font-semibold mb-6 text-theme">Comments</h3>
-                <div id="cusdis_thread"
-                     data-host="https://cusdis.com"
-                     data-app-id="ec698304-b2fd-4f80-bf18-3867119d076d"
-                     data-page-id={content.slug}
-                     data-page-url={currentUrl.toString()}
-                     data-page-title={content.data.title}
-                     data-theme="auto"
-                     style="margin-top: 1rem; min-height: 600px;"
-                ></div>
+            <div class="webmentions mt-12 pt-8 border-t border-theme">
+                <h3 class="text-xl font-semibold mb-6 text-theme">Social Interactions</h3>
+                <WebmentionFeed target={currentUrl.toString()} />
             </div>
         )}
     </div>
@@ -155,56 +153,4 @@ const currentUrl = new URL(Astro.url.pathname, Astro.site);
         })
     })}>
     </script>
-
-    <!-- Load Cusdis Comments Script -->
-    {type === 'post' && (
-        <>
-            <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
-            <script>
-                // Sync Cusdis theme with our theme system and set iframe height
-                document.addEventListener('DOMContentLoaded', function() {
-                    function updateCusdisTheme() {
-                        const currentTheme = document.documentElement.className;
-                        const cusdisFrame = document.querySelector('#cusdis_thread iframe') as HTMLIFrameElement;
-
-                        if (cusdisFrame) {
-                            const isDark = currentTheme.includes('dark') || currentTheme.includes('gruv-dark');
-                            cusdisFrame.contentWindow?.postMessage({
-                                type: 'setTheme',
-                                theme: isDark ? 'dark' : 'light'
-                            }, 'https://cusdis.com');
-                        }
-                    }
-
-                    function setCusdisHeight() {
-                        const cusdisFrame = document.querySelector('#cusdis_thread iframe') as HTMLIFrameElement;
-                        if (cusdisFrame) {
-                            cusdisFrame.style.height = '400px';
-                            cusdisFrame.style.minHeight = '400px';
-                        }
-                    }
-
-                    // Update theme and height on load
-                    setTimeout(() => {
-                        updateCusdisTheme();
-                        setCusdisHeight();
-                    }, 1000);
-
-                    // Watch for iframe creation and theme changes
-                    const observer = new MutationObserver(() => {
-                        updateCusdisTheme();
-                        setCusdisHeight();
-                    });
-                    observer.observe(document.querySelector('#cusdis_thread') as Node, {
-                        childList: true,
-                        subtree: true
-                    });
-                    observer.observe(document.documentElement, {
-                        attributes: true,
-                        attributeFilter: ['class']
-                    });
-                });
-            </script>
-        </>
-    )}
 </Container>

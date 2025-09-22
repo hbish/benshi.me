@@ -278,8 +278,10 @@ select:hover {
     padding: 1rem;
   }
 
-  /* Force mobile layout */
-  .flex.flex-col {
+  /* Force mobile layout for main containers only */
+  .container.flex.flex-col,
+  main.flex.flex-col,
+  nav.flex.flex-col {
     flex-direction: column !important;
   }
 

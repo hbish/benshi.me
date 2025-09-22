@@ -1,0 +1,164 @@
+---
+export interface Props {
+  target: string
+}
+
+const { target } = Astro.props
+---
+
+<div class="webmentions" data-target={target}>
+  <div class="webmentions-container"></div>
+  <div class="webmentions-empty" style="display: none;">
+    <p>No interactions yet.</p>
+  </div>
+</div>
+
+<script>
+  class WebmentionFeed {
+    constructor(element) {
+      this.element = element
+      this.target = element.dataset.target
+      this.fetchWebmentions()
+    }
+
+    async fetchWebmentions() {
+      if (!this.target) return
+
+      try {
+        const response = await fetch(
+          `https://webmention.io/api/mentions.jf2?target=${encodeURIComponent(this.target)}&per-page=50`
+        )
+        const data = await response.json()
+
+        if (data.children && data.children.length > 0) {
+          this.renderWebmentions(data.children)
+        } else {
+          this.showEmpty()
+        }
+      } catch {
+        // Silently handle fetch errors and show empty state
+        this.showEmpty()
+      }
+    }
+
+    renderWebmentions(webmentions) {
+      const container = this.element.querySelector('.webmentions-container')
+      const empty = this.element.querySelector('.webmentions-empty')
+
+      const sortedMentions = webmentions.sort((a, b) => {
+        const dateA = new Date(a.published || a['wm-received'] || 0)
+        const dateB = new Date(b.published || b['wm-received'] || 0)
+        return dateB - dateA
+      })
+
+      container.innerHTML = sortedMentions.map(mention => this.renderMention(mention)).join('')
+      empty.style.display = 'none'
+    }
+
+    renderMention(mention) {
+      const type = mention['wm-property']
+      const author = mention.author || {}
+      const name = author.name || 'Anonymous'
+      const url = author.url || mention.url || '#'
+      const content = mention.content?.text || mention.content?.html || ''
+      const published = mention.published || mention['wm-received']
+      const date = published ? new Date(published).toLocaleDateString() : ''
+
+      const typeLabel =
+        {
+          'like-of': 'liked this',
+          'repost-of': 'reposted this',
+          'in-reply-to': 'replied',
+          'mention-of': 'mentioned this',
+        }[type] || 'interacted'
+
+      return `
+        <div class="webmention">
+          <strong><a href="${this.escapeHtml(url)}" target="_blank">${this.escapeHtml(name)}</a></strong>
+          ${typeLabel}${date ? ` on ${date}` : ''}
+          ${content ? `<p>${this.escapeHtml(content.substring(0, 200))}${content.length > 200 ? '...' : ''}</p>` : ''}
+          <a href="${this.escapeHtml(mention.url || url)}" target="_blank">View original →</a>
+        </div>
+      `
+    }
+
+    showEmpty() {
+      const container = this.element.querySelector('.webmentions-container')
+      const empty = this.element.querySelector('.webmentions-empty')
+      container.innerHTML = ''
+      empty.style.display = 'block'
+    }
+
+    escapeHtml(unsafe) {
+      return (unsafe || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const elements = document.querySelectorAll('.webmentions')
+    elements.forEach(element => new WebmentionFeed(element))
+  })
+</script>
+
+<style>
+  .webmentions {
+    margin-top: 2rem;
+  }
+
+  .webmentions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .webmention {
+    padding: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    background: var(--color-bg);
+  }
+
+  .webmention p {
+    margin: 0.5rem 0;
+    color: var(--color-text-muted);
+  }
+
+  .webmention a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .webmention a:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .webmentions-empty {
+    text-align: center;
+    padding: 2rem;
+    color: var(--color-text-muted);
+  }
+
+  /* Responsive flex layout */
+  @media (min-width: 768px) {
+    .webmentions-container {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .webmention {
+      flex: 1 1 calc(50% - 0.5rem);
+      min-width: 0;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .webmention {
+      flex: 1 1 calc(33.333% - 0.67rem);
+    }
+  }
+</style>
