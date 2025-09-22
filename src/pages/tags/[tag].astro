@@ -44,7 +44,7 @@ const { tag, posts } = Astro.props
     {
       posts.map(post => {
         const isNote = post.collection === 'notes'
-        const url = isNote ? `/notes/${post.slug}` : `/${post.slug}`
+        const url = isNote ? `/notes/${post.slug}/` : `/${post.slug}/`
 
         return (
           <div>
@@ -82,6 +82,6 @@ const { tag, posts } = Astro.props
   </section>
 
   <div class="text-center mt-8 pt-6 border-t border-theme px-4 sm:px-0">
-    <a href="/archive" class="text-theme-accent hover:underline"> ← Back to archive </a>
+    <a href="/archive/" class="text-theme-accent hover:underline"> ← Back to archive </a>
   </div>
 </Container>

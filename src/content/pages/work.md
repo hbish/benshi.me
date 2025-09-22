@@ -39,7 +39,7 @@ A collection of videos, talks and tools about all things performance engineering
 created this in tandem with my performance testing [talk](https://dddsydney2019.hbish.com/#slide=1)
 at DDDSydney.
 
-#### hbish.com [[versions](/versions)]
+#### hbish.com [[versions](/versions/)]
 
 I've went through multiple iterations of the website as my personal design philosphy changed over
 time. I've created a dedicated page to take you through the different iterations.
