@@ -10,8 +10,9 @@ const { target } = Astro.props
   <!-- Test webmention for styling verification -->
   <div class="webmentions-container">
     <div class="webmention-simple">
-      <a href="#" target="_blank" title="Test User liked this">
+      <a href="#" target="_blank" title="Test User liked this" class="webmention-avatar-container">
         <img src="https://github.com/hbish.png" alt="Test User" class="webmention-avatar" />
+        <span class="webmention-action-emoji">❤️</span>
       </a>
     </div>
     <div class="webmention">
@@ -128,14 +129,16 @@ const { target } = Astro.props
 
       // For likes and reposts, show only the linked avatar
       if (type === 'like-of' || type === 'repost-of') {
+        const actionEmoji = type === 'like-of' ? '👍' : '🔄'
         return `
           <div class="webmention webmention-simple">
             ${
               avatar
-                ? `<a href="${this.escapeHtml(mention.url || url)}" target="_blank" title="${this.escapeHtml(name)} ${typeLabel}">
+                ? `<a href="${this.escapeHtml(mention.url || url)}" target="_blank" title="${this.escapeHtml(name)} ${typeLabel}" class="webmention-avatar-container">
                 <img src="${this.escapeHtml(avatar)}" alt="${this.escapeHtml(name)}" class="webmention-avatar">
+                <span class="webmention-action-emoji">${actionEmoji}</span>
               </a>`
-                : `<a href="${this.escapeHtml(mention.url || url)}" target="_blank" class="webmention-fallback">${this.escapeHtml(name)}</a>`
+                : `<a href="${this.escapeHtml(mention.url || url)}" target="_blank" class="webmention-fallback">${this.escapeHtml(name)} ${actionEmoji}</a>`
             }
           </div>
         `

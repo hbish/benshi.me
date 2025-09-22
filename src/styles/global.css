@@ -634,6 +634,21 @@ select:hover {
   margin: 0;
 }
 
+.webmention-avatar-container {
+  position: relative;
+  display: inline-block;
+}
+
+.webmention-action-emoji {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  font-size: 12px;
+  border-radius: 50%;
+  padding: 2px;
+  line-height: 1;
+}
+
 .webmention-simple .webmention-avatar {
   transition: transform 0.2s ease;
 }
@@ -738,6 +753,13 @@ select:hover {
   .webmention-avatar {
     width: 64px !important;
     height: 64px !important;
+  }
+
+  .webmention-action-emoji {
+    font-size: 16px;
+    bottom: -4px;
+    right: -4px;
+    padding: 4px;
   }
 }
 
