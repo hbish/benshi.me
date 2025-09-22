@@ -468,13 +468,6 @@ select:hover {
   fill: #ffffff;
 }
 
-/* For SVG icons rendered as images, invert colors in dark themes */
-.dark .social img,
-.gruv-dark .social img {
-  filter: invert(1);
-  transition: filter 0.3s ease;
-}
-
 /* Enhanced Theme Toggle Styling */
 .theme-section select {
   background-color: var(--color-bg-secondary);

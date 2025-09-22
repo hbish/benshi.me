@@ -1,11 +1,11 @@
 ---
 import { Image } from 'astro:assets'
 import profilePhoto from '../assets/profile-pic.png'
-import xLogo from '../assets/svg/x.inline.svg'
-import githubLogo from '../assets/svg/github.inline.svg'
-import keybaseLogo from '../assets/svg/keybase.inline.svg'
-import mailLogo from '../assets/svg/mail.inline.svg'
-import linkedinLogo from '../assets/svg/linkedin.inline.svg'
+import xLogo from '../assets/svg/x.inline.svg?raw'
+import githubLogo from '../assets/svg/github.inline.svg?raw'
+import keybaseLogo from '../assets/svg/keybase.inline.svg?raw'
+import mailLogo from '../assets/svg/mail.inline.svg?raw'
+import linkedinLogo from '../assets/svg/linkedin.inline.svg?raw'
 import ThemeToggle from './ThemeToggle.astro'
 ---
 
@@ -124,7 +124,7 @@ import ThemeToggle from './ThemeToggle.astro'
               rel={'me'}
               class="min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
-              <Image src={xLogo} alt="x" aria-labelledby={'title'} />
+              <Fragment set:html={xLogo} />
             </a>
             <a
               href="https://au.linkedin.com/in/benshi"
@@ -132,7 +132,7 @@ import ThemeToggle from './ThemeToggle.astro'
               rel={'me'}
               class="min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
-              <Image src={linkedinLogo} alt="linkedin" aria-labelledby={'title'} />
+              <Fragment set:html={linkedinLogo} />
             </a>
             <a
               href="https://github.com/hbish"
@@ -140,7 +140,7 @@ import ThemeToggle from './ThemeToggle.astro'
               rel={'me'}
               class="min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
-              <Image src={githubLogo} alt="github" aria-labelledby={'title'} />
+              <Fragment set:html={githubLogo} />
             </a>
             <a
               href="mailto:ben@hbish.com"
@@ -148,7 +148,7 @@ import ThemeToggle from './ThemeToggle.astro'
               rel={'me'}
               class={'u-email min-h-[44px] min-w-[44px] flex items-center justify-center'}
             >
-              <Image src={mailLogo} alt="email" aria-labelledby={'title'} />
+              <Fragment set:html={mailLogo} />
             </a>
             <a
               href="https://keybase.io/hbish"
@@ -156,7 +156,7 @@ import ThemeToggle from './ThemeToggle.astro'
               rel={'me'}
               class="min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
-              <Image src={keybaseLogo} alt="keybase" aria-labelledby={'title'} />
+              <Fragment set:html={keybaseLogo} />
             </a>
           </div>
         </div>
@@ -184,19 +184,19 @@ import ThemeToggle from './ThemeToggle.astro'
     <!-- Social Icons - Desktop Only -->
     <div class="social hidden lg:flex gap-4 justify-center my-4">
       <a href="https://x.com/hbish" title={'follow ben on x'} rel={'me'}>
-        <Image src={xLogo} alt="x" aria-labelledby={'title'} />
+        <Fragment set:html={xLogo} />
       </a>
       <a href="https://au.linkedin.com/in/benshi" title={'connect with ben on linkedin'} rel={'me'}>
-        <Image src={linkedinLogo} alt="linkedin" aria-labelledby={'title'} />
+        <Fragment set:html={linkedinLogo} />
       </a>
       <a href="https://github.com/hbish" title={'follow ben on github'} rel={'me'}>
-        <Image src={githubLogo} alt="github" aria-labelledby={'title'} />
+        <Fragment set:html={githubLogo} />
       </a>
       <a href="mailto:ben@hbish.com" title={'email ben'} rel={'me'} class={'u-email'}>
-        <Image src={mailLogo} alt="email" aria-labelledby={'title'} />
+        <Fragment set:html={mailLogo} />
       </a>
       <a href="https://keybase.io/hbish" title={'auth me on keybase'} rel={'me'}>
-        <Image src={keybaseLogo} alt="keybase" aria-labelledby={'title'} />
+        <Fragment set:html={keybaseLogo} />
       </a>
     </div>
 
