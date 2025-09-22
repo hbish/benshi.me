@@ -535,6 +535,18 @@ select:hover {
   );
 }
 
+/* Profile picture border styling */
+.profile-pic-border {
+  position: relative;
+  padding: 0.3rem;
+  background: linear-gradient(
+    140deg,
+    var(--color-accent) 0%,
+    var(--color-bg) 80%
+  );
+  border-radius: 50%;
+}
+
 /* Article metadata styling */
 .article-meta {
   font-size: 0.875rem;
@@ -556,4 +568,47 @@ select:hover {
 .comments h3 {
   margin-bottom: 1.5rem;
   font-weight: 600;
+}
+
+/* Section title with gradient underline */
+.section-title {
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--color-accent) 0%,
+    var(--color-bg) 100%
+  );
+  border-radius: 2px;
+}
+
+/* Page title with gradient underline */
+.page-title {
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.page-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--color-accent) 0%,
+    var(--color-bg) 100%
+  );
+  border-radius: 2px;
 }
