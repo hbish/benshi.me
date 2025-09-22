@@ -173,50 +173,49 @@ const { target } = Astro.props
       return `
         <div class="interaction-item ${type}">
           <div class="interaction-header">
-            <div class="interaction-type">
-              ${icon}
-              <span class="interaction-label">${label}</span>
+            <div class="interaction-meta">
+              <div class="interaction-author-info">
+                <img src="${this.escapeHtml(photo)}" 
+                     alt="${this.escapeHtml(name)}"
+                     class="interaction-avatar"
+                     onerror="this.src='/android-chrome-192x192.png'"
+                     loading="lazy" />
+                <a href="${this.escapeHtml(url)}" 
+                   class="interaction-author-name"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                  ${this.escapeHtml(name)}
+                </a>
+              </div>
+              <div class="interaction-type">
+                ${icon}
+                <span class="interaction-label">${label}</span>
+              </div>
             </div>
             <time class="interaction-date">${published}</time>
           </div>
           
-          <div class="interaction-main">
-            <div class="interaction-author-column">
-              <img src="${this.escapeHtml(photo)}" 
-                   alt="${this.escapeHtml(name)}"
-                   class="interaction-avatar"
-                   onerror="this.src='/android-chrome-192x192.png'"
-                   loading="lazy" />
-              <a href="${this.escapeHtml(url)}" 
-                 class="interaction-author-name"
-                 target="_blank"
-                 rel="noopener noreferrer">
-                ${this.escapeHtml(name)}
-              </a>
-            </div>
+          <div class="interaction-content">
+            ${
+              content
+                ? `
+              <div class="interaction-text">
+                ${this.sanitizeContent(content)}
+              </div>
+            `
+                : `
+              <div class="interaction-no-content">
+                <em>No additional content</em>
+              </div>
+            `
+            }
             
-            <div class="interaction-content-column">
-              ${
-                content
-                  ? `
-                <div class="interaction-text">
-                  ${this.sanitizeContent(content)}
-                </div>
-              `
-                  : `
-                <div class="interaction-no-content">
-                  <em>No additional content</em>
-                </div>
-              `
-              }
-              
-              <a href="${this.escapeHtml(mention.url || url)}" 
-                 class="interaction-source"
-                 target="_blank"
-                 rel="noopener noreferrer">
-                View original →
-              </a>
-            </div>
+            <a href="${this.escapeHtml(mention.url || url)}" 
+               class="interaction-source"
+               target="_blank"
+               rel="noopener noreferrer">
+              View original →
+            </a>
           </div>
         </div>
       `
@@ -426,7 +425,15 @@ const { target } = Astro.props
   }
 
   .interaction-header {
-    @apply flex items-center justify-between mb-3;
+    @apply flex items-start justify-between mb-3 gap-4;
+  }
+
+  .interaction-meta {
+    @apply flex items-center gap-3 flex-1;
+  }
+
+  .interaction-author-info {
+    @apply flex items-center gap-2 flex-shrink-0;
   }
 
   .interaction-type {
@@ -443,27 +450,15 @@ const { target } = Astro.props
     color: var(--color-text-muted);
   }
 
-  .interaction-main {
-    @apply flex gap-4 items-start;
-    /* Ensure proper flex behavior */
-    flex-wrap: nowrap;
-  }
-
-  .interaction-author-column {
-    @apply flex flex-col items-center gap-2 flex-shrink-0;
-    min-width: 80px;
-  }
-
-  .interaction-content-column {
-    @apply flex-1;
-    /* Use explicit spacing instead of space-y to avoid conflicts */
+  .interaction-content {
+    @apply ml-0;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
 
   .interaction-avatar {
-    @apply w-8 h-8 rounded-full;
+    @apply w-8 h-8 rounded-full flex-shrink-0;
     border-radius: 50% !important;
     /* Disable global image hover effects for avatars */
     transform: none !important;
@@ -476,13 +471,10 @@ const { target } = Astro.props
   }
 
   .interaction-author-name {
-    @apply text-sm font-medium transition-colors text-center;
+    @apply text-sm font-medium transition-colors;
     color: var(--color-text);
-    /* Prevent long names from breaking layout */
-    word-break: break-word;
-    hyphens: auto;
-    max-width: 80px;
-    overflow-wrap: break-word;
+    text-decoration: none;
+    white-space: nowrap;
   }
 
   .interaction-author-name:hover {
@@ -522,23 +514,24 @@ const { target } = Astro.props
       @apply p-3;
     }
 
-    .interaction-main {
-      @apply flex-col gap-3;
-      /* Override desktop flex direction */
-      flex-direction: column !important;
+    .interaction-header {
+      @apply flex-col items-start gap-2;
     }
 
-    .interaction-author-column {
-      @apply flex-row items-center justify-start;
-      min-width: auto;
-      max-width: none;
-      /* Reset desktop constraints */
+    .interaction-meta {
+      @apply flex-col items-start gap-2 w-full;
     }
 
-    .interaction-author-name {
-      @apply text-left;
-      max-width: none;
-      text-align: left !important;
+    .interaction-author-info {
+      @apply w-full;
+    }
+
+    .interaction-type {
+      @apply w-full;
+    }
+
+    .interaction-date {
+      @apply self-end text-xs;
     }
 
     .interactions-title {
