@@ -10,6 +10,29 @@ import ThemeToggle from './ThemeToggle.astro'
 ---
 
 <div class="sidebar text-center content-center">
+  <!-- Mobile Navigation Toggle - Fixed Top Right -->
+  <button
+    id="mobile-nav-toggle"
+    class="lg:hidden fixed top-4 right-4 z-50 w-10 h-10 bg-theme-secondary border border-theme rounded-lg text-theme hover:bg-theme transition-colors duration-200 flex items-center justify-center shadow-lg"
+    aria-expanded="false"
+    aria-controls="mobile-nav-menu"
+    aria-label="Toggle navigation menu"
+  >
+    <svg
+      id="nav-icon"
+      class="w-5 h-5 transition-transform duration-200"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+  </button>
+
   <div class="h-card">
     <a href="/" class="block">
       <Image
@@ -33,33 +56,6 @@ import ThemeToggle from './ThemeToggle.astro'
     <p class="p-note text-center hidden lg:block my-2">
       I write about software engineering, agile practices and self development & learning.
     </p>
-    <!-- Mobile Navigation Toggle -->
-    <div class="lg:hidden my-4">
-      <button
-        id="mobile-nav-toggle"
-        class="w-full px-4 py-2 bg-theme-secondary border border-theme rounded-lg text-theme hover:bg-theme transition-colors duration-200"
-        aria-expanded="false"
-        aria-controls="mobile-nav-menu"
-        aria-label="Toggle navigation menu"
-      >
-        <span class="flex items-center justify-between">
-          <span>Menu</span>
-          <svg
-            id="nav-icon"
-            class="w-5 h-5 transition-transform duration-200"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
-        </span>
-      </button>
-    </div>
 
     <!-- Navigation Menu -->
     <nav class="my-2">
