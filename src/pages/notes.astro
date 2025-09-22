@@ -28,7 +28,7 @@ notes.forEach(note => {
               {index === 0 && <h3 class="text-xl my-6">{year}</h3>}
               <div class={'row my-2'}>
                 <div class={'column'}>
-                  <a href={`/notes/${note.slug}`}>{note.data.title}</a>
+                  <a href={`/notes/${note.slug}/`}>{note.data.title}</a>
                   ::{' '}
                   <strong>
                     {note.data.date.toLocaleDateString(undefined, {

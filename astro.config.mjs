@@ -10,6 +10,7 @@ import { remarkOptimizeImages } from './remark-plugins/remark-optimize-images.mj
 // https://astro.build/config
 export default defineConfig({
   site: 'https://hbish.com',
+  trailingSlash: 'always',
   integrations: [mdx(), sitemap(), tailwind()],
   markdown: {
     remarkPlugins: [

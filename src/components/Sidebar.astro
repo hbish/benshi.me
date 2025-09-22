@@ -1,19 +1,26 @@
 ---
 import { Image } from 'astro:assets'
 import profilePhoto from '../assets/profile-pic.png'
-import xLogo from '../assets/svg/x.inline.svg'
-import githubLogo from '../assets/svg/github.inline.svg'
-import keybaseLogo from '../assets/svg/keybase.inline.svg'
-import mailLogo from '../assets/svg/mail.inline.svg'
-import linkedinLogo from '../assets/svg/linkedin.inline.svg'
+import xLogo from '../assets/svg/x.inline.svg?raw'
+import githubLogo from '../assets/svg/github.inline.svg?raw'
+import keybaseLogo from '../assets/svg/keybase.inline.svg?raw'
+import mailLogo from '../assets/svg/mail.inline.svg?raw'
+import linkedinLogo from '../assets/svg/linkedin.inline.svg?raw'
 import ThemeToggle from './ThemeToggle.astro'
 ---
 
 <div class="sidebar text-center content-center">
+  <!-- Mobile Navigation Backdrop -->
+  <div
+    id="mobile-nav-backdrop"
+    class="lg:hidden hidden fixed inset-0 bg-black bg-opacity-50 z-[9997] transition-opacity duration-200"
+  >
+  </div>
+
   <!-- Mobile Navigation Toggle - Fixed Top Right -->
   <button
     id="mobile-nav-toggle"
-    class="lg:hidden fixed top-4 right-4 z-50 w-10 h-10 bg-theme-secondary border border-theme rounded-lg text-theme hover:bg-theme transition-colors duration-200 flex items-center justify-center shadow-lg"
+    class="lg:hidden fixed top-4 right-4 z-[9999] w-10 h-10 bg-theme-secondary border border-theme rounded-lg text-theme hover:bg-theme transition-colors duration-200 flex items-center justify-center shadow-lg"
     aria-expanded="false"
     aria-controls="mobile-nav-menu"
     aria-label="Toggle navigation menu"
@@ -36,7 +43,7 @@ import ThemeToggle from './ThemeToggle.astro'
   <div class="h-card">
     <a href="/" class="block">
       <Image
-        class="w-20 h-20 lg:w-40 lg:h-40 rounded-full mx-auto border-2 border-white"
+        class="w-20 h-20 lg:w-40 lg:h-40 rounded-full mx-auto profile-pic-border"
         src={profilePhoto}
         alt="Ben Shi - Software Engineer and Technologist from Sydney, Australia"
         widths={[80, 160, 320]}
@@ -62,7 +69,7 @@ import ThemeToggle from './ThemeToggle.astro'
       <!-- Mobile Navigation Menu (hidden by default) -->
       <div
         id="mobile-nav-menu"
-        class="lg:hidden hidden flex-col space-y-3 py-4 border-t border-theme mt-4"
+        class="lg:hidden hidden flex-col space-y-3 py-4 px-4 border-t border-theme mt-4 fixed inset-x-4 top-16 bg-theme rounded-lg shadow-xl z-[9998]"
         role="navigation"
         aria-label="Main navigation"
       >
@@ -124,7 +131,7 @@ import ThemeToggle from './ThemeToggle.astro'
               rel={'me'}
               class="min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
-              <Image src={xLogo} alt="x" aria-labelledby={'title'} />
+              <Fragment set:html={xLogo} />
             </a>
             <a
               href="https://au.linkedin.com/in/benshi"
@@ -132,7 +139,7 @@ import ThemeToggle from './ThemeToggle.astro'
               rel={'me'}
               class="min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
-              <Image src={linkedinLogo} alt="linkedin" aria-labelledby={'title'} />
+              <Fragment set:html={linkedinLogo} />
             </a>
             <a
               href="https://github.com/hbish"
@@ -140,7 +147,7 @@ import ThemeToggle from './ThemeToggle.astro'
               rel={'me'}
               class="min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
-              <Image src={githubLogo} alt="github" aria-labelledby={'title'} />
+              <Fragment set:html={githubLogo} />
             </a>
             <a
               href="mailto:ben@hbish.com"
@@ -148,7 +155,7 @@ import ThemeToggle from './ThemeToggle.astro'
               rel={'me'}
               class={'u-email min-h-[44px] min-w-[44px] flex items-center justify-center'}
             >
-              <Image src={mailLogo} alt="email" aria-labelledby={'title'} />
+              <Fragment set:html={mailLogo} />
             </a>
             <a
               href="https://keybase.io/hbish"
@@ -156,7 +163,7 @@ import ThemeToggle from './ThemeToggle.astro'
               rel={'me'}
               class="min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
-              <Image src={keybaseLogo} alt="keybase" aria-labelledby={'title'} />
+              <Fragment set:html={keybaseLogo} />
             </a>
           </div>
         </div>
@@ -184,19 +191,19 @@ import ThemeToggle from './ThemeToggle.astro'
     <!-- Social Icons - Desktop Only -->
     <div class="social hidden lg:flex gap-4 justify-center my-4">
       <a href="https://x.com/hbish" title={'follow ben on x'} rel={'me'}>
-        <Image src={xLogo} alt="x" aria-labelledby={'title'} />
+        <Fragment set:html={xLogo} />
       </a>
       <a href="https://au.linkedin.com/in/benshi" title={'connect with ben on linkedin'} rel={'me'}>
-        <Image src={linkedinLogo} alt="linkedin" aria-labelledby={'title'} />
+        <Fragment set:html={linkedinLogo} />
       </a>
       <a href="https://github.com/hbish" title={'follow ben on github'} rel={'me'}>
-        <Image src={githubLogo} alt="github" aria-labelledby={'title'} />
+        <Fragment set:html={githubLogo} />
       </a>
       <a href="mailto:ben@hbish.com" title={'email ben'} rel={'me'} class={'u-email'}>
-        <Image src={mailLogo} alt="email" aria-labelledby={'title'} />
+        <Fragment set:html={mailLogo} />
       </a>
       <a href="https://keybase.io/hbish" title={'auth me on keybase'} rel={'me'}>
-        <Image src={keybaseLogo} alt="keybase" aria-labelledby={'title'} />
+        <Fragment set:html={keybaseLogo} />
       </a>
     </div>
 
@@ -214,14 +221,16 @@ import ThemeToggle from './ThemeToggle.astro'
     const toggleButton = document.getElementById('mobile-nav-toggle')
     const mobileMenu = document.getElementById('mobile-nav-menu')
     const navIcon = document.getElementById('nav-icon')
+    const backdrop = document.getElementById('mobile-nav-backdrop')
 
-    if (!toggleButton || !mobileMenu || !navIcon) return
+    if (!toggleButton || !mobileMenu || !navIcon || !backdrop) return
 
     toggleButton.addEventListener('click', () => {
       const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true'
 
       // Toggle menu visibility
       mobileMenu.classList.toggle('hidden')
+      backdrop.classList.toggle('hidden')
 
       // Update aria-expanded
       toggleButton.setAttribute('aria-expanded', String(!isExpanded))
@@ -238,11 +247,22 @@ import ThemeToggle from './ThemeToggle.astro'
       }
     })
 
+    // Close mobile menu when clicking backdrop
+    backdrop.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden')
+      backdrop.classList.add('hidden')
+      toggleButton.setAttribute('aria-expanded', 'false')
+      navIcon.style.transform = 'rotate(0deg)'
+      navIcon.innerHTML =
+        '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />'
+    })
+
     // Close mobile menu when clicking navigation links
     const mobileNavLinks = mobileMenu.querySelectorAll('a')
     mobileNavLinks.forEach(link => {
       link.addEventListener('click', () => {
         mobileMenu.classList.add('hidden')
+        backdrop.classList.add('hidden')
         toggleButton.setAttribute('aria-expanded', 'false')
         navIcon.style.transform = 'rotate(0deg)'
         navIcon.innerHTML =
@@ -254,6 +274,7 @@ import ThemeToggle from './ThemeToggle.astro'
     window.addEventListener('resize', () => {
       if (window.innerWidth >= 1024) {
         mobileMenu.classList.add('hidden')
+        backdrop.classList.add('hidden')
         toggleButton.setAttribute('aria-expanded', 'false')
         navIcon.style.transform = 'rotate(0deg)'
         navIcon.innerHTML =

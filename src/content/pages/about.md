@@ -30,10 +30,10 @@ I previously worked for [Versent](https://versent.com.au),
 
 #### Links of interest
 
-[/work](/work) - a bunch of my previous work both personal and professional
+[/work](/work/) - a bunch of my previous work both personal and professional
 
-[/talks](/talks) - some (just one) of my talks
+[/talks](/talks/) - some (just one) of my talks
 
-[/uses](/uses) - what my daily drivers and go to software
+[/uses](/uses/) - what my daily drivers and go to software
 
-[/versions](/versions) - a brief history of hbish.com
+[/versions](/versions/) - a brief history of hbish.com

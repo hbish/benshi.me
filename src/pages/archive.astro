@@ -35,7 +35,7 @@ posts.forEach(p => {
               {index === 0 && <h3 class="text-xl my-6">{year}</h3>}
               <div class={'row my-2'}>
                 <div class={'column'}>
-                  <a href={`/${p.slug}`}>{p.data.title}</a>
+                  <a href={`/${p.slug}/`}>{p.data.title}</a>
                   ::{' '}
                   <strong>
                     {p.data.date.toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}
