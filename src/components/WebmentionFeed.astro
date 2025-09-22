@@ -416,6 +416,8 @@ const { target } = Astro.props
     @apply p-4 rounded-lg border transition-all duration-200;
     border-color: var(--color-border);
     background: var(--color-bg);
+    /* Debug: Add subtle background to see layout bounds */
+    position: relative;
   }
 
   .interaction-item:hover {
@@ -442,7 +444,9 @@ const { target } = Astro.props
   }
 
   .interaction-main {
-    @apply flex gap-4;
+    @apply flex gap-4 items-start;
+    /* Ensure proper flex behavior */
+    flex-wrap: nowrap;
   }
 
   .interaction-author-column {
@@ -451,17 +455,34 @@ const { target } = Astro.props
   }
 
   .interaction-content-column {
-    @apply flex-1 space-y-2;
+    @apply flex-1;
+    /* Use explicit spacing instead of space-y to avoid conflicts */
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   .interaction-avatar {
     @apply w-8 h-8 rounded-full;
     border-radius: 50% !important;
+    /* Disable global image hover effects for avatars */
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .interaction-avatar:hover {
+    transform: none !important;
+    box-shadow: none !important;
   }
 
   .interaction-author-name {
     @apply text-sm font-medium transition-colors text-center;
     color: var(--color-text);
+    /* Prevent long names from breaking layout */
+    word-break: break-word;
+    hyphens: auto;
+    max-width: 80px;
+    overflow-wrap: break-word;
   }
 
   .interaction-author-name:hover {
@@ -503,15 +524,21 @@ const { target } = Astro.props
 
     .interaction-main {
       @apply flex-col gap-3;
+      /* Override desktop flex direction */
+      flex-direction: column !important;
     }
 
     .interaction-author-column {
       @apply flex-row items-center justify-start;
       min-width: auto;
+      max-width: none;
+      /* Reset desktop constraints */
     }
 
     .interaction-author-name {
       @apply text-left;
+      max-width: none;
+      text-align: left !important;
     }
 
     .interactions-title {
