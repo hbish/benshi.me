@@ -2,6 +2,7 @@
 import Container from '../layouts/Container.astro';
 import WebmentionCount from '../components/WebmentionCount.astro';
 import WebmentionFeed from '../components/WebmentionFeed.astro';
+import CommentCTA from '../components/CommentCTA.astro';
 import { type CollectionEntry, getCollection } from 'astro:content';
 import { SITE_TITLE } from '../consts';
 
@@ -118,7 +119,8 @@ const currentUrl = new URL(pathname, Astro.site);
 
         {type === 'post' && (
             <div class="webmentions mt-12 pt-8 border-t border-theme">
-                <h3 class="text-xl font-semibold mb-6 text-theme">Social Interactions</h3>
+                <h3 class="text-xl font-semibold mb-6 text-theme">Interactions</h3>
+                <CommentCTA url={currentUrl.toString()} />
                 <WebmentionFeed target={currentUrl.toString()} />
             </div>
         )}
