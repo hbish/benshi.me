@@ -1,0 +1,28 @@
+---
+export interface Props {
+  url: string
+}
+
+const { url } = Astro.props
+const commentUrl = `https://quill.p3k.io/?reply=${encodeURIComponent(url)}&me=https://commentpara.de/&dontask=1`
+---
+
+<div class="comment-cta">
+  <p class="text-sm text-theme-muted mb-3">
+    Have thoughts on this post?
+    <a
+      href={commentUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="text-theme-accent hover:underline"
+    >
+      Leave a comment
+    </a>
+  </p>
+</div>
+
+<style>
+  .comment-cta {
+    @apply text-center py-4;
+  }
+</style>
