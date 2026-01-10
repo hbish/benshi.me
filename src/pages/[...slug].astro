@@ -94,7 +94,7 @@ const currentUrl = new URL(pathname, Astro.site);
 
             <article class="h-entry">
             <!-- Article Header -->
-            <header class="mb-8 border-b border-theme pb-6">
+            <header class="mb-8 pb-6 header-divider">
                 <h1 class="p-name text-3xl lg:text-4xl font-bold leading-tight mb-4 text-theme text-center">
                     {content.data.title}
                 </h1>
@@ -187,4 +187,27 @@ const currentUrl = new URL(pathname, Astro.site);
         })
     })}>
     </script>
+
+<style>
+    .header-divider {
+        position: relative;
+    }
+
+    .header-divider::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+            to right,
+            transparent 0%,
+            var(--color-border) 20%,
+            var(--color-border) 80%,
+            transparent 100%
+        );
+        opacity: 0.6;
+    }
+</style>
 </Container>
