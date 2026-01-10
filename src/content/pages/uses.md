@@ -10,22 +10,22 @@ This page is inspired by WesBos’ [uses.tech](https://uses.tech).
 
 ### Hardware
 
-- **Personal** - 15" MacBook Pro (2015)
+- **Personal** - 14" MacBook Pro (2021)
 - **Work** - Lenovo Carbon X1 10th Gen (PopOS!)
-- **Monitor** - [LG 32UK550 UHD 4K](https://www.lg.com/au/it-monitors/lg-32UK550-B)
-- **Keyboard** -
-  [Keychron K2 RGB Aluminum Frame - Brown Switch](https://www.keychron.com/products/keychron-k2-wireless-mechanical-keyboard)
+- **Monitor** - [LG 32UK550 UHD 4K](https://amzn.to/4brEsHT)
+- **Keyboard** - [LOFREE Flow84 Low Profile Mechanical Keyboard](https://amzn.to/4aO12u7)
 - **Pointer** -
   [Apple Magic Trackpad 2](https://www.apple.com/au/shop/product/MJ2R2ZA/A/magic-trackpad-2-silver)
+  | [Razer Basilisk V3 X HyperSpeed](https://amzn.to/4q9spnb)
 
 ### Gadgets
 
-- **Phone** - Xiaomi Poco F2 Pro
+- **Phone** - Pixel 10 Pro XL
 - **Tablet** - Apple iPad Air 2
-- **Headphone** -
-  [Bose QuietComfort 35 II](https://www.bose.com.au/en_au/products/headphones/over_ear_headphones/quietcomfort-35-wireless-ii.html#v=qc35_ii_black) -
-  over-ear, mostly for work & air travel
-- **Earbuds** - [EOZ Air](https://eozaudio.com/products/eoz-air) - in-ear, mostly for daily commute
+- **Headphone** - [Bose QuietComfort 35 II](https://amzn.to/4bqNqFi) |
+  [Sonos Ace](https://amzn.to/4aO6Ljy) over-ear, mostly for work & air travel
+- **Earbuds** - [EOZ Air](https://eozaudio.com/products/eoz-air) |
+  [Pixel Bud Pro](https://amzn.to/4braeoq)
 - **Cameras** - Nikon D90 & Sony Alpha A6000
 
 ### Development Tools
@@ -36,12 +36,10 @@ This page is inspired by WesBos’ [uses.tech](https://uses.tech).
   choice, yes I have my [dotfiles](https://github.com/hbish/dotfiles)
 - [Intellij IDEA](https://www.jetbrains.com/idea/) - IDE of choice for most languages, occasionally
   use VS Code for web
-- [Sublime Text](https://www.sublimetext.com/) - general text editor, beats VS Code in speed and
-  large files
+- [Zed](https://zed.dev) - general text editor, beats VS Code in speed and large files
 - [Firefox Developer Edition](https://www.mozilla.org/en-US/firefox/developer/) - go to browser,
-  like the dev tools and memory usage, I use [Microsoft Edge](https://microsoft.com/edge) if I need
-  a chromium based browser
-- [Docker](https://www.docker.com/) - containerised builds and apps
+  like the dev tools and memory usage, I use [Helium](https://helium.computer) if I need a chromium
+  based browser
 - [Iosevka](https://typeof.net/Iosevka/) - terminal font, its slender and less rounded
 
 ### Development Services
@@ -56,7 +54,7 @@ This page is inspired by WesBos’ [uses.tech](https://uses.tech).
 
 - [Spark](https://sparkmailapp.com/) - cross platform email client for mac, ios & android
 - [Slack](https://www.slack.com/) - general comms for work/user groups
-- [Microsoft To Do](https://todo.microsoft.com/) - task lists management
+- [Tick Tick](https://ticktick.com/) - task lists management
 - [Bitwarden](https://bitwarden.com/) - password manager
 - [Adguard](https://adguard.com/) - system wide adblocker
 - [Hammerspoon](https://www.hammerspoon.org/) - mac automation tool, I write my own scripts window

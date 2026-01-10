@@ -16,10 +16,11 @@ This page is inspired by Derek Sivers’ [nownownow](https://nownownow.com/) and
 - growing my own indoor jungle
 - learning about horticulture and agriculture
 
-### What I plan on achieving in 2023
+### What I plan on achieving in 2026
 
-- read 6 books
-- learn more about go programming
+- read 10 books this year
+- run a marathon
+- beat my 5k PB
 - blog more...
 
-_last updated: Jan 2023_
+_last updated: Jan 2026_
