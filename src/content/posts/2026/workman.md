@@ -24,6 +24,8 @@ focuses on comfort and ergonomics by maximising the usage of keys on the home ro
 time aimed at reducing lateral movement of fingers and wrists. It comes with some other benefits
 like low finger travel, balanced left/right hand usage and maximise same hand utilisation.
 
+![Workman keyboard Layout](/media/workman.png)
+
 My first real exposure to alternate keyboard format was around 10 years ago where I tried Dvorak,
 but at the time I really never got the appeal of alternate keyboard layouts and very quickly gave up
 after 30 minutes. I came across Workman in 2018, at the time I didn't give it too much attention

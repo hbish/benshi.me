@@ -29,9 +29,6 @@ posts.forEach(p => {
           <div class="text-lg mb-4">🌵</div>
           <p class="text-theme-muted mb-2">Oops! I haven't written anything recently.</p>
           <p class="text-theme-muted mb-4">I'm probably busy coding or exploring new ideas!</p>
-          <a href="/archive/" class="text-blue-600 hover:text-blue-800 underline">
-            Check out the archive for older posts →
-          </a>
         </div>
       ) : (
         Array.from(postsByYear).map(([year, yearPosts]) => {
@@ -62,5 +59,8 @@ posts.forEach(p => {
         })
       )
     }
+    <div class="text-sm mt-8">
+      <a href="/archive/" class="text-blue-600 hover:text-blue-800 underline"> View all posts → </a>
+    </div>
   </section>
 </Container>
