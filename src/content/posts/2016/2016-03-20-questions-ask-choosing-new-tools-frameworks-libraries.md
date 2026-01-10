@@ -4,6 +4,9 @@ author: Ben Shi
 type: post
 date: 2016-03-20T11:26:25+00:00
 slug: questions-ask-choosing-new-tools-frameworks-libraries
+description:
+  'Essential questions to ask when evaluating new frameworks and libraries for your project. A
+  practical guide for technology selection decisions.'
 categories:
   - notes
 tags:

@@ -5,6 +5,7 @@ import WebmentionFeed from '../components/WebmentionFeed.astro';
 import CommentCTA from '../components/CommentCTA.astro';
 import { type CollectionEntry, getCollection } from 'astro:content';
 import { SITE_TITLE } from '../consts';
+import { extractFirstImage } from '../utils/extractFirstImage';
 
 export async function getStaticPaths() {
     const posts = await getCollection('posts');
@@ -31,6 +32,31 @@ type Props = {
 const { content, type } = Astro.props;
 const { Content, remarkPluginFrontmatter } = await content.render();
 
+// Get the raw content for image extraction
+const rawContent = content.body;
+
+// Resolve social media image with priority:
+// 1. socialImage field (explicit override)
+// 2. image field (general image)
+// 3. First image in content
+// 4. Default OG image
+const contentData = content.data as Record<string, unknown>;
+let socialImage = (contentData.socialImage as string) || (contentData.image as string);
+if (!socialImage) {
+    const extractedImage = extractFirstImage(rawContent);
+    if (extractedImage) {
+        socialImage = extractedImage;
+    }
+}
+
+// Generate description if not provided (first 160 chars of content)
+let description = content.data.description;
+if (!description && rawContent) {
+    // Strip markdown and get first 160 chars
+    const plainText = rawContent.replace(/[#*`[\]()]/g, '').replace(/\n/g, ' ').trim();
+    description = plainText.substring(0, 160) + (plainText.length > 160 ? '...' : '');
+}
+
 // Format date for display
 const formatDate = (date: Date) => {
     return date.toLocaleDateString('en-US', {
@@ -50,7 +76,16 @@ const pathname = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : Astro.u
 const currentUrl = new URL(pathname, Astro.site);
 ---
 
-<Container title={content.data.title}>
+<Container 
+    title={content.data.title}
+    description={description}
+    image={socialImage}
+    type={type === 'post' ? 'article' : 'website'}
+    url={currentUrl.toString()}
+    date={content.data.date}
+    author={content.data.author}
+    tags={content.data.tags}
+>
     <div class="content px-4 sm:px-0">
         <div class="section-title uppercase tracking-wide text-theme-muted mb-2 text-center">
             {type === 'post' ? 'Blog Post' : 'Note'}
@@ -79,7 +114,7 @@ const currentUrl = new URL(pathname, Astro.site);
                             <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                             </svg>
-                            <span>{remarkPluginFrontmatter.minutesRead} read</span>
+                            <span>{remarkPluginFrontmatter.minutesRead}</span>
                         </div>
                     )}
 
@@ -103,12 +138,6 @@ const currentUrl = new URL(pathname, Astro.site);
                             ))}
                         </div>
                     )}
-
-                {content.data.description && (
-                    <p class="text-lg text-theme-secondary mt-4 leading-relaxed">
-                        {content.data.description}
-                    </p>
-                )}
             </header>
 
             <!-- Article Content -->

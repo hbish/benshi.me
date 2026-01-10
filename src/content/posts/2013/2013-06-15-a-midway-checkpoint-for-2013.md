@@ -4,6 +4,9 @@ author: Ben Shi
 type: post
 date: 2013-06-15T07:55:25+00:00
 slug: a-midway-checkpoint-for-2013
+description:
+  'A mid-year reflection on 2013. Taking stock of progress, challenges, and lessons learned in the
+  first half of the year.'
 categories:
   - life
 tags:

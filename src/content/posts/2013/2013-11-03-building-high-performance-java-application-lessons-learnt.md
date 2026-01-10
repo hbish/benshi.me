@@ -4,6 +4,9 @@ author: Ben Shi
 type: post
 date: 2013-11-03T08:00:13+00:00
 slug: building-high-performance-java-application-lessons-learnt
+description:
+  'Lessons learned building an automated rates trading system in Java from scratch. Performance
+  optimization insights from a real-world project.'
 categories:
   - notes
 tags:

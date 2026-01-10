@@ -4,6 +4,9 @@ author: Ben Shi
 type: post
 date: 2020-05-17T00:00:00+00:00
 slug: covid-life-update
+description:
+  "Reflections on life during COVID-19 lockdown. How 2020 became one of the strangest years I've
+  experienced and what I learned from it."
 tags:
   - life
   - covid-19

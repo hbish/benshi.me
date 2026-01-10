@@ -4,6 +4,9 @@ author: Ben Shi
 type: post
 date: 2013-06-12T07:53:33+00:00
 slug: decisions
+description:
+  'When the world gets quiet and only your heart remains. Reflections on making life-changing
+  decisions and listening to your inner voice.'
 categories:
   - life
 tags:
