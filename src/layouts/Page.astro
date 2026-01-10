@@ -14,7 +14,9 @@ const { Content } = await page.render()
   <div class="content px-4 sm:px-0">
     <section>
       <article class="h-entry">
-        <h1 class="page-title p-name text-3xl font-bold mb-6 text-theme">{page.data.title}</h1>
+        <h1 class="page-title p-name text-3xl lg:text-4xl font-bold mb-6 text-theme">
+          {page.data.title}
+        </h1>
         <div class="prose prose-lg dark:prose-invert max-w-none">
           <Content />
         </div>

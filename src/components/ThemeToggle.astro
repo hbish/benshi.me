@@ -2,10 +2,10 @@
 // ThemeToggle component for switching between theme variants
 ---
 
-<div class="theme-toggle">
-  <label for="theme-select" class="sr-only">Select theme</label>
+<div class="theme-toggle" data-theme-toggle>
   <select
-    id="theme-select"
+    data-theme-selector
+    aria-label="Select theme"
     class="theme-selector bg-theme border border-theme rounded px-2 py-1 text-sm text-theme-secondary focus:outline-none focus:ring-2 focus:ring-accent-theme"
   >
     <option value="light">light</option>
@@ -43,87 +43,81 @@
 
 <script>
   // Theme management script
-  class ThemeManager {
-    themeKey: string
-    defaultTheme: string
-    themes: string[]
+  const THEME_KEY = 'hbish-theme'
+  const THEMES = ['light', 'dark', 'gruv-light', 'gruv-dark']
+  const DEFAULT_THEME = 'light'
 
-    constructor() {
-      this.themeKey = 'hbish-theme'
-      this.defaultTheme = 'light'
-      this.themes = ['light', 'dark', 'gruv-light', 'gruv-dark']
-      this.init()
-    }
-
-    init() {
-      // Get saved theme or default
-      const savedTheme = this.getSavedTheme()
-      this.setTheme(savedTheme)
-
-      // Set up the selector
-      const selector = document.getElementById('theme-select') as HTMLSelectElement
-      if (selector) {
-        selector.value = savedTheme
-        selector.addEventListener('change', e => {
-          const target = e.target as HTMLSelectElement
-          this.setTheme(target.value)
-        })
+  function getSavedTheme(): string {
+    if (typeof localStorage !== 'undefined') {
+      const saved = localStorage.getItem(THEME_KEY)
+      if (saved && THEMES.includes(saved)) {
+        return saved
       }
     }
 
-    getSavedTheme(): string {
-      if (typeof localStorage !== 'undefined') {
-        const saved = localStorage.getItem(this.themeKey)
-        if (saved && this.themes.includes(saved)) {
-          return saved
-        }
-      }
-
-      // Fallback to system preference for light/dark
-      if (typeof window !== 'undefined' && window.matchMedia) {
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-      }
-
-      return this.defaultTheme
+    // Fallback to system preference for light/dark
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
     }
 
-    setTheme(theme: string) {
-      if (!this.themes.includes(theme)) return
-
-      const html = document.documentElement
-
-      // Remove all theme classes
-      this.themes.forEach(t => {
-        html.classList.remove(t)
-      })
-
-      // Add the selected theme class
-      html.classList.add(theme)
-
-      // Save to localStorage
-      if (typeof localStorage !== 'undefined') {
-        localStorage.setItem(this.themeKey, theme)
-      }
-
-      // Update the selector if it exists
-      const selector = document.getElementById('theme-select') as HTMLSelectElement
-      if (selector && selector.value !== theme) {
-        selector.value = theme
-      }
-    }
+    return DEFAULT_THEME
   }
 
-  // Initialize theme manager on page load
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      new ThemeManager()
+  function setTheme(theme: string) {
+    if (!THEMES.includes(theme)) return
+
+    const html = document.documentElement
+
+    // Remove all theme classes
+    THEMES.forEach(t => {
+      html.classList.remove(t)
     })
+
+    // Add the selected theme class
+    html.classList.add(theme)
+
+    // Save to localStorage
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(THEME_KEY, theme)
+    }
+
+    // Update all selectors
+    document.querySelectorAll<HTMLSelectElement>('[data-theme-selector]').forEach(selector => {
+      if (selector.value !== theme) {
+        selector.value = theme
+      }
+    })
+  }
+
+  function initThemeToggle(container: HTMLElement, theme: string) {
+    const selector = container.querySelector<HTMLSelectElement>('[data-theme-selector]')
+    if (!selector) return
+
+    selector.value = theme
+
+    selector.addEventListener('change', e => {
+      const target = e.target as HTMLSelectElement
+      setTheme(target.value)
+    })
+  }
+
+  // Initialize all theme toggles
+  function initAllThemeToggles() {
+    const savedTheme = getSavedTheme()
+    document.querySelectorAll('[data-theme-toggle]').forEach(container => {
+      initThemeToggle(container as HTMLElement, savedTheme)
+    })
+    // Set initial theme
+    setTheme(savedTheme)
+  }
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAllThemeToggles)
   } else {
-    new ThemeManager()
+    initAllThemeToggles()
   }
 
   // Handle page navigation (for Astro view transitions)
-  document.addEventListener('astro:page-load', () => {
-    new ThemeManager()
-  })
+  document.addEventListener('astro:page-load', initAllThemeToggles)
 </script>
