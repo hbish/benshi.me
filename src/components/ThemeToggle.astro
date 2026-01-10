@@ -3,9 +3,9 @@
 ---
 
 <div class="theme-toggle" data-theme-toggle>
-  <label class="sr-only">Select theme</label>
   <select
     data-theme-selector
+    aria-label="Select theme"
     class="theme-selector bg-theme border border-theme rounded px-2 py-1 text-sm text-theme-secondary focus:outline-none focus:ring-2 focus:ring-accent-theme"
   >
     <option value="light">light</option>
@@ -89,12 +89,11 @@
     })
   }
 
-  function initThemeToggle(container: HTMLElement) {
+  function initThemeToggle(container: HTMLElement, theme: string) {
     const selector = container.querySelector<HTMLSelectElement>('[data-theme-selector]')
     if (!selector) return
 
-    const savedTheme = getSavedTheme()
-    selector.value = savedTheme
+    selector.value = theme
 
     selector.addEventListener('change', e => {
       const target = e.target as HTMLSelectElement
@@ -104,9 +103,12 @@
 
   // Initialize all theme toggles
   function initAllThemeToggles() {
-    document.querySelectorAll('[data-theme-toggle]').forEach(initThemeToggle)
+    const savedTheme = getSavedTheme()
+    document.querySelectorAll('[data-theme-toggle]').forEach(container => {
+      initThemeToggle(container as HTMLElement, savedTheme)
+    })
     // Set initial theme
-    setTheme(getSavedTheme())
+    setTheme(savedTheme)
   }
 
   // Initialize on page load
