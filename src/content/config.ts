@@ -14,6 +14,8 @@ const postCollection = defineCollection({
     slug: z.string().optional(),
     tags: z.array(z.string()).optional(),
     minutesRead: z.string().optional(),
+    image: z.string().optional(),
+    socialImage: z.string().optional(),
   }),
 })
 
@@ -43,6 +45,8 @@ const noteCollection = defineCollection({
     tags: z.array(z.string()).optional(),
     draft: z.boolean().default(false),
     minutesRead: z.string().optional(),
+    image: z.string().optional(),
+    socialImage: z.string().optional(),
   }),
 })
 

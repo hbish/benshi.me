@@ -4,6 +4,9 @@ author: Ben Shi
 type: post
 date: 2020-07-15
 slug: modding-keychron-k2
+description:
+  "Transform your Keychron K2's hollow sound into crisp mechanical satisfaction. A complete modding
+  guide covering O-rings, lubing, and foam padding."
 tags:
   - modding
   - mechanical keyboard

@@ -4,6 +4,9 @@ author: Ben Shi
 type: post
 date: 2020-06-07T00:00:00+00:00
 slug: deleting-old-tweets
+description:
+  'Why I decided to delete 13 years of tweets and how I automated the process. A reflection on
+  digital permanence and online identity.'
 tags:
   - programming
   - twitter

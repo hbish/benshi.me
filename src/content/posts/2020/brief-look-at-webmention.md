@@ -4,6 +4,9 @@ author: Ben Shi
 type: post
 date: 2020-05-25T00:00:00+00:00
 slug: brief-look-at-webmention
+description:
+  'Exploring WebMention as a decentralized commenting solution for static sites. How IndieWeb
+  protocols enable social interactions without centralized platforms.'
 tags:
   - programming
   - webmention

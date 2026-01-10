@@ -7,14 +7,39 @@ import Content from "../components/Content.astro";
 
 export interface Props {
 	title: string;
+	description?: string;
+	image?: string;
+	type?: 'article' | 'website';
+	url?: string;
+	date?: Date;
+	author?: string;
+	tags?: string[];
 }
 
-const { title } = Astro.props;
+const { 
+	title, 
+	description = SITE_DESCRIPTION,
+	image,
+	type,
+	url,
+	date,
+	author,
+	tags
+} = Astro.props;
 ---
 
 <!DOCTYPE html>
 <html lang="en">
-<Header title={title || SITE_TITLE} description={SITE_DESCRIPTION} />
+<Header 
+	title={title || SITE_TITLE} 
+	description={description} 
+	image={image}
+	type={type}
+	url={url}
+	date={date}
+	author={author}
+	tags={tags}
+/>
 <body class="bg-theme text-theme transition-colors duration-300">
 	<div class="waterfall"></div>
 	<div class="container font-sans max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-20">

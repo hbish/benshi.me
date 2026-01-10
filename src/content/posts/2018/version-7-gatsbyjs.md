@@ -1,9 +1,12 @@
-﻿---
+---
 title: Version 7 - GatsbyJS
 author: Ben Shi
 type: post
 date: 2018-10-15
 slug: version-7-gatsbyjs
+description:
+  'Why I completely rewrote my personal website using GatsbyJS and abandoned CMSs for a static site
+  generator. Version 7 brings speed and simplicity.'
 categories:
   - notes
 tags:
