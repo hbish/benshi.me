@@ -10,9 +10,8 @@ command = "pnpm build"
 cwd = "."
 watch_paths = ["src", "public", "astro.config.mjs", "tailwind.config.cjs", "tsconfig.json"]
 
-# Output directory (Astro default)
-[build.output]
-directory = "dist"
+# Output directory (Astro default) - Pages requires top-level pages_build_output_dir
+pages_build_output_dir = "dist"
 
 # Node.js version compatibility
 [compatibility]
