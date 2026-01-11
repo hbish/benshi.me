@@ -1,5 +1,19 @@
 # Cloudflare Pages configuration for benshi.me
+# See https://developers.cloudflare.com/pages/functions/wrangler-configuration/
 
 name = "benshi-me"
 compatibility_date = "2024-01-01"
-pages_build_output_dir = "dist"
+
+# Build configuration for Astro static site
+[build]
+command = "pnpm build"
+cwd = "."
+watch_paths = ["src", "public", "astro.config.mjs", "tailwind.config.cjs", "tsconfig.json"]
+
+# Output directory (Astro default)
+[build.output]
+directory = "dist"
+
+# Node.js version compatibility
+[compatibility]
+nodejs_compatibility = "v22"
