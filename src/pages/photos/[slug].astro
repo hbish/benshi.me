@@ -113,13 +113,16 @@ const CDN_BASE = 'https://cdn.hbish.com'
               const imageUrl = `${CDN_BASE}/${photo.data.id}`
               return (
                 <div class="photo-item" key={photo.id}>
-                  <img
-                    src={imageUrl}
-                    alt={photo.data.title}
-                    class="w-full h-auto object-cover rounded-lg hover:opacity-90 transition-opacity"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  <div class="relative bg-gray-200 dark:bg-gray-800 rounded-lg aspect-square overflow-hidden">
+                    <img
+                      src={imageUrl}
+                      alt={photo.data.title}
+                      class="w-full h-full object-cover rounded-lg opacity-0 transition-opacity duration-300"
+                      loading="lazy"
+                      decoding="async"
+                      onload="this.classList.remove('opacity-0')"
+                    />
+                  </div>
                   {photo.data.description && (
                     <p class="text-sm text-gray-600 mt-2">{photo.data.description}</p>
                   )}
