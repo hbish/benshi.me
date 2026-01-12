@@ -1,0 +1,79 @@
+---
+import Container from '../../layouts/Container.astro'
+import { type CollectionEntry, getCollection } from 'astro:content'
+
+export async function getStaticPaths() {
+  const collections = await getCollection('collections')
+
+  return collections
+    .filter(collection => collection.data.draft !== true)
+    .map(collection => {
+      const slug = collection.slug || collection.data.slug
+      return {
+        params: { slug },
+        props: { collection },
+      }
+    })
+}
+
+type Props = {
+  collection: CollectionEntry<'collections'>
+}
+
+const { collection } = Astro.props
+const slug = collection.slug || collection.data.slug
+
+// Get all photos and filter by collection
+const allPhotos = await getCollection('photos')
+const photos = allPhotos
+  .filter(photo => photo.data.collection === slug && photo.data.draft !== true)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+
+// CDN base URL for R2 bucket
+const CDN_BASE = 'https://cdn.hbish.com'
+---
+
+<Container title={`${collection.data.title} - Photos - Ben Shi`}>
+  <div class="section-title text-center text-2xl my-2 px-4 sm:px-0">
+    {collection.data.title}
+  </div>
+  {
+    collection.data.description && (
+      <div class="text-center text-gray-600 mb-4 px-4 sm:px-0">{collection.data.description}</div>
+    )
+  }
+  <section class="px-4 sm:px-0">
+    {
+      photos.length === 0 ? (
+        <div class="text-center text-gray-500 my-8">
+          <p>No photos in this album yet.</p>
+        </div>
+      ) : (
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {photos.map(photo => {
+            const imageUrl = `${CDN_BASE}/${photo.data.id}`
+            return (
+              <div class="photo-item" key={photo.id}>
+                <a href={imageUrl} target="_blank" rel="noopener noreferrer">
+                  <img
+                    src={imageUrl}
+                    alt={photo.data.title}
+                    class="w-full h-auto object-cover rounded-lg hover:opacity-90 transition-opacity"
+                    loading="lazy"
+                  />
+                </a>
+                {photo.data.description && (
+                  <p class="text-sm text-gray-600 mt-2">{photo.data.description}</p>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      )
+    }
+  </section>
+
+  <div class="text-center mt-8 pt-6 border-t border-theme px-4 sm:px-0">
+    <a href="/photos" class="text-theme-accent hover:underline"> Back to Albums </a>
+  </div>
+</Container>
