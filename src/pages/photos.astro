@@ -26,7 +26,7 @@ const CDN_BASE = 'https://cdn.hbish.com'
             const albumSlug = collection.slug || collection.data.slug
             return (
               <div class="album-item" key={collection.id}>
-                <a href={`/photos/${albumSlug}`}>
+                <a href={`/photos/${albumSlug}/`}>
                   <img
                     src={coverUrl}
                     alt={collection.data.title}
@@ -36,7 +36,7 @@ const CDN_BASE = 'https://cdn.hbish.com'
                 </a>
                 <div class="mt-2">
                   <h3 class="text-lg font-semibold">
-                    <a href={`/photos/${albumSlug}`} class="hover:opacity-70 transition-opacity">
+                    <a href={`/photos/${albumSlug}/`} class="hover:opacity-70 transition-opacity">
                       {collection.data.title}
                     </a>
                   </h3>
