@@ -2,15 +2,15 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-01-12)
+See: .planning/PROJECT.md (updated 2026-01-20)
 
-**Core value:** Site deploys successfully on Cloudflare Pages and is ready for DNS cutover.
-**Current focus:** v1.1 Photo Gallery complete
+**Core value:** Personal website with blog, photo gallery, and static content hosted on Cloudflare
+Pages **Current focus:** Maintenance mode — all planned milestones complete
 
 ## Current Position
 
-Milestone: v1.1 — Photo Gallery Phase: 7 of 7 (Gallery Integration) Plan: 1 of 1 in current phase
-Status: Phase complete Last activity: 2026-01-12 — Completed 07-01-PLAN.md
+Milestone: v1.1 Photo Gallery — COMPLETE Status: Shipped 2026-01-20 Last activity: Navigation
+reorganization (talks merged into work, emoji link to /now)
 
 Progress: ██████████ 100%
 
@@ -18,9 +18,9 @@ Progress: ██████████ 100%
 
 **Velocity:**
 
-- Total plans completed: 12
-- Average duration: 9 min
-- Total execution time: 1.5 hours
+- Total plans completed: 17
+- Average duration: 10 min
+- Total execution time: 2.8 hours
 
 **By Phase:**
 
@@ -49,6 +49,8 @@ All decisions logged in PROJECT.md Key Decisions table with outcomes marked.
 
 **Summary of key decisions:**
 
+**v1.0 decisions:**
+
 - Project name "benshi-me" (hyphenated for Cloudflare compatibility)
 - wrangler CLI for programmatic Cloudflare management
 - wrangler.toml for declarative configuration
@@ -56,31 +58,29 @@ All decisions logged in PROJECT.md Key Decisions table with outcomes marked.
 - pages_build_output_dir (top-level, not [build.output])
 - SSL by Google Trust Services (WE1)
 
-**v1.1 scope decisions:**
+**v1.1 decisions:**
 
 - Cloudflare R2 for hosting (zero egress fees)
 - Custom domain cdn.hbish.com for CDN
 - Masonry layout with 2 columns
 - Collections/Albums for organization
-- Filtering by tags/collections
+- Filtering by collection tags
 - Lazy loading and responsive images
 
 ### Deferred Issues
-
-From v1.0:
 
 - DNS cutover — keeping Vercel active as backup
 - Vercel cleanup — deferred until after validation period
 
 ### Blockers/Concerns
 
-None — ready to begin v1.1.
+None — project in maintenance mode
 
 ## Session Continuity
 
-Last session: 2026-01-12 Stopped at: Phase 7 complete (gallery integration with skeleton loading)
-Resume file: None
+Last session: 2026-01-20 Stopped at: v1.1 milestone complete, navigation reorganization Resume file:
+None
 
 ### Roadmap Evolution
 
-- Milestone v1.1 created: Photo Gallery, 4 phases (Phase 4-7) - COMPLETE
+- Milestone v1.1 complete: Photo Gallery — SHIPPED 2026-01-20
