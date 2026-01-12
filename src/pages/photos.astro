@@ -7,23 +7,8 @@ const collections = allCollections
   .filter(collection => collection.data.draft !== true)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 
-// Get URL param for tag filtering
-const urlObj = new URL(Astro.request.url)
-const activeTag = urlObj.searchParams.get('tag')
-
-// Get all photos to extract tags for filtering
-const allPhotos = await getCollection('photos')
-const allTags = [...new Set(allPhotos.flatMap(photo => photo.data.tags || []))].sort()
-
-// Filter collections to only show those that have photos with the active tag
-const filteredCollections = activeTag
-  ? collections.filter(collection => {
-      const collectionSlug = collection.slug || collection.data.slug
-      return allPhotos.some(
-        photo => photo.data.collection === collectionSlug && photo.data.tags?.includes(activeTag)
-      )
-    })
-  : collections
+// Extract tags from collection front matter
+const allTags = [...new Set(collections.flatMap(collection => collection.data.tags || []))].sort()
 
 // CDN base URL for R2 bucket
 const CDN_BASE = 'https://cdn.hbish.com'
@@ -37,6 +22,12 @@ const CDN_BASE = 'https://cdn.hbish.com'
   .tag-pill.active {
     @apply bg-blue-600 text-white hover:bg-blue-700;
   }
+  .album-item.hidden {
+    display: none;
+  }
+  .no-results.hidden {
+    display: none;
+  }
 </style>
 
 <Container title="Photos - Ben Shi">
@@ -45,28 +36,14 @@ const CDN_BASE = 'https://cdn.hbish.com'
   {
     allTags.length > 0 && (
       <nav aria-label="Filter albums by tag" class="px-4 sm:px-0 mb-4">
-        <div class="flex gap-2 flex-wrap justify-center">
-          <a
-            href="/photos/"
-            class:list={{
-              'tag-pill': true,
-              active: !activeTag,
-            }}
-            aria-current={!activeTag ? 'page' : undefined}
-          >
+        <div class="flex gap-2 flex-wrap justify-center" id="tag-pills">
+          <button data-tag="all" class="tag-pill active" aria-current="true">
             All
-          </a>
+          </button>
           {allTags.map(tag => (
-            <a
-              href={`/photos/?tag=${encodeURIComponent(tag)}`}
-              class:list={{
-                'tag-pill': true,
-                active: activeTag === tag,
-              }}
-              aria-current={activeTag === tag ? 'page' : undefined}
-            >
+            <button data-tag={tag} class="tag-pill">
               {tag}
-            </a>
+            </button>
           ))}
         </div>
       </nav>
@@ -74,44 +51,128 @@ const CDN_BASE = 'https://cdn.hbish.com'
   }
 
   <section class="px-4 sm:px-0">
-    {
-      filteredCollections.length === 0 ? (
-        <div class="text-center text-gray-500 my-8">
-          <p>{activeTag ? `No albums with photos tagged '${activeTag}'.` : 'No albums yet.'}</p>
-        </div>
-      ) : (
-        <div class="max-w-[60%] mx-auto">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {filteredCollections.map(collection => {
-              const coverUrl = `${CDN_BASE}/${collection.data.coverPhoto}`
-              const albumSlug = collection.slug || collection.data.slug
-              return (
-                <div class="album-item" key={collection.id}>
-                  <a href={`/photos/${albumSlug}/`} class="block">
-                    <div class="relative bg-gray-200 dark:bg-gray-800 rounded-lg aspect-video overflow-hidden">
-                      <img
-                        src={coverUrl}
-                        alt={collection.data.title}
-                        class="w-full h-full object-cover rounded-lg opacity-0 transition-opacity duration-300"
-                        loading="lazy"
-                        decoding="async"
-                        onload="this.classList.remove('opacity-0')"
-                      />
-                    </div>
-                  </a>
-                  <div class="mt-2">
-                    <h3 class="text-lg font-semibold">
-                      <a href={`/photos/${albumSlug}/`} class="hover:opacity-70 transition-opacity">
-                        {collection.data.title}
-                      </a>
-                    </h3>
+    <div class="max-w-[60%] mx-auto">
+      <div id="no-results" class="no-results hidden text-center text-gray-500 my-8">
+        <p>No albums with photos matching the selected tag.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {
+          collections.map(collection => {
+            const coverUrl = `${CDN_BASE}/${collection.data.coverPhoto}`
+            const albumSlug = collection.slug || collection.data.slug
+            const tags = collection.data.tags || []
+            return (
+              <div class="album-item" key={collection.id} data-tags={tags.join(',')}>
+                <a href={`/photos/${albumSlug}/`} class="block">
+                  <div class="relative bg-gray-200 dark:bg-gray-800 rounded-lg aspect-video overflow-hidden">
+                    <img
+                      src={coverUrl}
+                      alt={collection.data.title}
+                      class="w-full h-full object-cover rounded-lg opacity-0 transition-opacity duration-300"
+                      loading="lazy"
+                      decoding="async"
+                      onload="this.classList.remove('opacity-0')"
+                    />
                   </div>
+                </a>
+                <div class="mt-2">
+                  <h3 class="text-lg font-semibold">
+                    <a href={`/photos/${albumSlug}/`} class="hover:opacity-70 transition-opacity">
+                      {collection.data.title}
+                    </a>
+                  </h3>
                 </div>
-              )
-            })}
-          </div>
-        </div>
-      )
-    }
+              </div>
+            )
+          })
+        }
+      </div>
+    </div>
   </section>
 </Container>
+
+<script>
+  // Client-side tag filtering for static builds
+  function initTagFiltering() {
+    const tagPills = document.getElementById('tag-pills')
+    const albumItems = document.querySelectorAll('.album-item')
+    const noResults = document.getElementById('no-results')
+
+    // Get tag from URL parameter
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+
+    // Update URL when a tag is clicked
+    tagPills?.addEventListener('click', e => {
+      if (e.target.matches('.tag-pill')) {
+        const selectedTag = e.target.dataset.tag
+
+        // Update URL without page reload
+        const newUrl =
+          selectedTag === 'all' ? '/photos/' : `/photos/?tag=${encodeURIComponent(selectedTag)}`
+        window.history.pushState({}, '', newUrl)
+
+        // Filter albums
+        filterAlbums(selectedTag)
+
+        // Update active state on pills
+        updateActivePill(selectedTag)
+      }
+    })
+
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', () => {
+      const urlParams = new URLSearchParams(window.location.search)
+      const tag = urlParams.get('tag')
+      const tagToUse = tag || 'all'
+      filterAlbums(tagToUse)
+      updateActivePill(tagToUse)
+    })
+
+    function filterAlbums(tag: string) {
+      let visibleCount = 0
+
+      albumItems.forEach(item => {
+        const itemTags = item.dataset.tags?.split(',') || []
+        const shouldShow = tag === 'all' || itemTags.includes(tag)
+
+        if (shouldShow) {
+          item.classList.remove('hidden')
+          visibleCount++
+        } else {
+          item.classList.add('hidden')
+        }
+      })
+
+      // Show/hide no results message
+      if (noResults) {
+        if (visibleCount === 0 && tag !== 'all') {
+          noResults.classList.remove('hidden')
+        } else {
+          noResults.classList.add('hidden')
+        }
+      }
+    }
+
+    function updateActivePill(tag: string) {
+      const pills = tagPills?.querySelectorAll('.tag-pill')
+      pills?.forEach(pill => {
+        if (pill.dataset.tag === tag) {
+          pill.classList.add('active')
+          pill.setAttribute('aria-current', 'true')
+        } else {
+          pill.classList.remove('active')
+          pill.removeAttribute('aria-current')
+        }
+      })
+    }
+
+    // Initial filter on page load
+    const initialTag = activeTag || 'all'
+    filterAlbums(initialTag)
+    updateActivePill(initialTag)
+  }
+
+  // Run on page load
+  initTagFiltering()
+</script>

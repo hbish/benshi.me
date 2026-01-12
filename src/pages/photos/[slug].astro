@@ -23,7 +23,7 @@ type Props = {
 const { collection, url } = Astro.props
 const slug = collection.slug || collection.data.slug
 
-// Get all photos and filter by collection
+// Get all photos and filter by collection field
 const allPhotos = await getCollection('photos')
 const photos = allPhotos
   .filter(photo => photo.data.collection === slug && photo.data.draft !== true)
@@ -77,7 +77,7 @@ const CDN_BASE = 'https://cdn.hbish.com'
     }
   </section>
 
-  <div class="text-center mt-8 pt-6 border-t border-theme px-4 sm:px-0">
+  <div class="text-center mt-8 pt-6 px-4 sm:px-0">
     <a href="/photos/" class="text-theme-accent hover:underline">Back to Albums</a>
   </div>
 </Container>

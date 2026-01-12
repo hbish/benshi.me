@@ -58,7 +58,7 @@ const photoCollection = defineCollection({
     id: z.string(),
     title: z.string(),
     description: z.string().optional(),
-    collection: z.string(), // album name
+    collection: z.string().optional(), // album name (optional - derived from filename if not provided)
     tags: z.array(z.string()).optional(),
     date: z
       .string()
