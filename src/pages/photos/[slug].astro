@@ -45,6 +45,16 @@ const allTags = [...new Set(collectionPhotos.flatMap(photo => photo.data.tags ||
 const CDN_BASE = 'https://cdn.hbish.com'
 ---
 
+<style>
+  .tag-pill {
+    @apply px-3 py-1 rounded-full text-sm transition-colors;
+    @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
+  }
+  .tag-pill.active {
+    @apply bg-blue-600 text-white hover:bg-blue-700;
+  }
+</style>
+
 <Container title={`${collection.data.title} - Photos - Ben Shi`}>
   <div class="section-title text-center text-2xl my-2 px-4 sm:px-0">
     {collection.data.title}
@@ -54,6 +64,38 @@ const CDN_BASE = 'https://cdn.hbish.com'
       <div class="text-center text-gray-600 mb-4 px-4 sm:px-0">{collection.data.description}</div>
     )
   }
+
+  {
+    allTags.length > 0 && (
+      <nav aria-label="Filter photos by tag" class="px-4 sm:px-0 mb-4">
+        <div class="flex gap-2 flex-wrap justify-center">
+          <a
+            href={`/photos/${slug}/`}
+            class:list={{
+              'tag-pill': true,
+              active: !activeTag,
+            }}
+            aria-current={!activeTag ? 'page' : undefined}
+          >
+            All
+          </a>
+          {allTags.map(tag => (
+            <a
+              href={`/photos/${slug}/?tag=${encodeURIComponent(tag)}`}
+              class:list={{
+                'tag-pill': true,
+                active: activeTag === tag,
+              }}
+              aria-current={activeTag === tag ? 'page' : undefined}
+            >
+              {tag}
+            </a>
+          ))}
+        </div>
+      </nav>
+    )
+  }
+
   <section class="px-4 sm:px-0">
     {
       photos.length === 0 ? (
