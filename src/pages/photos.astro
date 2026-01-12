@@ -20,7 +20,7 @@ const CDN_BASE = 'https://cdn.hbish.com'
           <p>No albums yet.</p>
         </div>
       ) : (
-        <div class="max-w-[85%] md:max-w-[90%] lg:max-w-none mx-auto">
+        <div class="max-w-[60%] mx-auto">
           <div class="grid grid-cols-1 gap-4">
             {collections.map(collection => {
               const coverUrl = `${CDN_BASE}/${collection.data.coverPhoto}`
