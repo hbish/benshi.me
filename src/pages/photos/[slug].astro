@@ -56,9 +56,6 @@ const CDN_BASE = 'https://cdn.hbish.com'
 </style>
 
 <Container title={`${collection.data.title} - Photos - Ben Shi`}>
-  <div class="section-title text-center text-2xl my-2 px-4 sm:px-0">
-    {collection.data.title}
-  </div>
   {
     collection.data.description && (
       <div class="text-center text-gray-600 mb-4 px-4 sm:px-0">{collection.data.description}</div>
@@ -108,7 +105,7 @@ const CDN_BASE = 'https://cdn.hbish.com'
         </div>
       ) : (
         <div class="max-w-[60%] mx-auto">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 gap-4">
             {photos.map(photo => {
               const imageUrl = `${CDN_BASE}/${photo.data.id}`
               return (
