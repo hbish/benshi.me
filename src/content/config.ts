@@ -50,9 +50,12 @@ const noteCollection = defineCollection({
   }),
 })
 
+// Photo collection for gallery - stores R2 object keys and metadata
 const photoCollection = defineCollection({
   schema: z.object({
-    id: z.string(), // Cloudflare image ID
+    // R2 object key (e.g., "photos/sample.jpg") - used to construct CDN URL
+    // Full CDN URL: https://photos.benshi.me/{id}
+    id: z.string(),
     title: z.string(),
     description: z.string().optional(),
     collection: z.string(), // album name
@@ -63,6 +66,8 @@ const photoCollection = defineCollection({
       .transform(val => new Date(val)),
     width: z.number().optional(),
     height: z.number().optional(),
+    // Optional variant for thumbnail (different R2 object key)
+    variant: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 })
