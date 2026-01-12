@@ -20,14 +20,26 @@ type Props = {
   collection: CollectionEntry<'collections'>
 }
 
-const { collection } = Astro.props
+const { collection, url } = Astro.props
 const slug = collection.slug || collection.data.slug
+
+// Get URL params for tag filtering (server-side for SSR, client-side for static)
+const urlObj = new URL(Astro.request.url)
+const activeTag = urlObj.searchParams.get('tag')
 
 // Get all photos and filter by collection
 const allPhotos = await getCollection('photos')
-const photos = allPhotos
+const collectionPhotos = allPhotos
   .filter(photo => photo.data.collection === slug && photo.data.draft !== true)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+
+// Filter by tag if specified
+const photos = activeTag
+  ? collectionPhotos.filter(photo => photo.data.tags?.includes(activeTag))
+  : collectionPhotos
+
+// Extract all unique tags from collection photos for filter UI
+const allTags = [...new Set(collectionPhotos.flatMap(photo => photo.data.tags || []))].sort()
 
 // CDN base URL for R2 bucket
 const CDN_BASE = 'https://cdn.hbish.com'
@@ -46,7 +58,11 @@ const CDN_BASE = 'https://cdn.hbish.com'
     {
       photos.length === 0 ? (
         <div class="text-center text-gray-500 my-8">
-          <p>No photos in this album yet.</p>
+          <p>
+            {activeTag
+              ? `No photos tagged '${activeTag}' in this album yet.`
+              : 'No photos in this album yet.'}
+          </p>
         </div>
       ) : (
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
