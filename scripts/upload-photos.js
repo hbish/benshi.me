@@ -17,8 +17,15 @@
  */
 
 import { readFile, readdir, writeFile } from 'node:fs/promises'
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
 import { existsSync, mkdirSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import dotenv from 'dotenv'
+
+// Load environment variables from .env in project root
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const projectRoot = join(__dirname, '..')
+dotenv.config({ path: join(projectRoot, '.env') })
 
 const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg']
 
@@ -29,13 +36,13 @@ function getCredentials() {
 
   if (!accountId) {
     throw new Error(
-      'CLOUDFLARE_ACCOUNT_ID not set. Please run: export CLOUDFLARE_ACCOUNT_ID=your_account_id'
+      'CLOUDFLARE_ACCOUNT_ID not set. Add it to .env or run: export CLOUDFLARE_ACCOUNT_ID=your_account_id'
     )
   }
 
   if (!apiToken) {
     throw new Error(
-      'CLOUDFLARE_API_TOKEN not set. Please run: export CLOUDFLARE_API_TOKEN=your_token\n' +
+      'CLOUDFLARE_API_TOKEN not set. Add it to .env or run: export CLOUDFLARE_API_TOKEN=your_token\n' +
         'Create token at: https://dash.cloudflare.com/profile/api-tokens'
     )
   }
