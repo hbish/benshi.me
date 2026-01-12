@@ -41,19 +41,29 @@ import ThemeToggle from './ThemeToggle.astro'
   </button>
 
   <div class="h-card">
-    <a href="/" class="block">
-      <Image
-        class="w-20 h-20 lg:w-40 lg:h-40 rounded-full mx-auto profile-pic-border"
-        src={profilePhoto}
-        alt="Ben Shi - Software Engineer and Technologist from Sydney, Australia"
-        widths={[80, 160, 320]}
-        sizes="(max-width: 1024px) 80px, 160px"
-        loading="eager"
-        decoding="sync"
-        format="webp"
-        quality={90}
-      />
-    </a>
+    <div class="relative inline-block mx-auto">
+      <a href="/" class="block">
+        <Image
+          class="w-20 h-20 lg:w-40 lg:h-40 rounded-full mx-auto profile-pic-border"
+          src={profilePhoto}
+          alt="Ben Shi - Software Engineer and Technologist from Sydney, Australia"
+          widths={[80, 160, 320]}
+          sizes="(max-width: 1024px) 80px, 160px"
+          loading="eager"
+          decoding="sync"
+          format="webp"
+          quality={90}
+        />
+      </a>
+      <a
+        href="/now/"
+        class="absolute bottom-0 right-0 rounded-full text-xl lg:text-3xl hover:scale-110 transition-transform"
+        aria-label="See what I'm doing now"
+        title="What I'm doing now"
+      >
+        ✨
+      </a>
+    </div>
     <a href="/" class="p-name u-url text-center text-2xl lg:text-5xl">
       <h1 class="mx-auto my-1 lg:my-3">Ben Shi</h1>
     </a>
@@ -82,28 +92,16 @@ import ThemeToggle from './ThemeToggle.astro'
             /about
           </a>
           <a
-            href="/now/"
-            class="block px-4 py-3 text-center hover:bg-theme-secondary rounded-lg transition-colors duration-200 min-h-[44px] flex items-center justify-center"
-          >
-            /now
-          </a>
-          <a
-            href="/photos/"
-            class="block px-4 py-3 text-center hover:bg-theme-secondary rounded-lg transition-colors duration-200 min-h-[44px] flex items-center justify-center"
-          >
-            /photos
-          </a>
-          <a
             href="/work/"
             class="block px-4 py-3 text-center hover:bg-theme-secondary rounded-lg transition-colors duration-200 min-h-[44px] flex items-center justify-center"
           >
             /work
           </a>
           <a
-            href="/talks/"
+            href="/photos/"
             class="block px-4 py-3 text-center hover:bg-theme-secondary rounded-lg transition-colors duration-200 min-h-[44px] flex items-center justify-center"
           >
-            /talks
+            /photos
           </a>
           <a
             href="/uses/"
@@ -174,10 +172,8 @@ import ThemeToggle from './ThemeToggle.astro'
       <!-- Desktop Navigation (visible on lg and up) -->
       <div class="hidden lg:flex lg:flex-col items-center justify-start">
         <a href="/about/" class="block lg:inline-block lg:mt-0 mr-4 my-2"> /about </a>
-        <a href="/now/" class="block lg:inline-block lg:mt-0 mr-4 my-2"> /now </a>
-        <a href="/photos/" class="block lg:inline-block lg:mt-0 mr-4 my-2"> /photos </a>
         <a href="/work/" class="block lg:inline-block lg:mt-0 mr-4 my-2"> /work </a>
-        <a href="/talks/" class="block lg:inline-block lg:mt-0 mr-4 my-2"> /talks </a>
+        <a href="/photos/" class="block lg:inline-block lg:mt-0 mr-4 my-2"> /photos </a>
         <a href="/uses/" class="block lg:inline-block lg:mt-0 mr-4 my-2"> /uses </a>
       </div>
     </nav>
