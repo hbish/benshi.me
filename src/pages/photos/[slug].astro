@@ -23,73 +23,22 @@ type Props = {
 const { collection, url } = Astro.props
 const slug = collection.slug || collection.data.slug
 
-// Get URL params for tag filtering (server-side for SSR, client-side for static)
-const urlObj = new URL(Astro.request.url)
-const activeTag = urlObj.searchParams.get('tag')
-
 // Get all photos and filter by collection
 const allPhotos = await getCollection('photos')
-const collectionPhotos = allPhotos
+const photos = allPhotos
   .filter(photo => photo.data.collection === slug && photo.data.draft !== true)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-
-// Filter by tag if specified
-const photos = activeTag
-  ? collectionPhotos.filter(photo => photo.data.tags?.includes(activeTag))
-  : collectionPhotos
-
-// Extract all unique tags from collection photos for filter UI
-const allTags = [...new Set(collectionPhotos.flatMap(photo => photo.data.tags || []))].sort()
 
 // CDN base URL for R2 bucket
 const CDN_BASE = 'https://cdn.hbish.com'
 ---
 
-<style>
-  .tag-pill {
-    @apply px-3 py-1 rounded-full text-sm transition-colors;
-    @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
-  }
-  .tag-pill.active {
-    @apply bg-blue-600 text-white hover:bg-blue-700;
-  }
-</style>
-
 <Container title={`${collection.data.title} - Photos - Ben Shi`}>
+  <div class="section-title text-center text-2xl my-2 px-4 sm:px-0">{collection.data.title}</div>
+
   {
     collection.data.description && (
       <div class="text-center text-gray-600 mb-4 px-4 sm:px-0">{collection.data.description}</div>
-    )
-  }
-
-  {
-    allTags.length > 0 && (
-      <nav aria-label="Filter photos by tag" class="px-4 sm:px-0 mb-4">
-        <div class="flex gap-2 flex-wrap justify-center">
-          <a
-            href={`/photos/${slug}/`}
-            class:list={{
-              'tag-pill': true,
-              active: !activeTag,
-            }}
-            aria-current={!activeTag ? 'page' : undefined}
-          >
-            All
-          </a>
-          {allTags.map(tag => (
-            <a
-              href={`/photos/${slug}/?tag=${encodeURIComponent(tag)}`}
-              class:list={{
-                'tag-pill': true,
-                active: activeTag === tag,
-              }}
-              aria-current={activeTag === tag ? 'page' : undefined}
-            >
-              {tag}
-            </a>
-          ))}
-        </div>
-      </nav>
     )
   }
 
@@ -97,11 +46,7 @@ const CDN_BASE = 'https://cdn.hbish.com'
     {
       photos.length === 0 ? (
         <div class="text-center text-gray-500 my-8">
-          <p>
-            {activeTag
-              ? `No photos tagged '${activeTag}' in this album yet.`
-              : 'No photos in this album yet.'}
-          </p>
+          <p>No photos in this album yet.</p>
         </div>
       ) : (
         <div class="max-w-[60%] mx-auto">
