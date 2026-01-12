@@ -76,7 +76,7 @@ const photoCollection = defineCollection({
 // Collection (album) schema for organizing photos into groups
 const collectionCollection = defineCollection({
   schema: z.object({
-    slug: z.string(), // unique identifier for URLs
+    slug: z.string().optional(), // unique identifier for URLs (derived from filename if not provided)
     title: z.string(),
     description: z.string().optional(),
     coverPhoto: z.string(), // R2 object key for album cover image
