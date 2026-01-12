@@ -1,0 +1,46 @@
+---
+import Container from '../layouts/Container.astro'
+import { getCollection, type CollectionEntry } from 'astro:content'
+
+const allPhotos = await getCollection('photos')
+const photos = allPhotos
+  .filter(photo => photo.data.draft !== true)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+
+// CDN base URL for R2 bucket
+const CDN_BASE = 'https://cdn.hbish.com'
+---
+
+<Container title="Photos - Ben Shi">
+  <div class="section-title text-center text-2xl my-2 px-4 sm:px-0">Photos</div>
+  <section class="px-4 sm:px-0">
+    {
+      photos.length === 0 ? (
+        <div class="text-center text-gray-500 my-8">
+          <p>No photos yet.</p>
+        </div>
+      ) : (
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {photos.map(photo => {
+            const imageUrl = `${CDN_BASE}/${photo.data.id}`
+            return (
+              <div class="photo-item" key={photo.id}>
+                <a href={imageUrl} target="_blank" rel="noopener noreferrer">
+                  <img
+                    src={imageUrl}
+                    alt={photo.data.title}
+                    class="w-full h-auto object-cover rounded-lg hover:opacity-90 transition-opacity"
+                    loading="lazy"
+                  />
+                </a>
+                {photo.data.description && (
+                  <p class="text-sm text-gray-600 mt-2">{photo.data.description}</p>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      )
+    }
+  </section>
+</Container>
