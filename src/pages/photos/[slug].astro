@@ -49,7 +49,7 @@ const CDN_BASE = 'https://cdn.hbish.com'
           <p>No photos in this album yet.</p>
         </div>
       ) : (
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {photos.map(photo => {
             const imageUrl = `${CDN_BASE}/${photo.data.id}`
             return (
@@ -60,6 +60,7 @@ const CDN_BASE = 'https://cdn.hbish.com'
                     alt={photo.data.title}
                     class="w-full h-auto object-cover rounded-lg hover:opacity-90 transition-opacity"
                     loading="lazy"
+                    decoding="async"
                   />
                 </a>
                 {photo.data.description && (
