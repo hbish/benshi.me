@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-01-12)
 
 **Core value:** Site deploys successfully on Cloudflare Pages and is ready for DNS cutover.
-**Current focus:** v1.0 milestone complete
+**Current focus:** Phase 4 — Cloudflare Images Setup
 
 ## Current Position
 
-Milestone: v1.0 — Cloudflare Pages Migration Status: Complete Last activity: 2026-01-12 — v1.0
-milestone shipped
+Milestone: v1.1 — Photo Gallery Phase: 4 of 7 (Cloudflare Images Setup) Plan: Not started Status:
+Ready to plan Last activity: 2026-01-12 — v1.1 milestone created
 
-Progress: ██████████ 100%
+Progress: ████░░░░░░ 43%
 
 ## Performance Metrics
 
@@ -52,15 +52,29 @@ All decisions logged in PROJECT.md Key Decisions table with outcomes marked.
 - pages_build_output_dir (top-level, not [build.output])
 - SSL by Google Trust Services (WE1)
 
+**v1.1 scope decisions:**
+
+- Cloudflare Images for hosting (vs local files)
+- Masonry layout with 2 columns
+- Collections/Albums for organization
+- Filtering by tags/collections
+- Lazy loading and responsive images
+
 ### Deferred Issues
+
+From v1.0:
 
 - DNS cutover — keeping Vercel active as backup
 - Vercel cleanup — deferred until after validation period
 
 ### Blockers/Concerns
 
-None — migration complete and validated.
+None — ready to begin v1.1.
 
 ## Session Continuity
 
-Last session: 2026-01-12 Stopped at: v1.0 milestone complete Resume file: None
+Last session: 2026-01-12 Stopped at: Milestone v1.1 initialization Resume file: None
+
+### Roadmap Evolution
+
+- Milestone v1.1 created: Photo Gallery, 4 phases (Phase 4-7)

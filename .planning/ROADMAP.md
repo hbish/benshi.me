@@ -2,14 +2,14 @@
 
 ## Overview
 
-Migrate the personal website (benshi.me) from Vercel to Cloudflare Pages. The migration involves
-setting up the Cloudflare Pages project with the correct build configuration, adding the custom
-domain, and validating that all existing functionality works correctly.
+Migrate the personal website (benshi.me) from Vercel to Cloudflare Pages, then add a photo gallery
+feature powered by Cloudflare Images.
 
 ## Milestones
 
 - ✅ **v1.0 Cloudflare Pages Migration** — Phases 1-3 (shipped 2026-01-12)
   - Full details: [.planning/milestones/v1.0-ROADMAP.md](.planning/milestones/v1.0-ROADMAP.md)
+- 🚧 **v1.1 Photo Gallery** — Phases 4-7 (in progress)
 
 ## Completed Milestones
 
@@ -22,12 +22,59 @@ domain, and validating that all existing functionality works correctly.
 
 </details>
 
+## 🚧 v1.1 Photo Gallery (In Progress)
+
+**Milestone Goal:** Add a photo gallery with Cloudflare Images, masonry grid, collections, and
+filtering.
+
+#### Phase 4: Cloudflare Images Setup
+
+**Goal**: Configure Cloudflare Images and upload sample photos **Depends on**: v1.0 milestone
+complete **Research**: Likely (new Cloudflare Images API integration) **Research topics**:
+Cloudflare Images API, upload workflow, image variants/resizing, direct upload vs API **Plans**: TBD
+
+Plans:
+
+- [ ] 04-01: TBD (run /gsd:plan-phase 4 to break down)
+
+#### Phase 5: Gallery Data Structure
+
+**Goal**: Create photo collections and metadata schema **Depends on**: Phase 4 **Research**:
+Unlikely (internal data structures using existing Astro patterns) **Plans**: TBD
+
+Plans:
+
+- [ ] 05-01: TBD
+
+#### Phase 6: Gallery UI Components
+
+**Goal**: Build masonry grid, collections view, and filtering UI **Depends on**: Phase 5
+**Research**: Unlikely (internal UI using existing Tailwind patterns) **Plans**: TBD
+
+Plans:
+
+- [ ] 06-01: TBD
+
+#### Phase 7: Gallery Integration
+
+**Goal**: Add lazy loading, responsive images, and lightbox **Depends on**: Phase 6 **Research**:
+Likely (need to evaluate lazy loading options for Astro/Images) **Research topics**: Astro Image
+component lazy loading, responsive image strategies, lightbox libraries **Plans**: TBD
+
+Plans:
+
+- [ ] 07-01: TBD
+
 ## Progress
 
-| Phase                     | Milestone | Plans Complete | Status   | Completed  |
-| ------------------------- | --------- | -------------- | -------- | ---------- |
-| 1. Cloudflare Pages Setup | v1.0      | 2/2            | Complete | 2026-01-12 |
-| 2. Domain Configuration   | v1.0      | 2/2            | Complete | 2026-01-12 |
-| 3. Validation             | v1.0      | 3/3            | Complete | 2026-01-12 |
+| Phase                      | Milestone | Plans Complete | Status      | Completed  |
+| -------------------------- | --------- | -------------- | ----------- | ---------- |
+| 1. Cloudflare Pages Setup  | v1.0      | 2/2            | Complete    | 2026-01-12 |
+| 2. Domain Configuration    | v1.0      | 2/2            | Complete    | 2026-01-12 |
+| 3. Validation              | v1.0      | 3/3            | Complete    | 2026-01-12 |
+| 4. Cloudflare Images Setup | v1.1      | 0/?            | Not started | -          |
+| 5. Gallery Data Structure  | v1.1      | 0/?            | Not started | -          |
+| 6. Gallery UI Components   | v1.1      | 0/?            | Not started | -          |
+| 7. Gallery Integration     | v1.1      | 0/?            | Not started | -          |
 
-**Overall Progress: ██████████ 100%**
+**Overall Progress: █████░░░░░ 43%**
