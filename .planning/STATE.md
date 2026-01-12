@@ -9,18 +9,18 @@ See: .planning/PROJECT.md (updated 2026-01-12)
 
 ## Current Position
 
-Milestone: v1.1 — Photo Gallery Phase: 4 of 7 (Cloudflare Images Setup) Plan: Not started Status:
-Ready to plan Last activity: 2026-01-12 — v1.1 milestone created
+Milestone: v1.1 — Photo Gallery Phase: 4 of 7 (Cloudflare R2 Storage Setup) Plan: 1 of 1 in current
+phase Status: In progress Last activity: 2026-01-12 — Completed 04-01-PLAN.md
 
-Progress: ████░░░░░░ 43%
+Progress: ██████░░░░ 50%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 7
-- Average duration: 4 min
-- Total execution time: 0.5 hours
+- Total plans completed: 8
+- Average duration: 5 min
+- Total execution time: 0.7 hours
 
 **By Phase:**
 
@@ -29,10 +29,11 @@ Progress: ████░░░░░░ 43%
 | 1     | 2     | 15min | 8min     |
 | 2     | 2     | 6min  | 3min     |
 | 3     | 3     | 7min  | 2min     |
+| 4     | 1     | 30min | 30min    |
 
 **Recent Trend:**
 
-- Last 5 plans: 01-02 (5min), 02-01 (2min), 02-02 (4min), 03-01 (3min), 03-02 (2min), 03-03 (2min)
+- Last 5 plans: 02-02 (4min), 03-01 (3min), 03-02 (2min), 03-03 (2min), 04-01 (30min)
 - Trend: Improving
 
 _Updated after each plan completion_
@@ -54,7 +55,8 @@ All decisions logged in PROJECT.md Key Decisions table with outcomes marked.
 
 **v1.1 scope decisions:**
 
-- Cloudflare Images for hosting (vs local files)
+- Cloudflare R2 for hosting (zero egress fees)
+- Custom domain cdn.hbish.com for CDN
 - Masonry layout with 2 columns
 - Collections/Albums for organization
 - Filtering by tags/collections
@@ -73,7 +75,7 @@ None — ready to begin v1.1.
 
 ## Session Continuity
 
-Last session: 2026-01-12 Stopped at: Milestone v1.1 initialization Resume file: None
+Last session: 2026-01-12 Stopped at: Completed 04-01-PLAN.md (R2 storage setup) Resume file: None
 
 ### Roadmap Evolution
 

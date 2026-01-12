@@ -24,18 +24,17 @@ feature powered by Cloudflare Images.
 
 ## 🚧 v1.1 Photo Gallery (In Progress)
 
-**Milestone Goal:** Add a photo gallery with Cloudflare Images, masonry grid, collections, and
-filtering.
+**Milestone Goal:** Add a photo gallery with R2 object storage, custom domain CDN, masonry grid,
+collections, and filtering.
 
-#### Phase 4: Cloudflare Images Setup
+#### Phase 4: Cloudflare R2 Storage Setup
 
-**Goal**: Configure Cloudflare Images and upload sample photos **Depends on**: v1.0 milestone
-complete **Research**: Likely (new Cloudflare Images API integration) **Research topics**:
-Cloudflare Images API, upload workflow, image variants/resizing, direct upload vs API **Plans**: TBD
+**Goal**: Configure Cloudflare R2 for image storage with custom domain CDN and upload sample photos
+**Depends on**: v1.0 milestone complete **Research**: Completed (R2 S3-compatible API)
 
 Plans:
 
-- [ ] 04-01: TBD (run /gsd:plan-phase 4 to break down)
+- [x] 04-01: R2 bucket, upload script, photos page (completed 2026-01-12)
 
 #### Phase 5: Gallery Data Structure
 
@@ -67,14 +66,14 @@ Plans:
 
 ## Progress
 
-| Phase                      | Milestone | Plans Complete | Status      | Completed  |
-| -------------------------- | --------- | -------------- | ----------- | ---------- |
-| 1. Cloudflare Pages Setup  | v1.0      | 2/2            | Complete    | 2026-01-12 |
-| 2. Domain Configuration    | v1.0      | 2/2            | Complete    | 2026-01-12 |
-| 3. Validation              | v1.0      | 3/3            | Complete    | 2026-01-12 |
-| 4. Cloudflare Images Setup | v1.1      | 0/?            | Not started | -          |
-| 5. Gallery Data Structure  | v1.1      | 0/?            | Not started | -          |
-| 6. Gallery UI Components   | v1.1      | 0/?            | Not started | -          |
-| 7. Gallery Integration     | v1.1      | 0/?            | Not started | -          |
+| Phase                     | Milestone | Plans Complete | Status      | Completed  |
+| ------------------------- | --------- | -------------- | ----------- | ---------- |
+| 1. Cloudflare Pages Setup | v1.0      | 2/2            | Complete    | 2026-01-12 |
+| 2. Domain Configuration   | v1.0      | 2/2            | Complete    | 2026-01-12 |
+| 3. Validation             | v1.0      | 3/3            | Complete    | 2026-01-12 |
+| 4. Cloudflare R2 Storage  | v1.1      | 1/1            | Complete    | 2026-01-12 |
+| 5. Gallery Data Structure | v1.1      | 0/?            | Not started | -          |
+| 6. Gallery UI Components  | v1.1      | 0/?            | Not started | -          |
+| 7. Gallery Integration    | v1.1      | 0/?            | Not started | -          |
 
-**Overall Progress: █████░░░░░ 43%**
+**Overall Progress: ██████░░░░ 50%**
