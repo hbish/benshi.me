@@ -20,37 +20,39 @@ const CDN_BASE = 'https://cdn.hbish.com'
           <p>No albums yet.</p>
         </div>
       ) : (
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {collections.map(collection => {
-            const coverUrl = `${CDN_BASE}/${collection.data.coverPhoto}`
-            const albumSlug = collection.slug || collection.data.slug
-            return (
-              <div class="album-item" key={collection.id}>
-                <a href={`/photos/${albumSlug}/`} class="block">
-                  <div class="relative bg-gray-200 dark:bg-gray-800 rounded-lg aspect-video overflow-hidden">
-                    <img
-                      src={coverUrl}
-                      alt={collection.data.title}
-                      class="w-full h-full object-cover rounded-lg opacity-0 transition-opacity duration-300"
-                      loading="lazy"
-                      decoding="async"
-                      onload="this.classList.remove('opacity-0')"
-                    />
+        <div class="max-w-[85%] md:max-w-[90%] lg:max-w-none mx-auto">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {collections.map(collection => {
+              const coverUrl = `${CDN_BASE}/${collection.data.coverPhoto}`
+              const albumSlug = collection.slug || collection.data.slug
+              return (
+                <div class="album-item" key={collection.id}>
+                  <a href={`/photos/${albumSlug}/`} class="block">
+                    <div class="relative bg-gray-200 dark:bg-gray-800 rounded-lg aspect-video overflow-hidden">
+                      <img
+                        src={coverUrl}
+                        alt={collection.data.title}
+                        class="w-full h-full object-cover rounded-lg opacity-0 transition-opacity duration-300"
+                        loading="lazy"
+                        decoding="async"
+                        onload="this.classList.remove('opacity-0')"
+                      />
+                    </div>
+                  </a>
+                  <div class="mt-2">
+                    <h3 class="text-lg font-semibold">
+                      <a href={`/photos/${albumSlug}/`} class="hover:opacity-70 transition-opacity">
+                        {collection.data.title}
+                      </a>
+                    </h3>
+                    {collection.data.description && (
+                      <p class="text-sm text-gray-600 mt-1">{collection.data.description}</p>
+                    )}
                   </div>
-                </a>
-                <div class="mt-2">
-                  <h3 class="text-lg font-semibold">
-                    <a href={`/photos/${albumSlug}/`} class="hover:opacity-70 transition-opacity">
-                      {collection.data.title}
-                    </a>
-                  </h3>
-                  {collection.data.description && (
-                    <p class="text-sm text-gray-600 mt-1">{collection.data.description}</p>
-                  )}
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
       )
     }
