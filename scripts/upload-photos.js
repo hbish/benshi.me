@@ -1,18 +1,19 @@
 #!/usr/bin/env node
 
 /**
- * Upload photos to Cloudflare Images and generate Astro content collection entries.
+ * Upload photos to Cloudflare R2 and generate Astro content collection entries.
  *
  * Usage:
  *   node scripts/upload-photos.js [directory]
  *
  * Environment variables:
  *   CLOUDFLARE_ACCOUNT_ID - Cloudflare account ID
- *   CLOUDFLARE_API_TOKEN - Cloudflare API token with Images:Edit permission
+ *   R2_ACCESS_KEY_ID - R2 API token Access Key ID
+ *   R2_SECRET_ACCESS_KEY - R2 API token Secret Access Key
  *
  * The script will:
  * 1. Find all images in the specified directory
- * 2. Upload each image to Cloudflare Images
+ * 2. Upload each image to Cloudflare R2 bucket 'benshi-photos'
  * 3. Generate an .mdx file for each photo in src/content/photos/
  */
 
@@ -20,6 +21,7 @@ import { readFile, readdir, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { existsSync, mkdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import dotenv from 'dotenv'
 
 // Load environment variables from .env in project root
@@ -27,12 +29,37 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const projectRoot = join(__dirname, '..')
 dotenv.config({ path: join(projectRoot, '.env') })
 
-const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg']
+const IMAGE_EXTENSIONS = [
+  '.jpg',
+  '.jpeg',
+  '.png',
+  '.gif',
+  '.webp',
+  '.svg',
+  '.avif',
+  '.heic',
+]
 
-// Get Cloudflare credentials from environment
+// Content-Type mapping for image extensions
+const CONTENT_TYPES = {
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.png': 'image/png',
+  '.gif': 'image/gif',
+  '.webp': 'image/webp',
+  '.svg': 'image/svg+xml',
+  '.avif': 'image/avif',
+  '.heic': 'image/heic',
+}
+
+// R2 bucket name
+const BUCKET_NAME = 'benshi-photos'
+
+// Get R2 credentials from environment
 function getCredentials() {
   const accountId = process.env.CLOUDFLARE_ACCOUNT_ID
-  const apiToken = process.env.CLOUDFLARE_API_TOKEN
+  const accessKeyId = process.env.R2_ACCESS_KEY_ID
+  const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY
 
   if (!accountId) {
     throw new Error(
@@ -40,14 +67,33 @@ function getCredentials() {
     )
   }
 
-  if (!apiToken) {
+  if (!accessKeyId) {
     throw new Error(
-      'CLOUDFLARE_API_TOKEN not set. Add it to .env or run: export CLOUDFLARE_API_TOKEN=your_token\n' +
-        'Create token at: https://dash.cloudflare.com/profile/api-tokens'
+      'R2_ACCESS_KEY_ID not set. Add it to .env or run: export R2_ACCESS_KEY_ID=your_access_key_id\n' +
+        'Create R2 API token at: https://dash.cloudflare.com/profile/api-tokens'
     )
   }
 
-  return { accountId, apiToken }
+  if (!secretAccessKey) {
+    throw new Error(
+      'R2_SECRET_ACCESS_KEY not set. Add it to .env or run: export R2_SECRET_ACCESS_KEY=your_secret_key\n' +
+        'Create R2 API token at: https://dash.cloudflare.com/profile/api-tokens'
+    )
+  }
+
+  return { accountId, accessKeyId, secretAccessKey }
+}
+
+// Create S3 client configured for R2
+function createS3Client({ accountId, accessKeyId, secretAccessKey }) {
+  return new S3Client({
+    region: 'auto', // Required by SDK but not used by R2
+    endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
+    credentials: {
+      accessKeyId,
+      secretAccessKey,
+    },
+  })
 }
 
 // Get all image files from directory
@@ -71,42 +117,26 @@ async function getImageFiles(directory) {
   return images.sort()
 }
 
-// Upload image to Cloudflare Images
-async function uploadImage(filePath, { accountId, apiToken }) {
+// Upload image to R2
+async function uploadImage(filePath, s3Client) {
   const fileName = filePath.split('/').pop()
   const fileBuffer = await readFile(filePath)
-  const fileBlob = new Blob([fileBuffer])
+  const ext = fileName.toLowerCase().slice(fileName.lastIndexOf('.'))
+  const contentType = CONTENT_TYPES[ext] || 'image/jpeg'
 
-  const formData = new FormData()
-  formData.append('file', fileBlob, fileName)
+  // Use filename as the R2 object key (can include subdirectories like "photos/sample.jpg")
+  const key = `photos/${fileName}`
 
-  const response = await fetch(
-    `https://api.cloudflare.com/client/v4/accounts/${accountId}/images/v1`,
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiToken}`,
-      },
-      body: formData,
-    }
-  )
+  const command = new PutObjectCommand({
+    Bucket: BUCKET_NAME,
+    Key: key,
+    Body: fileBuffer,
+    ContentType: contentType,
+  })
 
-  if (!response.ok) {
-    const errorText = await response.text()
-    throw new Error(
-      `Upload failed for ${fileName}: ${response.status} ${errorText}`
-    )
-  }
+  await s3Client.send(command)
 
-  const data = await response.json()
-
-  if (!data.success) {
-    throw new Error(
-      `Upload failed for ${fileName}: ${JSON.stringify(data.errors)}`
-    )
-  }
-
-  return data.result
+  return { key, fileName }
 }
 
 // Generate slug from filename
@@ -134,7 +164,7 @@ async function createPhotoEntry(imageData, filePath) {
   const now = new Date().toISOString()
 
   const content = `---
-id: ${imageData.id}
+id: ${imageData.key}
 title: ${title}
 description: '${title} photo'
 collection: sample
@@ -166,14 +196,18 @@ ${title}
 
 // Main upload function
 async function uploadPhotos(directory = 'scripts/sample-photos') {
-  console.log('📸 Cloudflare Images Upload Script')
+  console.log('📸 Cloudflare R2 Upload Script')
   console.log(`📁 Directory: ${directory}`)
   console.log()
 
   // Get credentials
   const credentials = getCredentials()
   console.log(`✅ Credentials loaded for account: ${credentials.accountId}`)
+  console.log(`🪣 Bucket: ${BUCKET_NAME}`)
   console.log()
+
+  // Create S3 client
+  const s3Client = createS3Client(credentials)
 
   // Get image files
   const images = await getImageFiles(directory)
@@ -196,9 +230,9 @@ async function uploadPhotos(directory = 'scripts/sample-photos') {
     console.log(`[${i + 1}/${images.length}] Uploading: ${fileName}`)
 
     try {
-      const result = await uploadImage(imagePath, credentials)
-      console.log(`  ✅ Uploaded! ID: ${result.id}`)
-      console.log(`  🌐 URL: ${result.variant || result.filename}`)
+      const result = await uploadImage(imagePath, s3Client)
+      console.log(`  ✅ Uploaded! Key: ${result.key}`)
+      console.log(`  🌐 CDN URL: https://photos.benshi.me/${result.key}`)
 
       // Create content entry
       const entryPath = await createPhotoEntry(result, imagePath)
@@ -206,8 +240,8 @@ async function uploadPhotos(directory = 'scripts/sample-photos') {
 
       results.push({
         fileName,
-        id: result.id,
-        url: result.variant || result.filename,
+        key: result.key,
+        cdnUrl: `https://photos.benshi.me/${result.key}`,
         entryPath,
       })
     } catch (error) {
@@ -242,6 +276,7 @@ async function uploadPhotos(directory = 'scripts/sample-photos') {
 
   console.log()
   console.log('🎉 Done! Photo entries created in src/content/photos/')
+  console.log(`📸 Access photos at: https://photos.benshi.me/photos/<filename>`)
 }
 
 // Run script
