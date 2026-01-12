@@ -3,61 +3,52 @@
 ## What This Is
 
 Migrate the personal website (benshi.me) from Vercel to Cloudflare Pages. The site is an Astro-based
-static site generator with blog posts, notes, and webmention integration. This migration enables
-consolidation with existing Cloudflare services and leverages Cloudflare's edge network for improved
-performance.
+static site generator with blog posts, notes, and webmention integration.
+
+**Current State:** Site successfully deployed on Cloudflare Pages at https://benshi-me.pages.dev/
+with all functionality validated. Ready for DNS cutover.
 
 ## Core Value
 
 **Site deploys successfully on Cloudflare Pages and is ready for DNS cutover.**
 
-The deployment must work correctly with all existing functionality (RSS feeds, webmentions, theming)
+The deployment works correctly with all existing functionality (RSS feeds, webmentions, theming)
 preserved.
 
 ## Requirements
 
 ### Validated
 
-<!-- Inferred from existing codebase -->
-
-- ✓ Static site generation with Astro 5.1.3 — existing
-- ✓ Standard build process (pnpm build → dist/) — existing
+- ✓ Static site generation with Astro 5.1.3 — existing, verified on Cloudflare Pages
+- ✓ Standard build process (pnpm build → dist/) — existing, verified with 129 pages generated
 - ✓ Markdown-based content with Zod validation — existing
-- ✓ Custom domain support (benshi.me) — existing
-- ✓ RSS/JSON feed generation — existing
-- ✓ Webmention.io integration — existing
-- ✓ Theme system (light/dark/gruv variants) — existing
+- ✓ Custom domain support (benshi.me) — configured on Cloudflare Pages
+- ✓ RSS/JSON feed generation — verified working (11 posts in RSS, JSON Feed v1.1)
+- ✓ Webmention.io integration — verified working (links present on posts)
+- ✓ Theme system (light/dark/gruv variants) — verified working with localStorage persistence
 - ✓ Image optimization via Sharp — existing
 
 ### Active
 
-<!-- Current scope. Building toward these. -->
-
-- [ ] Configure Cloudflare Pages project for Astro build
-- [ ] Set up build command (pnpm build) and output directory (dist/)
-- [ ] Configure custom domain (benshi.me) on Cloudflare Pages
-- [ ] Verify all site functionality works (feeds, webmentions, theming)
-- [ ] Confirm build succeeds consistently
+_All migration requirements validated. No active work remaining._
 
 ### Out of Scope
 
-<!-- Explicit boundaries. Includes reasoning to prevent re-adding. -->
-
 - DNS cutover — keeping Vercel active as backup during validation period
-- Vercel cleanup — will clean up after Cloudflare deployment is validated
+- Vercel cleanup — will clean up after Cloudflare deployment is fully validated
 - Cloudflare Analytics — add later if needed
 - Cloudflare D1, KV, or other services — not needed for static site
 - Build optimizations — current build is sufficient
 
 ## Context
 
-**Current state:**
+**Migration completed:**
 
-- Site deployed on Vercel with standard Astro configuration
-- No vercel.json config file (plain deployment)
+- Site deployed on Cloudflare Pages at https://benshi-me.pages.dev/
+- wrangler.toml configured for declarative deployment
+- Custom domain benshi.me configured (awaiting DNS cutover)
 - No environment variables required
-- No redirects configured on Vercel
-- Domain: benshi.me
+- SSL certificate active (Google Trust Services WE1)
 
 **Migration drivers:**
 
@@ -65,13 +56,14 @@ preserved.
 - **Features:** Access to Cloudflare-specific capabilities if needed later
 - **Performance:** Cloudflare's global edge network
 
-**Technical details from codebase map:**
+**Technical details:**
 
 - Build: `pnpm build` outputs to `dist/`
 - Node.js: 22.12.0 (via .tool-versions)
 - Package manager: pnpm
 - Framework: Astro 5.1.3 with MDX support
 - Image optimization: Sharp 0.32.1
+- Deployment: wrangler CLI v4.58.0
 
 ## Constraints
 
@@ -79,12 +71,15 @@ None — no timing constraints, no downtime requirements, no hard technical limi
 
 ## Key Decisions
 
-| Decision                                | Rationale                                              | Outcome   |
-| --------------------------------------- | ------------------------------------------------------ | --------- |
-| Keep Vercel active during migration     | Maintain backup while validating Cloudflare deployment | — Pending |
-| Standard Astro build (no custom config) | Keep migration simple, leverage Astro defaults         | — Pending |
-| No environment variables needed         | Site is fully static, no external service deps         | — Pending |
+| Decision                                | Rationale                                              | Outcome |
+| --------------------------------------- | ------------------------------------------------------ | ------- |
+| Keep Vercel active during migration     | Maintain backup while validating Cloudflare deployment | ✓ Good  |
+| Standard Astro build (no custom config) | Keep migration simple, leverage Astro defaults         | ✓ Good  |
+| No environment variables needed         | Site is fully static, no external service deps         | ✓ Good  |
+| wrangler.toml for configuration         | Declarative, version-controlled deployment config      | ✓ Good  |
+| Dashboard for custom domain (not CLI)   | wrangler CLI does not support domain management        | ✓ Good  |
+| pages_build_output_dir (top-level)      | Cloudflare Pages requires this field format            | ✓ Good  |
 
 ---
 
-_Last updated: 2026-01-11 after initialization_
+_Last updated: 2026-01-12 after v1.0 milestone_ _Migration: Vercel → Cloudflare Pages Complete_

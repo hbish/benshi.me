@@ -2,15 +2,15 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-01-11)
+See: .planning/PROJECT.md (updated 2026-01-12)
 
 **Core value:** Site deploys successfully on Cloudflare Pages and is ready for DNS cutover.
-**Current focus:** Phase 3 — Validation
+**Current focus:** v1.0 milestone complete
 
 ## Current Position
 
-Phase: 3 of 3 (Validation) Plan: 3 of 3 in current phase Status: Phase complete Last activity:
-2026-01-12 — Completed 03-03-PLAN.md
+Milestone: v1.0 — Cloudflare Pages Migration Status: Complete Last activity: 2026-01-12 — v1.0
+milestone shipped
 
 Progress: ██████████ 100%
 
@@ -19,8 +19,8 @@ Progress: ██████████ 100%
 **Velocity:**
 
 - Total plans completed: 7
-- Average duration: 5 min
-- Total execution time: 0.52 hours
+- Average duration: 4 min
+- Total execution time: 0.5 hours
 
 **By Phase:**
 
@@ -41,31 +41,26 @@ _Updated after each plan completion_
 
 ### Decisions
 
-Decisions are logged in PROJECT.md Key Decisions table. Recent decisions affecting current work:
+All decisions logged in PROJECT.md Key Decisions table with outcomes marked.
 
-- **Phase 1-01**: Project name "benshi-me" (hyphenated for Cloudflare compatibility), production
-  branch "main", using wrangler CLI for programmatic Cloudflare management
-- **Phase 1-02**: Build command pnpm build, output dist/, Node.js v22 compatibility, wrangler.toml
-  for declarative configuration
-- **Phase 2-01**: Used Cloudflare dashboard for custom domain (wrangler CLI does not support it),
-  confirmed benshi.me is a Cloudflare zone for apex domain support
-- **Phase 2-02**: SSL certificate issued by Google Trust Services (WE1), DNS uses Cloudflare A
-  records for proxied routing (172.67.189.1, 104.21.51.223)
-- **Phase 3-01**: Build verified (129 pages), wrangler.toml requires top-level
-  pages_build_output_dir (not [build.output] directory)
-- **Phase 3-02**: RSS feed (11 posts), JSON feed (jsonfeed.org v1.1), and webmention.io integration
-  all verified working
-- **Phase 3-03**: Theme system (light/dark/gruv) verified, all pages accessible, mobile responsive
-  - Migration validation complete, ready for DNS cutover
+**Summary of key decisions:**
+
+- Project name "benshi-me" (hyphenated for Cloudflare compatibility)
+- wrangler CLI for programmatic Cloudflare management
+- wrangler.toml for declarative configuration
+- Dashboard for custom domain (CLI limitation)
+- pages_build_output_dir (top-level, not [build.output])
+- SSL by Google Trust Services (WE1)
 
 ### Deferred Issues
 
-None yet.
+- DNS cutover — keeping Vercel active as backup
+- Vercel cleanup — deferred until after validation period
 
 ### Blockers/Concerns
 
-None yet.
+None — migration complete and validated.
 
 ## Session Continuity
 
-Last session: 2026-01-12 Stopped at: Completed 03-03-PLAN.md (Phase 3 complete) Resume file: None
+Last session: 2026-01-12 Stopped at: v1.0 milestone complete Resume file: None
