@@ -232,7 +232,7 @@ async function uploadPhotos(directory = 'scripts/sample-photos') {
     try {
       const result = await uploadImage(imagePath, s3Client)
       console.log(`  ✅ Uploaded! Key: ${result.key}`)
-      console.log(`  🌐 CDN URL: https://photos.benshi.me/${result.key}`)
+      console.log(`  🌐 CDN URL: https://cdn.hbish.com/${result.key}`)
 
       // Create content entry
       const entryPath = await createPhotoEntry(result, imagePath)
@@ -276,7 +276,7 @@ async function uploadPhotos(directory = 'scripts/sample-photos') {
 
   console.log()
   console.log('🎉 Done! Photo entries created in src/content/photos/')
-  console.log(`📸 Access photos at: https://photos.benshi.me/photos/<filename>`)
+  console.log(`📸 Access photos at: https://cdn.hbish.com/photos/<filename>`)
 }
 
 // Run script
