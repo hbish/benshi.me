@@ -85,6 +85,9 @@ export default [
         module: 'readonly',
         require: 'readonly',
         Response: 'readonly', // For Astro API routes
+        Blob: 'readonly', // For Cloudflare Images upload script
+        FormData: 'readonly', // For Cloudflare Images upload script
+        fetch: 'readonly', // For Cloudflare Images upload script
       },
     },
     rules: {

@@ -50,8 +50,49 @@ const noteCollection = defineCollection({
   }),
 })
 
+// Photo collection for gallery - stores R2 object keys and metadata
+const photoCollection = defineCollection({
+  schema: z.object({
+    // R2 object key (e.g., "photos/sample.jpg") - used to construct CDN URL
+    // Full CDN URL: https://photos.benshi.me/{id}
+    id: z.string(),
+    title: z.string(),
+    description: z.string().optional(),
+    collection: z.string().optional(), // album name (optional - derived from filename if not provided)
+    tags: z.array(z.string()).optional(),
+    date: z
+      .string()
+      .or(z.date())
+      .transform(val => new Date(val)),
+    width: z.number().optional(),
+    height: z.number().optional(),
+    // Optional variant for thumbnail (different R2 object key)
+    variant: z.string().optional(),
+    featured: z.boolean().default(false),
+    draft: z.boolean().default(false),
+  }),
+})
+
+// Collection (album) schema for organizing photos into groups
+const collectionCollection = defineCollection({
+  schema: z.object({
+    slug: z.string().optional(), // unique identifier for URLs (derived from filename if not provided)
+    title: z.string(),
+    description: z.string().optional(),
+    coverPhoto: z.string(), // R2 object key for album cover image
+    date: z
+      .string()
+      .or(z.date())
+      .transform(val => new Date(val)),
+    tags: z.array(z.string()).optional(),
+    draft: z.boolean().default(false),
+  }),
+})
+
 export const collections = {
   posts: postCollection,
   pages: pageCollection,
   notes: noteCollection,
+  photos: photoCollection,
+  collections: collectionCollection,
 }

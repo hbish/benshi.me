@@ -8,6 +8,7 @@ description: Some of Ben Shi's work. Both professional and personal.
 
 - [Personal Work](#personal-work)
 - [Professional Work](#professional-work)
+- [Talks](#talks)
 
 ### Personal Work
 
@@ -102,3 +103,11 @@ I worked as a consultant on the building the life insurance API
 **Technology** - Java, Sprint Boot, Axway, Oauth2, AWS
 
 </details>
+
+### Talks
+
+#### 2019 Sep: DDDSydney
+
+##### Are we there yet? - Lessons Learnt Performance Testing Crypto Exchange API
+
+[📇 slide deck](https://dddsydney2019.hbish.com/#slide=1) | ~~📹 recording~~
