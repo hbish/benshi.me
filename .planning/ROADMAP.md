@@ -57,24 +57,34 @@ Plans:
 
 #### Phase 7: Gallery Integration
 
-**Goal**: Add lazy loading, responsive images, and lightbox **Depends on**: Phase 6 **Research**:
-Likely (need to evaluate lazy loading options for Astro/Images) **Research topics**: Astro Image
-component lazy loading, responsive image strategies, lightbox libraries **Plans**: TBD
+**Goal**: Add polish and consistency to gallery pages with skeleton loading states and
+blog-consistent layout **Depends on**: Phase 6 **Research**: Unlikely (internal polish using
+existing patterns) **Plans**:
 
-Plans:
-
-- [ ] 07-01: TBD
+- [x] 07-01: Skeleton loading, 2-column grid, centered layout (completed 2026-01-12)
 
 ## Progress
 
-| Phase                     | Milestone | Plans Complete | Status      | Completed  |
-| ------------------------- | --------- | -------------- | ----------- | ---------- |
-| 1. Cloudflare Pages Setup | v1.0      | 2/2            | Complete    | 2026-01-12 |
-| 2. Domain Configuration   | v1.0      | 2/2            | Complete    | 2026-01-12 |
-| 3. Validation             | v1.0      | 3/3            | Complete    | 2026-01-12 |
-| 4. Cloudflare R2 Storage  | v1.1      | 1/1            | Complete    | 2026-01-12 |
-| 5. Gallery Data Structure | v1.1      | 2/2            | Complete    | 2026-01-12 |
-| 6. Gallery UI Components  | v1.1      | 1/1            | Complete    | 2026-01-12 |
-| 7. Gallery Integration    | v1.1      | 0/1            | Not started | -          |
+| Phase                     | Milestone | Plans Complete | Status   | Completed  |
+| ------------------------- | --------- | -------------- | -------- | ---------- |
+| 1. Cloudflare Pages Setup | v1.0      | 2/2            | Complete | 2026-01-12 |
+| 2. Domain Configuration   | v1.0      | 2/2            | Complete | 2026-01-12 |
+| 3. Validation             | v1.0      | 3/3            | Complete | 2026-01-12 |
+| 4. Cloudflare R2 Storage  | v1.1      | 1/1            | Complete | 2026-01-12 |
+| 5. Gallery Data Structure | v1.1      | 2/2            | Complete | 2026-01-12 |
+| 6. Gallery UI Components  | v1.1      | 1/1            | Complete | 2026-01-12 |
+| 7. Gallery Integration    | v1.1      | 1/1            | Complete | 2026-01-12 |
 
-**Overall Progress: ██████████ 92%**
+**Overall Progress: ██████████ 100%**
+
+## Completed Milestones
+
+<details>
+<summary>v1.1 Photo Gallery (Phases 4-7) — COMPLETED 2026-01-12</summary>
+
+- [x] Phase 4: Cloudflare R2 Storage Setup (1/1 plans) — completed 2026-01-12
+- [x] Phase 5: Gallery Data Structure (2/2 plans) — completed 2026-01-12
+- [x] Phase 6: Gallery UI Components (1/1 plans) — completed 2026-01-12
+- [x] Phase 7: Gallery Integration (1/1 plans) — completed 2026-01-12
+
+</details>
