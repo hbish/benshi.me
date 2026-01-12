@@ -50,8 +50,26 @@ const noteCollection = defineCollection({
   }),
 })
 
+const photoCollection = defineCollection({
+  schema: z.object({
+    id: z.string(), // Cloudflare image ID
+    title: z.string(),
+    description: z.string().optional(),
+    collection: z.string(), // album name
+    tags: z.array(z.string()).optional(),
+    date: z
+      .string()
+      .or(z.date())
+      .transform(val => new Date(val)),
+    width: z.number().optional(),
+    height: z.number().optional(),
+    draft: z.boolean().default(false),
+  }),
+})
+
 export const collections = {
   posts: postCollection,
   pages: pageCollection,
   notes: noteCollection,
+  photos: photoCollection,
 }
