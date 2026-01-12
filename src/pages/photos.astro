@@ -7,22 +7,82 @@ const collections = allCollections
   .filter(collection => collection.data.draft !== true)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 
+// Get URL param for tag filtering
+const urlObj = new URL(Astro.request.url)
+const activeTag = urlObj.searchParams.get('tag')
+
+// Get all photos to extract tags for filtering
+const allPhotos = await getCollection('photos')
+const allTags = [...new Set(allPhotos.flatMap(photo => photo.data.tags || []))].sort()
+
+// Filter collections to only show those that have photos with the active tag
+const filteredCollections = activeTag
+  ? collections.filter(collection => {
+      const collectionSlug = collection.slug || collection.data.slug
+      return allPhotos.some(
+        photo => photo.data.collection === collectionSlug && photo.data.tags?.includes(activeTag)
+      )
+    })
+  : collections
+
 // CDN base URL for R2 bucket
 const CDN_BASE = 'https://cdn.hbish.com'
 ---
 
+<style>
+  .tag-pill {
+    @apply px-3 py-1 rounded-full text-sm transition-colors;
+    @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
+  }
+  .tag-pill.active {
+    @apply bg-blue-600 text-white hover:bg-blue-700;
+  }
+</style>
+
 <Container title="Photos - Ben Shi">
-  <div class="section-title text-center text-2xl my-2 px-4 sm:px-0">Albums</div>
+  <div class="section-title text-center text-2xl my-6 px-4 sm:px-0">Albums</div>
+
+  {
+    allTags.length > 0 && (
+      <nav aria-label="Filter albums by tag" class="px-4 sm:px-0 mb-4">
+        <div class="flex gap-2 flex-wrap justify-center">
+          <a
+            href="/photos/"
+            class:list={{
+              'tag-pill': true,
+              active: !activeTag,
+            }}
+            aria-current={!activeTag ? 'page' : undefined}
+          >
+            All
+          </a>
+          {allTags.map(tag => (
+            <a
+              href={`/photos/?tag=${encodeURIComponent(tag)}`}
+              class:list={{
+                'tag-pill': true,
+                active: activeTag === tag,
+              }}
+              aria-current={activeTag === tag ? 'page' : undefined}
+            >
+              {tag}
+            </a>
+          ))}
+        </div>
+      </nav>
+    )
+  }
+
   <section class="px-4 sm:px-0">
     {
-      collections.length === 0 ? (
+      filteredCollections.length === 0 ? (
         <div class="text-center text-gray-500 my-8">
-          <p>No albums yet.</p>
+          <p>{activeTag ? `No albums with photos tagged '${activeTag}'.` : 'No albums yet.'}</p>
         </div>
       ) : (
         <div class="max-w-[60%] mx-auto">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {collections.map(collection => {
+            {filteredCollections.map(collection => {
               const coverUrl = `${CDN_BASE}/${collection.data.coverPhoto}`
               const albumSlug = collection.slug || collection.data.slug
               return (
@@ -45,9 +105,6 @@ const CDN_BASE = 'https://cdn.hbish.com'
                         {collection.data.title}
                       </a>
                     </h3>
-                    {collection.data.description && (
-                      <p class="text-sm text-gray-600 mt-1">{collection.data.description}</p>
-                    )}
                   </div>
                 </div>
               )
