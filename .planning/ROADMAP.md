@@ -44,12 +44,12 @@ Unlikely (internal data structures using existing Astro patterns)
 Plans:
 
 - [x] 05-01: Schema updates — featured field + collections (completed 2026-01-12)
-- [ ] 05-02: Album pages — individual collection views
+- [x] 05-02: Album pages — individual collection views (completed 2026-01-12)
 
 #### Phase 6: Gallery UI Components
 
 **Goal**: Build masonry grid, collections view, and filtering UI **Depends on**: Phase 5
-**Research**: Unlikely (internal UI using existing Tailwind patterns) **Plans**: TBD
+**Research**: Unlikely (internal UI using existing Tailwind patterns)
 
 Plans:
 
@@ -73,8 +73,8 @@ Plans:
 | 2. Domain Configuration   | v1.0      | 2/2            | Complete    | 2026-01-12 |
 | 3. Validation             | v1.0      | 3/3            | Complete    | 2026-01-12 |
 | 4. Cloudflare R2 Storage  | v1.1      | 1/1            | Complete    | 2026-01-12 |
-| 5. Gallery Data Structure | v1.1      | 1/2            | In progress | 2026-01-12 |
+| 5. Gallery Data Structure | v1.1      | 2/2            | Complete    | 2026-01-12 |
 | 6. Gallery UI Components  | v1.1      | 0/1            | Not started | -          |
 | 7. Gallery Integration    | v1.1      | 0/1            | Not started | -          |
 
-**Overall Progress: █████████░░░ 75%**
+**Overall Progress: ██████████░ 83%**
