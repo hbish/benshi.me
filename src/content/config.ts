@@ -68,6 +68,7 @@ const photoCollection = defineCollection({
     height: z.number().optional(),
     // Optional variant for thumbnail (different R2 object key)
     variant: z.string().optional(),
+    featured: z.boolean().default(false),
     draft: z.boolean().default(false),
   }),
 })
