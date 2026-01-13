@@ -1,10 +1,10 @@
 # Architecture
 
-**Analysis Date:** 2026-01-11
+**Analysis Date:** 2026-01-13
 
 ## Pattern Overview
 
-**Overall:** Static Site Generator (SSG) with Component-Based Architecture
+**Overall:** Static Site Generator (SSG) with Content-Driven Architecture
 
 **Key Characteristics:**
 
@@ -12,13 +12,14 @@
 - Content-driven design with markdown/MDX files
 - Island architecture: client-side JavaScript only where needed (theme toggle, webmentions)
 - Zero server-side runtime requirements
+- Multi-collection content structure (posts, notes, pages, photos, collections)
 
 ## Layers
 
 **Content Layer:**
 
 - Purpose: Store and structure all content
-- Location: `src/content/` (posts, notes, pages)
+- Location: `src/content/` (posts, notes, pages, photos, collections)
 - Contains: Markdown/MDX files with frontmatter metadata
 - Depends on: Zod schemas in `src/content/config.ts`
 - Used by: Page layer through Astro's `getCollection()`
@@ -43,7 +44,7 @@
 
 - Purpose: Reusable UI elements
 - Location: `src/components/`
-- Contains: Header, Footer, Sidebar, ThemeToggle, Webmention components
+- Contains: Header, Footer, Sidebar, ThemeToggle, Webmention components, CommentCTA, Content
 - Depends on: Styles layer
 - Used by: Pages and layouts
 
@@ -94,7 +95,7 @@
 **Content Collection:**
 
 - Purpose: Type-safe content management with schema validation
-- Examples: `posts`, `notes`, `pages` collections in `src/content/config.ts`
+- Examples: `posts`, `notes`, `pages`, `photos`, `collections` in `src/content/config.ts`
 - Pattern: Zod schema defines required/optional frontmatter fields
 
 **Dynamic Route Handler:**
@@ -102,6 +103,13 @@
 - Purpose: Catch-all routing for posts and notes
 - Location: `src/pages/[...slug].astro`
 - Pattern: Single route handles multiple content types via discriminating props
+
+**Photo Gallery System:**
+
+- Purpose: Photo albums with CDN integration
+- Location: `src/pages/photos.astro`, `src/pages/photos/[slug].astro`
+- Pattern: Collections-based with R2 CDN hosting (`https://cdn.hbish.com/`)
+- Files: `src/content/collections/` (albums), `src/content/photos/` (individual photos)
 
 **Remark Plugin:**
 
@@ -133,6 +141,8 @@
 
 - `src/pages/index.astro` - Homepage (recent posts)
 - `src/pages/[...slug].astro` - Dynamic routes for posts/notes
+- `src/pages/photos.astro` - Photo gallery index
+- `src/pages/photos/[slug].astro` - Individual photo albums
 - `src/pages/archive.astro` - Post archive
 - `src/pages/notes.astro` - Notes listing
 - `src/pages/tags/[tag].astro` - Tag pages
@@ -155,6 +165,13 @@
 - Location: `src/components/ThemeToggle.astro`
 - Themes: light, dark, gruv-light, gruv-dark
 
+**Photo Management:**
+
+- Storage: Cloudflare R2 (S3-compatible)
+- CDN: `https://cdn.hbish.com/`
+- Upload script: `scripts/upload-photos.js` using `@aws-sdk/client-s3`
+- Content: Photo metadata in `src/content/photos/`, albums in `src/content/collections/`
+
 **SEO:**
 
 - Approach: JSON-LD schema markup in each page
@@ -169,4 +186,4 @@
 
 ---
 
-_Architecture analysis: 2026-01-11_ _Update when major patterns change_
+_Architecture analysis: 2026-01-13_ _Update when major patterns change_
