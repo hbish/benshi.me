@@ -33,6 +33,12 @@ const photos = allPhotos
 const CDN_BASE = 'https://cdn.hbish.com'
 ---
 
+<style>
+  .photo-item img {
+    margin-bottom: 0 !important;
+  }
+</style>
+
 <Container title={`${collection.data.title} - Photos - Ben Shi`}>
   <div class="section-title text-center text-2xl my-2 px-4 sm:px-0">{collection.data.title}</div>
 
@@ -55,11 +61,11 @@ const CDN_BASE = 'https://cdn.hbish.com'
               const imageUrl = `${CDN_BASE}/${photo.data.id}`
               return (
                 <div class="photo-item" key={photo.id}>
-                  <div class="relative bg-gray-200 dark:bg-gray-800 rounded-lg aspect-square overflow-hidden">
+                  <div class="relative rounded-lg overflow-hidden">
                     <img
                       src={imageUrl}
                       alt={photo.data.title}
-                      class="w-full h-full object-cover rounded-lg opacity-0 transition-opacity duration-300"
+                      class="w-full h-auto block rounded-lg opacity-0 transition-opacity duration-300"
                       loading="lazy"
                       decoding="async"
                       onload="this.classList.remove('opacity-0')"
