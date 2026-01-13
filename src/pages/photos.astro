@@ -64,14 +64,15 @@ const CDN_BASE = 'https://cdn.hbish.com'
             return (
               <div class="album-item" key={collection.id} data-tags={tags.join(',')}>
                 <a href={`/photos/${albumSlug}/`} class="block">
-                  <div class="relative bg-gray-200 dark:bg-gray-800 rounded-lg aspect-video overflow-hidden">
+                  <div class="relative rounded-lg overflow-hidden">
                     <img
                       src={coverUrl}
                       alt={collection.data.title}
-                      class="w-full h-full object-cover rounded-lg opacity-0 transition-opacity duration-300"
+                      class="w-full h-auto block rounded-lg opacity-0 transition-opacity duration-300"
                       loading="lazy"
                       decoding="async"
                       onload="this.classList.remove('opacity-0')"
+                      style="margin-bottom: 0 !important;"
                     />
                   </div>
                 </a>
