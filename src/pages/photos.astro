@@ -28,6 +28,9 @@ const CDN_BASE = 'https://cdn.hbish.com'
   .no-results.hidden {
     display: none;
   }
+  .album-cover {
+    margin-bottom: 0 !important;
+  }
 </style>
 
 <Container title="Photos - Ben Shi">
@@ -68,11 +71,10 @@ const CDN_BASE = 'https://cdn.hbish.com'
                     <img
                       src={coverUrl}
                       alt={collection.data.title}
-                      class="w-full h-auto block rounded-lg opacity-0 transition-opacity duration-300"
+                      class="w-full h-auto block rounded-lg opacity-0 transition-opacity duration-300 album-cover"
                       loading="lazy"
                       decoding="async"
                       onload="this.classList.remove('opacity-0')"
-                      style="margin-bottom: 0 !important;"
                     />
                   </div>
                 </a>

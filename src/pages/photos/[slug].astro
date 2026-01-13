@@ -33,6 +33,12 @@ const photos = allPhotos
 const CDN_BASE = 'https://cdn.hbish.com'
 ---
 
+<style>
+  .photo-item img {
+    margin-bottom: 0 !important;
+  }
+</style>
+
 <Container title={`${collection.data.title} - Photos - Ben Shi`}>
   <div class="section-title text-center text-2xl my-2 px-4 sm:px-0">{collection.data.title}</div>
 
@@ -63,7 +69,6 @@ const CDN_BASE = 'https://cdn.hbish.com'
                       loading="lazy"
                       decoding="async"
                       onload="this.classList.remove('opacity-0')"
-                      style="margin-bottom: 0 !important;"
                     />
                   </div>
                   {photo.data.description && (
