@@ -1,7 +1,7 @@
 import { defineConfig, passthroughImageService } from 'astro/config'
 import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
-import tailwind from '@astrojs/tailwind'
+import tailwind from '@tailwindcss/vite'
 
 import { remarkReadingTime } from './remark-plugins/remark-reading-time.mjs'
 import { remarkAutoLinkImages } from './remark-plugins/remark-auto-link-images.mjs'
@@ -11,7 +11,7 @@ import { remarkOptimizeImages } from './remark-plugins/remark-optimize-images.mj
 export default defineConfig({
   site: 'https://hbish.com',
   trailingSlash: 'always',
-  integrations: [mdx(), sitemap(), tailwind()],
+  integrations: [mdx(), sitemap()],
   markdown: {
     remarkPlugins: [
       remarkReadingTime,
@@ -41,6 +41,7 @@ export default defineConfig({
     inlineStylesheets: 'auto',
   },
   vite: {
+    plugins: [tailwind()],
     build: {
       // Enable CSS code splitting for better loading
       cssCodeSplit: true,
