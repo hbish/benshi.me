@@ -1,18 +1,27 @@
 # External Integrations
 
-**Analysis Date:** 2026-01-11
+**Analysis Date:** 2026-01-13
 
 ## APIs & External Services
 
-**Webmentions:**
+**Cloudflare R2 (AWS S3-compatible):**
 
-- webmention.io - Social interactions and comments
-  - SDK/Client: Custom fetch in `src/components/WebmentionFeed.astro`,
-    `src/components/WebmentionCount.astro`
-  - Auth: None required (public API)
-  - Endpoints used: `https://webmention.io/api/mentions.jf2`
-  - Files: `src/components/WebmentionFeed.astro`, `src/components/WebmentionCount.astro`,
-    `src/components/CommentCTA.astro`
+- Purpose: Photo storage and CDN hosting
+- SDK/Client: `@aws-sdk/client-s3` - `scripts/upload-photos.js`
+- Auth: Environment variables - `CLOUDFLARE_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`
+- Bucket: `benshi-photos`
+- CDN URLs: `https://cdn.hbish.com/`, `https://photos.benshi.me/`
+- Upload script: `scripts/upload-photos.js`
+
+**Webmention.io:**
+
+- Purpose: Social interactions and comments
+- SDK/Client: Custom fetch in `src/components/WebmentionFeed.astro`,
+  `src/components/WebmentionCount.astro`
+- Auth: None required (public API)
+- Endpoints used: `https://webmention.io/api/mentions.jf2`
+- Files: `src/components/WebmentionFeed.astro`, `src/components/WebmentionCount.astro`,
+  `src/components/CommentCTA.astro`
 
 ## Data Storage
 
@@ -22,13 +31,18 @@
 
 **File Storage:**
 
-- Local filesystem - All assets in `src/assets/` and `src/public/`
+- Cloudflare R2 - Photo storage with CDN
+  - Connection: AWS S3 SDK with R2 credentials
+  - Bucket: `benshi-photos`
+  - CDN: `https://cdn.hbish.com/`
+- Local filesystem - All other assets in `src/assets/` and `public/`
   - Images optimized via Sharp during build
-  - No external CDN
+  - Static assets served from root
 
 **Caching:**
 
-- Not detected
+- Not detected - No server-side caching
+- Client-side: localStorage for theme preference only
 
 ## Authentication & Identity
 
@@ -48,31 +62,33 @@
 
 **Analytics:**
 
-- None detected (no Google Analytics, etc.)
+- None detected (no Google Analytics, Plausible, etc.)
 
 **Logs:**
 
 - Console output during build only
+- No production logging
 
 ## CI/CD & Deployment
 
 **Hosting:**
 
-- Not configured - Static site can be deployed anywhere
-  - Deployment target: User's choice (Vercel, Netlify, GitHub Pages, etc.)
-  - Build output: `dist/` directory
+- Cloudflare Pages - Configured in `wrangler.toml`
+- Build Command: `pnpm build`
+- Build Output: `dist/` directory
+- Environment vars: Configured for R2 credentials
 
 **CI Pipeline:**
 
 - Not detected - No GitHub Actions or other CI configured
-  - Pre-commit hooks only via Husky
+- Pre-commit hooks only via Husky
 
 ## Environment Configuration
 
 **Development:**
 
-- Required env vars: None
-- Secrets location: Not applicable
+- Required env vars: None (R2 credentials only needed for photo uploads)
+- Secrets location: `.env` (gitignored), `.env.example` for reference
 - Mock/stub services: None needed
 
 **Staging:**
@@ -81,8 +97,8 @@
 
 **Production:**
 
-- Secrets management: Not applicable
-- No environment-specific configuration
+- Secrets management: Cloudflare Pages environment variables
+- Environment-specific: R2 credentials for photo CDN
 
 ## Webhooks & Callbacks
 
@@ -98,24 +114,31 @@
 
 **RSS Feed:**
 
-- `src/pages/rss.xml.js` - RSS endpoint
-- `scripts/validate-rss.js` - RSS validation script
+- Endpoint: `src/pages/rss.xml.js`
+- Validation: `scripts/validate-rss.js`
 - Dependencies: `@astrojs/rss`, `rss-parser`, `fast-xml-parser`
 
 **JSON Feed:**
 
-- `src/pages/feed.json.js` - JSON Feed endpoint
-- `scripts/validate-json-feed.js` - JSON Feed validation
+- Endpoint: `src/pages/feed.json.js`
+- Validation: `scripts/validate-json-feed.js`
+
+**Feed Validation:**
+
+- Wrapper script: `scripts/validate-feeds.js` (runs both validators)
+- Run via: `pnpm validate:feeds` or `pnpm build` (automatic)
 
 ## Content Sources
 
 **Local File-Based Content Management:**
 
-- `src/content/posts/` - Blog posts (organized by year)
+- `src/content/posts/` - Blog posts (organized by year: 2011/, 2012/, etc.)
 - `src/content/notes/` - Short notes (organized by year)
-- `src/content/pages/` - Static pages
+- `src/content/pages/` - Static pages (about, uses, now, versions, work)
+- `src/content/photos/` - Individual photo metadata with R2 references
+- `src/content/collections/` - Photo album definitions
 - Schema: Zod-validated frontmatter defined in `src/content/config.ts`
 
 ---
 
-_Integration audit: 2026-01-11_ _Update when adding/removing external services_
+_Integration audit: 2026-01-13_ _Update when adding/removing external services_

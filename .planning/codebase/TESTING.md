@@ -1,6 +1,6 @@
 # Testing Patterns
 
-**Analysis Date:** 2026-01-11
+**Analysis Date:** 2026-01-13
 
 ## Test Framework
 
@@ -101,12 +101,13 @@ Instead of automated tests, the project uses:
 **Build Validation:**
 
 - `pnpm build` - Builds site and catches TypeScript errors
-- `astro check` - Type checking (via `pnpm check` script)
+- `pnpm check` - Type checking via `astro check`
 
 **Feed Validation:**
 
 - `scripts/validate-rss.js` - Validates RSS feed structure
 - `scripts/validate-json-feed.js` - Validates JSON Feed structure
+- `scripts/validate-feeds.js` - Wrapper that runs both validators
 
 **Code Quality:**
 
@@ -118,6 +119,13 @@ Instead of automated tests, the project uses:
 
 - Zod schemas in `src/content/config.ts` validate frontmatter at build time
 
+**Pre-commit Hooks:**
+
+- `.husky/pre-commit` runs lint-staged
+- lint-staged configuration:
+  - `*.{js,mjs,cjs,ts,tsx,astro}`: eslint --fix + prettier --write
+  - `*.{json,md,css}`: prettier --write
+
 ## Common Patterns
 
 **No testing patterns exist in this codebase.** The project relies on:
@@ -126,6 +134,7 @@ Instead of automated tests, the project uses:
 2. Zod for runtime schema validation
 3. ESLint/Prettier for code quality
 4. Build-time checks for errors
+5. Feed validation scripts for RSS/JSON output
 
 ## Recommendations
 
@@ -139,7 +148,8 @@ To add testing to this project, consider:
    - Remark plugins in `remark-plugins/`
    - Critical component logic (ThemeToggle, webmention fetching)
    - Content rendering and routing
+   - Photo gallery functionality
 
 ---
 
-_Testing analysis: 2026-01-11_ _Update when test patterns change_
+_Testing analysis: 2026-01-13_ _Update when test patterns change_

@@ -1,6 +1,6 @@
 # Coding Conventions
 
-**Analysis Date:** 2026-01-11
+**Analysis Date:** 2026-01-13
 
 ## Naming Patterns
 
@@ -38,14 +38,20 @@
 - 2-space indentation (no tabs)
 - Single quotes for strings
 - No semicolons
-- 80 character line width (100 for Astro/Markdown)
+- 80 character line width (100 for Astro/Markdown/JSON)
 - ES5 trailing commas
+- LF line endings
 
 **Linting:**
 
-- ESLint with `eslint.config.mjs`
-- Extends: JS, TypeScript, and Astro recommended configs
-- Custom rules: TypeScript-specific, import sorting, console warnings
+- ESLint with `eslint.config.mjs` (flat config)
+- Extends: `@eslint/js`, `typescript-eslint`, `eslint-plugin-astro`
+- Custom rules:
+  - `prefer-const`: error
+  - `no-var`: error
+  - `no-console`: warn (except in Astro files)
+  - `@typescript-eslint/no-unused-vars`: error with `_` prefix exception
+  - `sort-imports`: error
 - Run: `pnpm lint` (with --fix) or `pnpm lint:check`
 
 ## Import Organization
@@ -122,7 +128,7 @@
 **Size:**
 
 - Generally keep functions focused
-- Some large components (Sidebar.astro is 277 lines)
+- Some large components (Sidebar.astro is 281 lines)
 
 **Parameters:**
 
@@ -156,6 +162,7 @@
 
 - `<style>` tags within components for scoped CSS
 - CSS variables for theming: `var(--color-bg)`, `var(--color-text)`
+- Tailwind utility classes via `@apply` directive
 
 **Client-Side Scripts:**
 
@@ -168,6 +175,19 @@
 - Define TypeScript interface in frontmatter
 - Destructure from `Astro.props`
 
+## CSS Conventions
+
+**Theme Variables:**
+
+- Use CSS custom properties: `var(--color-bg)`, `var(--color-text)`
+- Utility classes: `.text-theme`, `.bg-theme`, `.text-theme-accent`
+
+**Tailwind Usage:**
+
+- Utility classes for layout and spacing
+- `@apply` directive for reusable patterns
+- Theme-aware variants: `dark:text-gray-200`
+
 ---
 
-_Convention analysis: 2026-01-11_ _Update when patterns change_
+_Convention analysis: 2026-01-13_ _Update when patterns change_
