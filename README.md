@@ -20,7 +20,7 @@ This is a personal website featuring:
 
 - **Astro 5.1.3** - Static site generator with content collections
 - **TypeScript 5.9.2** - Type-safe development
-- **Node.js 22** - Runtime environment
+- **Node.js 24** - Runtime environment
 
 **Styling:**
 

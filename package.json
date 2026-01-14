@@ -2,6 +2,9 @@
   "name": "eccentric-ellipse",
   "type": "module",
   "version": "0.0.1",
+  "engines": {
+    "node": ">=24.12.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -16,7 +19,8 @@
     "prepare": "husky",
     "validate:rss": "node scripts/validate-rss.js",
     "validate:json-feed": "node scripts/validate-json-feed.js",
-    "validate:feeds": "node scripts/validate-feeds.js"
+    "validate:feeds": "node scripts/validate-feeds.js",
+    "audit": "pnpm audit --audit-level moderate"
   },
   "lint-staged": {
     "*.{js,mjs,ts,tsx,astro}": [
@@ -28,28 +32,27 @@
     ]
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
-    "@astrojs/mdx": "^4.0.3",
-    "@astrojs/rss": "^4.0.11",
-    "@astrojs/sitemap": "^3.2.1",
-    "@astrojs/tailwind": "^5.1.4",
-    "@tailwindcss/aspect-ratio": "^0.4.2",
-    "@tailwindcss/typography": "^0.5.9",
-    "astro": "^5.1.3",
+    "@astrojs/check": "^0.9.6",
+    "@astrojs/mdx": "^4.3.13",
+    "@astrojs/rss": "^4.0.14",
+    "@astrojs/sitemap": "^3.6.1",
+    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/vite": "^4.1.18",
+    "astro": "^5.16.9",
     "mdast-util-to-string": "^3.2.0",
     "reading-time": "^1.5.0",
-    "tailwindcss": "^3.0.24",
+    "tailwindcss": "^4.1.18",
     "typescript": "^5.9.2",
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.966.0",
-    "@eslint/js": "^9.36.0",
+    "@eslint/js": "^9.39.2",
     "@types/eslint": "^9.6.1",
-    "@typescript-eslint/parser": "^8.44.0",
+    "@typescript-eslint/parser": "^8.53.0",
     "astro-eslint-parser": "^1.2.2",
     "dotenv": "^17.2.3",
-    "eslint": "^9.36.0",
+    "eslint": "^9.39.2",
     "eslint-parser-plain": "^0.1.1",
     "eslint-plugin-astro": "^1.3.1",
     "fast-xml-parser": "^5.2.5",
@@ -58,7 +61,7 @@
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1",
     "rss-parser": "^3.13.0",
-    "typescript-eslint": "^8.44.0",
+    "typescript-eslint": "^8.53.0",
     "wrangler": "^4.58.0"
   }
 }

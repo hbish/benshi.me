@@ -148,23 +148,23 @@
 
 ## Dependencies at Risk
 
-**Tailwind CSS Version:**
+**~~Tailwind CSS Version:~~ RESOLVED**
 
-- Risk: Using v3.0.24 (current is v3.4+)
-- Impact: Missing performance improvements and features
-- Migration plan: Upgrade to latest Tailwind CSS v3
+- Previously: Using v3.0.24
+- Now: Upgraded to v3.4.19 with updated plugins
+- Completed: 2026-01-14
 
-**No Dependency Scanning:**
+**~~No Dependency Scanning:~~ RESOLVED**
 
-- Risk: No automated checking for known vulnerabilities
-- Impact: Vulnerable dependencies could go undetected
-- Migration plan: Add `pnpm audit` to CI or pre-commit hooks
+- Previously: No automated checking for known vulnerabilities
+- Now: Added `pnpm audit` to pre-commit hook and `pnpm audit` script
+- Completed: 2026-01-14
 
-**Outdated ESLint Config:**
+**~~Outdated ESLint Config:~~ RESOLVED**
 
-- Risk: Using new flat config format (good) but may need updates
-- Impact: Potential linting issues with new TypeScript/Eslint versions
-- Migration plan: Keep typescript-eslint updated
+- Previously: ESLint 9.36.0, typescript-eslint 8.44.0
+- Now: ESLint 9.39.2, typescript-eslint 8.53.0
+- Completed: 2026-01-14
 
 ## Missing Critical Features
 

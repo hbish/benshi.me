@@ -15,4 +15,4 @@ pages_build_output_dir = "dist"
 
 # Node.js version compatibility
 [compatibility]
-nodejs_compatibility = "v22"
+nodejs_compatibility = "v24"
