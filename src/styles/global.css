@@ -466,15 +466,15 @@ select:hover {
 
 /* Social icons should inherit text color for theme compatibility */
 .social svg {
-  fill: var(--color-text);
+  stroke: var(--color-text);
   margin: 0 0 0 0.8rem;
-  transition: fill 0.3s ease;
+  transition: stroke 0.3s ease;
 }
 
 /* Ensure SVG icons are white in dark themes */
 .dark .social svg,
 .gruv-dark .social svg {
-  fill: #ffffff;
+  stroke: #ffffff;
 }
 
 /* Enhanced Theme Toggle Styling */

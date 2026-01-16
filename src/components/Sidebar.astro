@@ -1,11 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import profilePhoto from '../assets/profile-pic.png'
-import xLogo from '../assets/svg/x.inline.svg?raw'
-import githubLogo from '../assets/svg/github.inline.svg?raw'
-import keybaseLogo from '../assets/svg/keybase.inline.svg?raw'
-import mailLogo from '../assets/svg/mail.inline.svg?raw'
-import linkedinLogo from '../assets/svg/linkedin.inline.svg?raw'
+import { X, Github, Key, Mail, Linkedin, Menu } from '@lucide/astro'
 import ThemeToggle from './ThemeToggle.astro'
 ---
 
@@ -25,19 +21,7 @@ import ThemeToggle from './ThemeToggle.astro'
     aria-controls="mobile-nav-menu"
     aria-label="Toggle navigation menu"
   >
-    <svg
-      id="nav-icon"
-      class="w-5 h-5 transition-transform duration-200"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M4 6h16M4 12h16M4 18h16"></path>
-    </svg>
+    <Menu id="nav-icon" class="w-5 h-5 transition-transform duration-200" />
   </button>
 
   <div class="h-card">
@@ -123,7 +107,7 @@ import ThemeToggle from './ThemeToggle.astro'
               rel={'me'}
               class="min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
-              <Fragment set:html={xLogo} />
+              <X />
             </a>
             <a
               href="https://au.linkedin.com/in/benshi"
@@ -131,7 +115,7 @@ import ThemeToggle from './ThemeToggle.astro'
               rel={'me'}
               class="min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
-              <Fragment set:html={linkedinLogo} />
+              <Linkedin />
             </a>
             <a
               href="https://github.com/hbish"
@@ -139,7 +123,7 @@ import ThemeToggle from './ThemeToggle.astro'
               rel={'me'}
               class="min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
-              <Fragment set:html={githubLogo} />
+              <Github />
             </a>
             <a
               href="mailto:ben@hbish.com"
@@ -147,7 +131,7 @@ import ThemeToggle from './ThemeToggle.astro'
               rel={'me'}
               class={'u-email min-h-[44px] min-w-[44px] flex items-center justify-center'}
             >
-              <Fragment set:html={mailLogo} />
+              <Mail />
             </a>
             <a
               href="https://keybase.io/hbish"
@@ -155,7 +139,7 @@ import ThemeToggle from './ThemeToggle.astro'
               rel={'me'}
               class="min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
-              <Fragment set:html={keybaseLogo} />
+              <Key />
             </a>
           </div>
         </div>
@@ -180,19 +164,19 @@ import ThemeToggle from './ThemeToggle.astro'
     <!-- Social Icons - Desktop Only -->
     <div class="social hidden lg:flex gap-4 justify-center my-4">
       <a href="https://x.com/hbish" title={'follow ben on x'} rel={'me'}>
-        <Fragment set:html={xLogo} />
+        <X />
       </a>
       <a href="https://au.linkedin.com/in/benshi" title={'connect with ben on linkedin'} rel={'me'}>
-        <Fragment set:html={linkedinLogo} />
+        <Linkedin />
       </a>
       <a href="https://github.com/hbish" title={'follow ben on github'} rel={'me'}>
-        <Fragment set:html={githubLogo} />
+        <Github />
       </a>
       <a href="mailto:ben@hbish.com" title={'email ben'} rel={'me'} class={'u-email'}>
-        <Fragment set:html={mailLogo} />
+        <Mail />
       </a>
       <a href="https://keybase.io/hbish" title={'auth me on keybase'} rel={'me'}>
-        <Fragment set:html={keybaseLogo} />
+        <Key />
       </a>
     </div>
 
@@ -227,12 +211,26 @@ import ThemeToggle from './ThemeToggle.astro'
       // Rotate icon
       if (isExpanded) {
         navIcon.style.transform = 'rotate(0deg)'
-        navIcon.innerHTML =
-          '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />'
+        const menuIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+        menuIcon.setAttribute('class', 'w-5 h-5 transition-transform duration-200')
+        menuIcon.setAttribute('fill', 'none')
+        menuIcon.setAttribute('stroke', 'currentColor')
+        menuIcon.setAttribute('viewBox', '0 0 24 24')
+        menuIcon.innerHTML =
+          '<line x1="4" y1="6" x2="20" y2="6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line><line x1="4" y1="12" x2="20" y2="12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line><line x1="4" y1="18" x2="20" y2="18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>'
+        navIcon.replaceWith(menuIcon)
+        menuIcon.id = 'nav-icon'
       } else {
         navIcon.style.transform = 'rotate(90deg)'
-        navIcon.innerHTML =
-          '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />'
+        const xIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+        xIcon.setAttribute('class', 'w-5 h-5 transition-transform duration-200')
+        xIcon.setAttribute('fill', 'none')
+        xIcon.setAttribute('stroke', 'currentColor')
+        xIcon.setAttribute('viewBox', '0 0 24 24')
+        xIcon.innerHTML =
+          '<line x1="18" y1="6" x2="6" y2="18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line><line x1="6" y1="6" x2="18" y2="18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>'
+        navIcon.replaceWith(xIcon)
+        xIcon.id = 'nav-icon'
       }
     })
 
@@ -241,9 +239,15 @@ import ThemeToggle from './ThemeToggle.astro'
       mobileMenu.classList.add('hidden')
       backdrop.classList.add('hidden')
       toggleButton.setAttribute('aria-expanded', 'false')
-      navIcon.style.transform = 'rotate(0deg)'
-      navIcon.innerHTML =
-        '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />'
+      const menuIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+      menuIcon.setAttribute('class', 'w-5 h-5 transition-transform duration-200')
+      menuIcon.setAttribute('fill', 'none')
+      menuIcon.setAttribute('stroke', 'currentColor')
+      menuIcon.setAttribute('viewBox', '0 0 24 24')
+      menuIcon.innerHTML =
+        '<line x1="4" y1="6" x2="20" y2="6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line><line x1="4" y1="12" x2="20" y2="12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line><line x1="4" y1="18" x2="20" y2="18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>'
+      navIcon.replaceWith(menuIcon)
+      menuIcon.id = 'nav-icon'
     })
 
     // Close mobile menu when clicking navigation links
@@ -253,9 +257,15 @@ import ThemeToggle from './ThemeToggle.astro'
         mobileMenu.classList.add('hidden')
         backdrop.classList.add('hidden')
         toggleButton.setAttribute('aria-expanded', 'false')
-        navIcon.style.transform = 'rotate(0deg)'
-        navIcon.innerHTML =
-          '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />'
+        const menuIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+        menuIcon.setAttribute('class', 'w-5 h-5 transition-transform duration-200')
+        menuIcon.setAttribute('fill', 'none')
+        menuIcon.setAttribute('stroke', 'currentColor')
+        menuIcon.setAttribute('viewBox', '0 0 24 24')
+        menuIcon.innerHTML =
+          '<line x1="4" y1="6" x2="20" y2="6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line><line x1="4" y1="12" x2="20" y2="12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line><line x1="4" y1="18" x2="20" y2="18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>'
+        navIcon.replaceWith(menuIcon)
+        menuIcon.id = 'nav-icon'
       })
     })
 
@@ -265,9 +275,15 @@ import ThemeToggle from './ThemeToggle.astro'
         mobileMenu.classList.add('hidden')
         backdrop.classList.add('hidden')
         toggleButton.setAttribute('aria-expanded', 'false')
-        navIcon.style.transform = 'rotate(0deg)'
-        navIcon.innerHTML =
-          '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />'
+        const menuIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+        menuIcon.setAttribute('class', 'w-5 h-5 transition-transform duration-200')
+        menuIcon.setAttribute('fill', 'none')
+        menuIcon.setAttribute('stroke', 'currentColor')
+        menuIcon.setAttribute('viewBox', '0 0 24 24')
+        menuIcon.innerHTML =
+          '<line x1="4" y1="6" x2="20" y2="6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line><line x1="4" y1="12" x2="20" y2="12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line><line x1="4" y1="18" x2="20" y2="18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>'
+        navIcon.replaceWith(menuIcon)
+        menuIcon.id = 'nav-icon'
       }
     })
   }
