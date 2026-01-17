@@ -21,6 +21,7 @@
   --color-accent: #103fea;
   --color-accent-hover: #0a2bb8;
   --color-selection: rgba(16, 63, 234, 0.2);
+  --color-bg-transparent: rgba(255, 255, 255, 0.8);
 }
 
 /* Light Theme (explicit) - matching hbish.com */
@@ -34,6 +35,7 @@
   --color-accent: #103fea;
   --color-accent-hover: #0a2bb8;
   --color-selection: rgba(16, 63, 234, 0.2);
+  --color-bg-transparent: rgba(255, 255, 255, 0.8);
 }
 
 /* Dark Theme - matching hbish.com */
@@ -47,6 +49,7 @@
   --color-accent: #a0b3f8;
   --color-accent-hover: #bcc9fa;
   --color-selection: rgba(160, 179, 248, 0.2);
+  --color-bg-transparent: rgba(41, 41, 41, 0.8);
 }
 
 /* Gruvbox Light Theme */
@@ -93,6 +96,10 @@ body {
 /* Custom utility classes for theme variables */
 .bg-theme {
   background-color: var(--color-bg);
+}
+
+.bg-theme-transparent {
+  background-color: var(--color-bg-transparent);
 }
 
 .bg-theme-secondary {
@@ -466,15 +473,15 @@ select:hover {
 
 /* Social icons should inherit text color for theme compatibility */
 .social svg {
-  fill: var(--color-text);
+  stroke: var(--color-text);
   margin: 0 0 0 0.8rem;
-  transition: fill 0.3s ease;
+  transition: stroke 0.3s ease;
 }
 
 /* Ensure SVG icons are white in dark themes */
 .dark .social svg,
 .gruv-dark .social svg {
-  fill: #ffffff;
+  stroke: #ffffff;
 }
 
 /* Enhanced Theme Toggle Styling */
