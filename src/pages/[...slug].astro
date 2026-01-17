@@ -143,7 +143,7 @@ const currentUrl = new URL(pathname, Astro.site);
         </article>
 
         {type === 'post' && (
-            <div class="webmentions mt-12 pt-8 border-t border-theme">
+            <div class="webmentions mt-12 pt-8 border-t border-theme max-w-[85%] md:max-w-[90%] lg:max-w-none mx-auto">
                 <h3 class="text-xl font-semibold mb-6 text-theme">Interactions</h3>
                 <CommentCTA url={currentUrl.toString()} />
                 <WebmentionFeed target={currentUrl.toString()} />
