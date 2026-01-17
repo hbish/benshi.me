@@ -21,7 +21,8 @@ import ThemeToggle from './ThemeToggle.astro'
     aria-controls="mobile-nav-menu"
     aria-label="Toggle navigation menu"
   >
-    <Menu id="nav-icon" class="w-5 h-5 transition-transform duration-200" />
+    <Menu id="menu-icon" class="w-5 h-5 transition-all duration-300 ease-in-out" />
+    <X id="close-icon" class="w-5 h-5 transition-all duration-300 ease-in-out absolute hidden" />
   </button>
 
   <div class="h-card">
@@ -193,100 +194,69 @@ import ThemeToggle from './ThemeToggle.astro'
   function setupMobileNav() {
     const toggleButton = document.getElementById('mobile-nav-toggle')
     const mobileMenu = document.getElementById('mobile-nav-menu')
-    const navIcon = document.getElementById('nav-icon')
+    const menuIcon = document.getElementById('menu-icon')
+    const closeIcon = document.getElementById('close-icon')
     const backdrop = document.getElementById('mobile-nav-backdrop')
 
-    if (!toggleButton || !mobileMenu || !navIcon || !backdrop) return
+    if (!toggleButton || !mobileMenu || !menuIcon || !closeIcon || !backdrop) return
 
+    const toggleMenu = (show: boolean) => {
+      if (show) {
+        mobileMenu.classList.remove('hidden')
+        backdrop.classList.remove('hidden')
+        toggleButton.setAttribute('aria-expanded', 'true')
+
+        // Animate icon transition: Menu -> X with rotation
+        menuIcon.style.transform = 'rotate(90deg) scale(0)'
+        menuIcon.style.opacity = '0'
+
+        setTimeout(() => {
+          menuIcon.classList.add('hidden')
+          closeIcon.classList.remove('hidden')
+          closeIcon.style.transform = 'rotate(0deg) scale(1)'
+          closeIcon.style.opacity = '1'
+        }, 150)
+      } else {
+        mobileMenu.classList.add('hidden')
+        backdrop.classList.add('hidden')
+        toggleButton.setAttribute('aria-expanded', 'false')
+
+        // Animate icon transition: X -> Menu with rotation
+        closeIcon.style.transform = 'rotate(-90deg) scale(0)'
+        closeIcon.style.opacity = '0'
+
+        setTimeout(() => {
+          closeIcon.classList.add('hidden')
+          menuIcon.classList.remove('hidden')
+          menuIcon.style.transform = 'rotate(0deg) scale(1)'
+          menuIcon.style.opacity = '1'
+        }, 150)
+      }
+    }
+
+    // Toggle menu on button click
     toggleButton.addEventListener('click', () => {
       const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true'
-
-      // Toggle menu visibility
-      mobileMenu.classList.toggle('hidden')
-      backdrop.classList.toggle('hidden')
-
-      // Update aria-expanded
-      toggleButton.setAttribute('aria-expanded', String(!isExpanded))
-
-      // Rotate icon
-      if (isExpanded) {
-        const menuIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-        menuIcon.setAttribute('class', 'w-5 h-5 transition-transform duration-200')
-        menuIcon.setAttribute('fill', 'none')
-        menuIcon.setAttribute('stroke', 'currentColor')
-        menuIcon.setAttribute('viewBox', '0 0 24 24')
-        menuIcon.innerHTML =
-          '<line x1="4" y1="6" x2="20" y2="6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line><line x1="4" y1="12" x2="20" y2="12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line><line x1="4" y1="18" x2="20" y2="18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>'
-        menuIcon.style.transform = 'rotate(0deg)'
-        navIcon.replaceWith(menuIcon)
-        menuIcon.id = 'nav-icon'
-      } else {
-        const xIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-        xIcon.setAttribute('class', 'w-5 h-5 transition-transform duration-200')
-        xIcon.setAttribute('fill', 'none')
-        xIcon.setAttribute('stroke', 'currentColor')
-        xIcon.setAttribute('viewBox', '0 0 24 24')
-        xIcon.innerHTML =
-          '<line x1="18" y1="6" x2="6" y2="18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line><line x1="6" y1="6" x2="18" y2="18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>'
-        xIcon.style.transform = 'rotate(90deg)'
-        navIcon.replaceWith(xIcon)
-        xIcon.id = 'nav-icon'
-      }
+      toggleMenu(!isExpanded)
     })
 
     // Close mobile menu when clicking backdrop
     backdrop.addEventListener('click', () => {
-      mobileMenu.classList.add('hidden')
-      backdrop.classList.add('hidden')
-      toggleButton.setAttribute('aria-expanded', 'false')
-      const menuIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-      menuIcon.setAttribute('class', 'w-5 h-5 transition-transform duration-200')
-      menuIcon.setAttribute('fill', 'none')
-      menuIcon.setAttribute('stroke', 'currentColor')
-      menuIcon.setAttribute('viewBox', '0 0 24 24')
-      menuIcon.innerHTML =
-        '<line x1="4" y1="6" x2="20" y2="6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line><line x1="4" y1="12" x2="20" y2="12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line><line x1="4" y1="18" x2="20" y2="18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>'
-      menuIcon.style.transform = 'rotate(0deg)'
-      navIcon.replaceWith(menuIcon)
-      menuIcon.id = 'nav-icon'
+      toggleMenu(false)
     })
 
     // Close mobile menu when clicking navigation links
     const mobileNavLinks = mobileMenu.querySelectorAll('a')
     mobileNavLinks.forEach(link => {
       link.addEventListener('click', () => {
-        mobileMenu.classList.add('hidden')
-        backdrop.classList.add('hidden')
-        toggleButton.setAttribute('aria-expanded', 'false')
-        const menuIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-        menuIcon.setAttribute('class', 'w-5 h-5 transition-transform duration-200')
-        menuIcon.setAttribute('fill', 'none')
-        menuIcon.setAttribute('stroke', 'currentColor')
-        menuIcon.setAttribute('viewBox', '0 0 24 24')
-        menuIcon.innerHTML =
-          '<line x1="4" y1="6" x2="20" y2="6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line><line x1="4" y1="12" x2="20" y2="12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line><line x1="4" y1="18" x2="20" y2="18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>'
-        menuIcon.style.transform = 'rotate(0deg)'
-        navIcon.replaceWith(menuIcon)
-        menuIcon.id = 'nav-icon'
+        toggleMenu(false)
       })
     })
 
     // Close mobile menu on window resize to desktop size
     window.addEventListener('resize', () => {
       if (window.innerWidth >= 1024) {
-        mobileMenu.classList.add('hidden')
-        backdrop.classList.add('hidden')
-        toggleButton.setAttribute('aria-expanded', 'false')
-        const menuIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-        menuIcon.setAttribute('class', 'w-5 h-5 transition-transform duration-200')
-        menuIcon.setAttribute('fill', 'none')
-        menuIcon.setAttribute('stroke', 'currentColor')
-        menuIcon.setAttribute('viewBox', '0 0 24 24')
-        menuIcon.innerHTML =
-          '<line x1="4" y1="6" x2="20" y2="6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line><line x1="4" y1="12" x2="20" y2="12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line><line x1="4" y1="18" x2="20" y2="18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>'
-        menuIcon.style.transform = 'rotate(0deg)'
-        navIcon.replaceWith(menuIcon)
-        menuIcon.id = 'nav-icon'
+        toggleMenu(false)
       }
     })
   }
