@@ -25,6 +25,8 @@ potential setbacks and misfortunes across all aspects of life. Wearing red, incl
 thought to combat this bad luck. I’m not quite superstitious enough to follow this tradition
 consistently, nor do I want to leave that image in your head as you read through this post.
 
+![Reflecting on 2025](/media/reflecting-on-2025.png)
+
 ## Work
 
 Burnout is no joke. This has probably been the most challenging year since I joined the workforce.
