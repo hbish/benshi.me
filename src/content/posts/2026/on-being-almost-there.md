@@ -38,7 +38,7 @@ Why is this so fascinating? If the AI were perfect, it would be boring. If I ask
 scraper, and it gave me a flawless, production-ready script in a few seconds, my role would be
 reduced to that of a middle manager. Over time, a feeling of disconnect would set in.
 
-On the flip side, if the AI were terrible, I would simply turn it off and write the code my self.
+On the flip side, if the AI were terrible, I would simply turn it off and write the code myself.
 
 AI agents live in the uncanny valley of competence. It gets the structure right. It knows the
 libraries. It understands the intent. It just misses the execution by that final, crucial 5%. It
