@@ -3,7 +3,7 @@ title: Workman
 author: Ben Shi
 type: post
 date: 2026-01-09
-url: workman
+slug: workman
 description:
   "My 5-year journey learning the Workman keyboard layout. After 20+ hours of deliberate practice,
   here's my honest review and why I'm now learning Colemak-DH."

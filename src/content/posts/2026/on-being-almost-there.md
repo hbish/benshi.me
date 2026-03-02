@@ -3,7 +3,7 @@ title: On being almost there
 author: Ben Shi
 type: post
 date: 2026-02-28
-url: on-being-almost-there
+slug: on-being-almost-there
 description:
   "The seduction of near misses with AI coding agents. Why 'almost there' is more exciting than
   finished, and the addictive nature of imperfect AI assistance."
@@ -14,7 +14,7 @@ tags:
   - technology
 ---
 
-![On being almost there](./on-being-almost-there.jpeg)
+![On being almost there](on-being-almost-there.jpeg)
 
 There is a specific kind of trance that sets in when you are working with coding agents.
 
