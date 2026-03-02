@@ -3,7 +3,7 @@ title: Reflecting on 2025
 author: Ben Shi
 type: post
 date: 2025-12-31
-url: reflecting-on-2025
+slug: reflecting-on-2025
 description:
   'Navigating burnout, AI fatigue, and organisational cycles during the Year of the Snake.
   Reflections on six years at a scale-up, principles for using AI without losing critical thinking
