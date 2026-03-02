@@ -86,7 +86,7 @@ I am no longer writing code line-by-line; I am reviewing pull requests from a ma
 The beauty of this workflow is that it lowers the barrier to creation while raising the value of
 taste. The AI provides the raw material – often flawed, often messy – but the human provides the
 direction and the context. The "_almost there_" nature of the output turns the act of building into
-a game of sculpture. Slowly chipping away at a block of in perfect marble.
+a game of sculpture. Slowly chipping away at a block of imperfect marble.
 
 **The Joy of the Almost**
 
