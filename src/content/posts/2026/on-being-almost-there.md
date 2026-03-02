@@ -14,7 +14,7 @@ tags:
   - technology
 ---
 
-![On being almost there](on-being-almost-there.jpeg)
+![On being almost there](/media/on-being-almost-there.jpeg)
 
 There is a specific kind of trance that sets in when you are working with coding agents.
 

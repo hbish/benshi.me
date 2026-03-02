@@ -14,7 +14,7 @@ tags:
   - musashi
 ---
 
-![Musashi - Book Cover](musashi.jpg)
+![Musashi - Book Cover](/media/musashi.jpg)
 
 This masterpiece by Eiji Yoshikawa is easily one of the best (if not the best) book I have ever
 read. A well-written fictionalisation of the intriguing life of one of the world's greatest
@@ -32,8 +32,8 @@ character relationships and social hierarchy was covered in great detail.
 For me, each character from this book has taught me something valuable, whether it be thinking
 critically, training, persistence, tactics and trust. I would highly recommend it to anyone whether
 you are reading it for the historical significance, martial arts, Japanese culture, heroics or
-portrayal of human transcendence, you will not be disappointed and hopefully you would have received
-some of the learnings I got!
+portrayal of human transcendence, you will not be disappointed, and hopefully you would have
+received some of the learnings I got!
 
 [1]: https://en.wikipedia.org/wiki/Miyamoto_Musashi
 [2]: https://en.wikipedia.org/wiki/Battle_of_Sekigahara
