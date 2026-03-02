@@ -1,7 +1,7 @@
 ---
 title: 'Book Review: Musashi – Eiji Yoshikawa (5/5)'
 author: Ben Shi
-type: note
+type: post
 date: 2014-05-29T14:38:50+00:00
 slug: musashi-eiji-yoshikawa
 categories:
@@ -14,7 +14,7 @@ tags:
   - musashi
 ---
 
-![Musashi - Book Cover](./musashi.jpg)
+![Musashi - Book Cover](musashi.jpg)
 
 This masterpiece by Eiji Yoshikawa is easily one of the best (if not the best) book I have ever
 read. A well-written fictionalisation of the intriguing life of one of the world's greatest
