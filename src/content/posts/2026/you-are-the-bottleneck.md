@@ -1,5 +1,5 @@
 ---
-title: 'You are the bottleneck'
+title: 'AI Makes Deep Expertise More Valuable'
 author: Ben Shi
 type: post
 date: 2026-08-04
