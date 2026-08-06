@@ -3,7 +3,7 @@ title: 'AI Makes Deep Expertise More Valuable'
 author: Ben Shi
 type: post
 date: 2026-08-04
-slug: you-are-the-bottleneck
+slug: ai-makes-deep-expertise-more-valuable
 description:
   'LLMs can produce plausible answers quickly. The harder part is knowing which problem matters and
   whether the answer fits the system you actually have.'
