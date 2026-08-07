@@ -13,6 +13,8 @@ tags:
   - system-design
 ---
 
+![AI magnifying code and complexity](/media/ai-makes-deep-expertise-more-valuable.png)
+
 An LLM can write a rate limiter in seconds. That is not the same as deciding how rate limiting
 should work.
 
