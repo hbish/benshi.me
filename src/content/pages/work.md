@@ -50,6 +50,12 @@ time. I've created a dedicated page to take you through the different iterations
 Below are some of my professional projects/work that I have been involved in, which are available in
 the public. I omitted some projects due to NDAs and other restrictions.
 
+<details><summary>Hello Clever</summary>
+
+Head of Product at an Australian fintech building global payments and AI-driven commerce.
+
+</details>
+
 <details><summary>DLTA - GROW Inc.</summary>
 
 A superannuation administration platform designed from the ground up built on top of distributed

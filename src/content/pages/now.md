@@ -11,7 +11,7 @@ This page is inspired by Derek Sivers’ [nownownow](https://nownownow.com/) and
 
 ### What I'm focused on now
 
-- helping reshape superannuation with [GROW Inc.](https://grow.inc/)
+- leading product at [Hello Clever](https://helloclever.co/)
 - organising [Programmable](https://programmable.io/)
 - growing my own indoor jungle
 - learning about horticulture and agriculture
@@ -23,4 +23,4 @@ This page is inspired by Derek Sivers’ [nownownow](https://nownownow.com/) and
 - beat my 5k PB
 - blog more...
 
-_last updated: Jan 2026_
+_last updated: Aug 2026_
