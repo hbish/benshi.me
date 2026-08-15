@@ -6,12 +6,10 @@ slug: about
 description: Find out more about who Ben Shi is and what he is up to
 ---
 
-I'm currently the Head of Engineering at [GROW Inc](https://www.growsuper.com/), where we aim to
-disrupt superannuation administration by providing administrators with better user experience and
-near real-time access to more member data through the use of distributed ledger technology (DLT),
-APIs and event streams.
+I'm currently the Head of Product at [Hello Clever](https://helloclever.co/), an Australian fintech
+building global payments and AI-driven commerce.
 
-I previously worked for [Versent](https://versent.com.au),
+I previously worked for [GROW Inc](https://grow.inc/), [Versent](https://versent.com.au),
 [J.P Morgan](https://www.jpmorgan.com/pages/jpmorgan),
 [ACI Worldwide](https://www.aciworldwide.com/), and
 [Distra](https://www.crunchbase.com/company/distra).
