@@ -15,6 +15,21 @@
     z-index: -2;
     pointer-events: none;
     contain: strict;
+    /*
+     * The slanted field occupies roughly the upper-right two-thirds and
+     * melts along a diagonal parallel to the arc, so it never reaches the
+     * lower-left corner where the lockup text lives.
+     */
+    -webkit-mask-image: linear-gradient(225deg, #000 0%, #000 32%, transparent 68%);
+    mask-image: linear-gradient(225deg, #000 0%, #000 32%, transparent 68%);
+  }
+
+  @media (max-aspect-ratio: 3 / 4) {
+    .dither-sky {
+      /* Portrait: the lockup spans most of the width, so flatten the dissolve. */
+      -webkit-mask-image: linear-gradient(205deg, #000 0%, #000 30%, transparent 56%);
+      mask-image: linear-gradient(205deg, #000 0%, #000 30%, transparent 56%);
+    }
   }
 
   .dither-sky-canvas {
@@ -183,8 +198,11 @@
     const STAR_CELL = 22
 
     function resize() {
-      const vw = Math.max(320, window.innerWidth)
-      const vh = Math.max(240, window.innerHeight)
+      // Size the buffer from the canvas box (full viewport), falling back
+      // to the window if layout has not settled yet.
+      const rect = surface.getBoundingClientRect()
+      const vw = Math.max(320, rect.width || window.innerWidth)
+      const vh = Math.max(240, rect.height || window.innerHeight)
       // One buffer pixel targets a 2 CSS px cell; cap the buffer for huge windows.
       const scale = Math.max(1, Math.sqrt((vw * vh) / 4 / 1_300_000))
       W = Math.max(160, Math.round(vw / 2 / scale))
@@ -210,7 +228,9 @@
       const { bg, ink, star, coverage, maxInk } = palette
 
       // Per-frame scene parameters.
-      const cx = W * (0.18 + 0.025 * Math.sin(t * 0.05))
+      // The arc originates upper-right and descends toward the lower-left,
+      // melting into the mask before it reaches the lockup text.
+      const cx = W * (0.82 + 0.025 * Math.sin(t * 0.05))
       const cy = H * 1.9
       const R = H * 1.72
       const bandW = H * 0.052

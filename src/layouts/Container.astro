@@ -2,8 +2,10 @@
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import Sidebar from "../components/Sidebar.astro";
+import SiteNav from "../components/SiteNav.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
 import Content from "../components/Content.astro";
+
 export interface Props {
 	title: string;
 	description?: string;
@@ -15,8 +17,8 @@ export interface Props {
 	tags?: string[];
 }
 
-const { 
-	title, 
+const {
+	title,
 	description = SITE_DESCRIPTION,
 	image,
 	type,
@@ -29,9 +31,9 @@ const {
 
 <!DOCTYPE html>
 <html lang="en">
-<Header 
-	title={title || SITE_TITLE} 
-	description={description} 
+<Header
+	title={title || SITE_TITLE}
+	description={description}
 	image={image}
 	type={type}
 	url={url}
@@ -41,23 +43,15 @@ const {
 />
 <body class="bg-theme text-theme transition-colors duration-300">
 	<div class="waterfall"></div>
-	<div class="container font-sans max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-20">
-		<div class="flex flex-col lg:flex-row">
-			<div class="w-full lg:w-1/5 lg:order-first lg:sticky lg:top-20 lg:self-start mx-8">
-				<Sidebar />
-			</div>
-			<div class="w-full lg:w-4/5 mx-8">
-				<div class="mb-8">
-					<Content>
-						<slot />
-					</Content>
-				</div>
-				<div>
-					<Footer />
-				</div>
-			</div>
+	<SiteNav />
+	<main class="mx-auto w-full max-w-[46rem] px-4 sm:px-6 py-16 lg:py-20">
+		<Content>
+			<slot />
+		</Content>
+		<div class="mt-16">
+			<Footer />
 		</div>
-	</div>
-
+	</main>
+	<ThemeToggle />
 </body>
 </html>

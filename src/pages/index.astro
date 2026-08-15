@@ -1,7 +1,27 @@
 ---
 import Header from '../components/Header.astro'
 import DitherSky from '../components/DitherSky.astro'
+import ThemeToggle from '../components/ThemeToggle.astro'
+import { X, Github, Key, Mail, Linkedin } from '@lucide/astro'
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
+
+const socials = [
+  { href: 'https://x.com/hbish', label: 'follow ben on x', Icon: X },
+  {
+    href: 'https://au.linkedin.com/in/benshi',
+    label: 'connect with ben on linkedin',
+    Icon: Linkedin,
+  },
+  { href: 'https://github.com/hbish', label: 'follow ben on github', Icon: Github },
+  { href: 'mailto:ben@hbish.com', label: 'email ben', Icon: Mail },
+  { href: 'https://keybase.io/hbish', label: 'auth ben on keybase', Icon: Key },
+]
+
+const menu = [
+  { href: '/about/', label: 'about' },
+  { href: '/writing/', label: 'writing' },
+  { href: '/photos/', label: 'photos' },
+]
 ---
 
 <!doctype html>
@@ -9,14 +29,33 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
   <Header title={SITE_TITLE} description={SITE_DESCRIPTION} />
   <body class="bg-theme text-theme transition-colors duration-300">
     <DitherSky />
+    <ThemeToggle />
     <main class="landing">
       <div class="landing-lockup">
-        <h1 class="landing-name">Ben Shi</h1>
+        <h1 class="landing-name">
+          Ben Shi
+          <a
+            href="/now/"
+            class="landing-sparkle"
+            aria-label="What I'm doing now"
+            title="What I'm doing now"
+          >
+            ✨
+          </a>
+        </h1>
+        <p class="landing-headline">Pragmatic notes on product, engineering, and learning</p>
         <nav class="landing-menu" aria-label="Main navigation">
-          <a href="/about/">about</a>
-          <a href="/writing/">writing</a>
-          <a href="/photos/">photos</a>
+          {menu.map(item => <a href={item.href}>{item.label}</a>)}
         </nav>
+        <div class="landing-socials">
+          {
+            socials.map(({ href, label, Icon }) => (
+              <a href={href} aria-label={label} title={label} rel="me">
+                <Icon />
+              </a>
+            ))
+          }
+        </div>
       </div>
     </main>
   </body>
@@ -37,13 +76,33 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
     line-height: 1.1;
   }
 
+  .landing-sparkle {
+    font-size: 0.45em;
+    vertical-align: 0.65em;
+    margin-left: 0.3rem;
+    text-decoration: none;
+    transition: transform 0.18s ease;
+  }
+
+  .landing-sparkle:hover {
+    transform: rotate(12deg) scale(1.2);
+  }
+
+  .landing-headline {
+    margin: 0.9rem 0 0;
+    max-width: 38ch;
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+    font-style: italic;
+    line-height: 1.45;
+    color: var(--color-text-secondary);
+  }
+
   .landing-menu {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem 1.75rem;
-    margin-top: 1.25rem;
-    font-family:
-      ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+    margin-top: 1.5rem;
+    font-family: var(--font-mono);
     font-size: 0.8rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -54,17 +113,42 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
     align-items: center;
     min-height: 44px;
     color: var(--color-text-secondary);
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    text-underline-offset: 6px;
-    transition:
-      color 0.18s ease,
-      text-decoration-color 0.18s ease;
+    text-decoration: none;
+    transition: color 0.18s ease;
   }
 
   .landing-menu a:hover {
     color: var(--color-accent);
-    text-decoration-color: currentColor;
+  }
+
+  .landing-socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 1.25rem;
+  }
+
+  .landing-socials a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: var(--color-text-secondary);
+    border-radius: 8px;
+    transition:
+      color 0.18s ease,
+      transform 0.18s ease;
+  }
+
+  .landing-socials a:hover {
+    color: var(--color-accent);
+    transform: translateY(-2px);
+  }
+
+  .landing-socials :global(svg) {
+    width: 17px;
+    height: 17px;
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -74,6 +158,10 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
 
     .landing-menu {
       animation: landing-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+    }
+
+    .landing-socials {
+      animation: landing-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
     }
   }
 

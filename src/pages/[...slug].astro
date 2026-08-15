@@ -6,7 +6,7 @@ import CommentCTA from '../components/CommentCTA.astro';
 import { type CollectionEntry, getCollection } from 'astro:content';
 import { SITE_TITLE } from '../consts';
 import { extractFirstImage } from '../utils/extractFirstImage';
-import { Calendar, Clock, Tag } from '@lucide/astro';
+import { Tag } from '@lucide/astro';
 
 export async function getStaticPaths() {
     const posts = await getCollection('posts');
@@ -87,42 +87,33 @@ const currentUrl = new URL(pathname, Astro.site);
     author={content.data.author}
     tags={content.data.tags}
 >
-    <div class="content px-4 sm:px-0">
+    <div class="content">
         <section>
-            <div class="section-title uppercase tracking-wide text-theme-muted mb-2 text-center">
-                {type === 'post' ? 'Blog Post' : 'Note'}
-            </div>
-
             <article class="h-entry">
             <!-- Article Header -->
-            <header class="mb-8 pb-6 header-divider">
-                <h1 class="p-name text-3xl lg:text-4xl font-bold leading-tight mb-4 text-theme text-center">
+            <header class="page-header">
+                <h1 class="page-header-title p-name leading-tight text-theme">
                     {content.data.title}
                 </h1>
 
                 <!-- Article Metadata -->
-                <div class="flex flex-wrap items-center justify-center text-sm text-theme-muted space-x-4 mb-4">
-                    <div class="flex items-center">
-                        <Calendar class="w-4 h-4 mr-2" />
-                        <time class="dt-published" datetime={formatISODate(content.data.date)}>
-                            {formatDate(content.data.date)}
-                        </time>
-                    </div>
+                <div class="page-header-meta">
+                    <time class="dt-published" datetime={formatISODate(content.data.date)}>
+                        {formatDate(content.data.date)}
+                    </time>
 
                     {remarkPluginFrontmatter?.minutesRead && (
-                        <div class="flex items-center">
-                            <Clock class="w-4 h-4 mr-2" />
-                            <span>{remarkPluginFrontmatter.minutesRead}</span>
-                        </div>
+                        <span> · {remarkPluginFrontmatter.minutesRead}</span>
                     )}
 
                     {type === 'post' && (
                         <WebmentionCount target={currentUrl.toString()} />
                     )}
                 </div>
+            </header>
 
                 {content.data.tags && content.data.tags.length > 0 && (
-                    <div class="flex items-center flex-wrap gap-2 justify-center">
+                    <div class="flex items-center flex-wrap gap-2 mt-4 mb-8">
                         <Tag class="w-4 h-4 text-theme-muted" />
                         {content.data.tags.map((tag: string) => (
                             <a
@@ -134,16 +125,15 @@ const currentUrl = new URL(pathname, Astro.site);
                         ))}
                     </div>
                 )}
-            </header>
 
             <!-- Article Content -->
-            <div class="e-content prose prose-lg dark:prose-invert max-w-[85%] md:max-w-[90%] lg:max-w-none mx-auto">
+            <div class="e-content prose prose-lg dark:prose-invert max-w-none mt-6">
                 <Content />
             </div>
         </article>
 
         {type === 'post' && (
-            <div class="webmentions mt-12 pt-8 border-t border-theme max-w-[85%] md:max-w-[90%] lg:max-w-none mx-auto">
+            <div class="webmentions mt-12 pt-8 border-t border-theme">
                 <h3 class="text-xl font-semibold mb-6 text-theme">Interactions</h3>
                 <CommentCTA url={currentUrl.toString()} />
                 <WebmentionFeed target={currentUrl.toString()} />
@@ -183,26 +173,4 @@ const currentUrl = new URL(pathname, Astro.site);
     })}>
     </script>
 
-<style>
-    .header-divider {
-        position: relative;
-    }
-
-    .header-divider::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: linear-gradient(
-            to right,
-            transparent 0%,
-            var(--color-border) 20%,
-            var(--color-border) 80%,
-            transparent 100%
-        );
-        opacity: 0.6;
-    }
-</style>
 </Container>

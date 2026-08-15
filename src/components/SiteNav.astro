@@ -1,0 +1,128 @@
+---
+// SiteNav: slim sticky top bar for child pages. The name links home,
+// the sparkle links to /now, and the section menu sits on the right.
+const links = [
+  { href: '/about/', label: 'about' },
+  { href: '/writing/', label: 'writing' },
+  { href: '/photos/', label: 'photos' },
+]
+
+const currentPath = Astro.url.pathname
+const isActive = (href: string) => currentPath === href || currentPath.startsWith(`${href}`)
+---
+
+<header class="site-nav" data-site-nav>
+  <div class="site-nav-inner">
+    <div class="site-nav-lockup">
+      <a href="/" class="site-nav-name">Ben Shi</a>
+      <a
+        href="/now/"
+        class="site-nav-sparkle"
+        aria-label="What I'm doing now"
+        title="What I'm doing now"
+      >
+        ✨
+      </a>
+    </div>
+    <nav class="site-nav-menu" aria-label="Main navigation">
+      {
+        links.map(link => (
+          <a href={link.href} aria-current={isActive(link.href) ? 'page' : undefined}>
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>
+
+<style>
+  /* Floats above the content while scrolling; the shadow appears only once
+     the bar has left its resting position, so there is no underline at rest. */
+  .site-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--color-bg);
+    transition: box-shadow 0.25s ease;
+  }
+
+  .site-nav.is-scrolled {
+    box-shadow: 0 6px 18px -8px rgba(0, 0, 0, 0.18);
+  }
+
+  .site-nav-inner {
+    /* The shared 46rem content measure; matches the main column so edges align. */
+    max-width: 46rem;
+    margin: 0 auto;
+    /* Matches the main column's px-4 sm:px-6 so edges align optically. */
+    padding: 1rem clamp(1rem, 4vw, 1.5rem);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+  }
+
+  .site-nav-lockup {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.45rem;
+  }
+
+  .site-nav-name {
+    font-family: 'Playfair Display', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 1.15rem;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color 0.18s ease;
+  }
+
+  .site-nav-name:hover {
+    color: var(--color-accent);
+  }
+
+  .site-nav-sparkle {
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: transform 0.18s ease;
+  }
+
+  .site-nav-sparkle:hover {
+    transform: rotate(12deg) scale(1.15);
+  }
+
+  .site-nav-menu {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .site-nav-menu a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color 0.18s ease;
+  }
+
+  .site-nav-menu a:hover,
+  .site-nav-menu a[aria-current='page'] {
+    color: var(--color-accent);
+  }
+</style>
+
+<script>
+  const nav = document.querySelector('[data-site-nav]')
+  if (nav) {
+    const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 8)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+  }
+</script>

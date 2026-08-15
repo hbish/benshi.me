@@ -35,64 +35,69 @@ const CDN_BASE = 'https://cdn.hbish.com'
 </style>
 
 <Container title="Photos - Ben Shi">
-  <div class="section-title text-center text-2xl my-6 px-4 sm:px-0">Albums</div>
+  <div>
+    <header class="page-header">
+      <h1 class="page-header-title">Albums</h1>
+      <p class="page-header-meta">{collections.length} albums</p>
+    </header>
 
-  {
-    allTags.length > 0 && (
-      <nav aria-label="Filter albums by tag" class="px-4 sm:px-0 mb-4">
-        <div class="flex gap-2 flex-wrap justify-center" id="tag-pills">
-          <button data-tag="all" class="tag-pill active" aria-current="true">
-            All
-          </button>
-          {allTags.map(tag => (
-            <button data-tag={tag} class="tag-pill">
-              {tag}
+    {
+      allTags.length > 0 && (
+        <nav aria-label="Filter albums by tag" class="mt-6 mb-6">
+          <div class="flex gap-2 flex-wrap" id="tag-pills">
+            <button data-tag="all" class="tag-pill active" aria-current="true">
+              All
             </button>
-          ))}
-        </div>
-      </nav>
-    )
-  }
+            {allTags.map(tag => (
+              <button data-tag={tag} class="tag-pill">
+                {tag}
+              </button>
+            ))}
+          </div>
+        </nav>
+      )
+    }
 
-  <section class="px-4 sm:px-0">
-    <div class="max-w-[60%] mx-auto">
-      <div id="no-results" class="no-results hidden text-center text-gray-500 my-8">
-        <p>No albums with photos matching the selected tag.</p>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {
-          collections.map(collection => {
-            const coverUrl = `${CDN_BASE}/${collection.data.coverPhoto}`
-            const albumSlug = collection.slug || collection.data.slug
-            const tags = collection.data.tags || []
-            return (
-              <div class="album-item" key={collection.id} data-tags={tags.join(',')}>
-                <a href={`/photos/${albumSlug}/`} class="block">
-                  <div class="relative rounded-lg overflow-hidden">
-                    <img
-                      src={coverUrl}
-                      alt={collection.data.title}
-                      class="w-full h-auto block rounded-lg opacity-0 transition-opacity duration-300 album-cover"
-                      loading="lazy"
-                      decoding="async"
-                      onload="this.classList.remove('opacity-0')"
-                    />
+    <section>
+      <div>
+        <div id="no-results" class="no-results hidden text-center text-theme-muted my-8">
+          <p>No albums with photos matching the selected tag.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {
+            collections.map(collection => {
+              const coverUrl = `${CDN_BASE}/${collection.data.coverPhoto}`
+              const albumSlug = collection.slug || collection.data.slug
+              const tags = collection.data.tags || []
+              return (
+                <div class="album-item" key={collection.id} data-tags={tags.join(',')}>
+                  <a href={`/photos/${albumSlug}/`} class="block">
+                    <div class="relative rounded-lg overflow-hidden">
+                      <img
+                        src={coverUrl}
+                        alt={collection.data.title}
+                        class="w-full h-auto block rounded-lg opacity-0 transition-opacity duration-300 album-cover"
+                        loading="lazy"
+                        decoding="async"
+                        onload="this.classList.remove('opacity-0')"
+                      />
+                    </div>
+                  </a>
+                  <div class="mt-2">
+                    <h2 class="text-lg font-semibold">
+                      <a href={`/photos/${albumSlug}/`} class="hover:opacity-70 transition-opacity">
+                        {collection.data.title}
+                      </a>
+                    </h2>
                   </div>
-                </a>
-                <div class="mt-2">
-                  <h3 class="text-lg font-semibold">
-                    <a href={`/photos/${albumSlug}/`} class="hover:opacity-70 transition-opacity">
-                      {collection.data.title}
-                    </a>
-                  </h3>
                 </div>
-              </div>
-            )
-          })
-        }
+              )
+            })
+          }
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </Container>
 
 <script>

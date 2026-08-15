@@ -15,43 +15,64 @@ posts.forEach(p => {
     postsByYear.set(fullYear, [p])
   }
 })
+
+const newestYear = posts[0]?.data.date.getFullYear()
+const oldestYear = posts[posts.length - 1]?.data.date.getFullYear()
+const yearRange = newestYear === oldestYear ? `${newestYear}` : `${oldestYear} — ${newestYear}`
+const metaLine = posts.length === 0 ? 'no posts' : `${posts.length} posts · ${yearRange}`
+
+const isoDate = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(
+    2,
+    '0'
+  )}`
 ---
 
 <Container title="Archive - Ben Shi">
-  <div class="section-title text-center text-2xl my-2 px-4 sm:px-0">Archive</div>
-  <section class="text-center px-4 sm:px-0">
+  <div>
+    <header class="page-header">
+      <h1 class="page-header-title">Archive</h1>
+      <p class="page-header-meta">{metaLine}</p>
+    </header>
+
     {
-      Array.from(postsByYear).map(([year, yearPosts]) => {
-        return yearPosts.map((p, index) => {
-          return (
-            <div>
-              {index === 0 && <h3 class="text-xl my-6">{year}</h3>}
-              <div class={'row my-2'}>
-                <div class={'column'}>
-                  <a href={`/${p.slug}/`}>{p.data.title}</a>
-                  ::{' '}
-                  <strong>
-                    {p.data.date.toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}
-                  </strong>
-                </div>
-                <div>
-                  {p.data.minutesRead && (
-                    <span class={'time-to-read'}>~{p.data.minutesRead} min read</span>
-                  )}
-                </div>
-              </div>
-              {p.data.description && (
-                <div class="post-excerpt text-left my-3 px-4 text-sm">{p.data.description}</div>
-              )}
-            </div>
-          )
-        })
-      })
-    }
-    {
-      posts.length === 0 && (
-        <div class="text-gray-500 text-center my-8">No archived posts found.</div>
+      posts.length === 0 ? (
+        <div class="empty-state text-theme-muted">No archived posts found.</div>
+      ) : (
+        Array.from(postsByYear).map(([year, yearPosts]) => (
+          <section class="year-group" aria-label={`Posts from ${year}`}>
+            <h2 class="year-label">{year}</h2>
+            <ul class="post-list">
+              {yearPosts.map(p => (
+                <li>
+                  <div class="post-row">
+                    <time class="post-date" datetime={isoDate(p.data.date)}>
+                      {p.data.date.toLocaleDateString(undefined, {
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </time>
+                    <a class="post-link" href={`/${p.slug}/`}>
+                      {p.data.title}
+                    </a>
+                    {p.data.minutesRead && (
+                      <span class="post-read">~{p.data.minutesRead} min read</span>
+                    )}
+                  </div>
+                  {p.data.description && <p class="post-desc">{p.data.description}</p>}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
       )
     }
-  </section>
+  </div>
 </Container>
+
+<style>
+  .empty-state {
+    text-align: center;
+    padding: 4rem 0;
+  }
+</style>

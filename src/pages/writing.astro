@@ -32,10 +32,10 @@ const isoDate = (d: Date) =>
 ---
 
 <Container title="Writing - Ben Shi" description="Recent posts by Ben Shi.">
-  <div class="writing-index px-4 sm:px-0">
-    <header class="writing-header">
-      <h1 class="writing-title">Writing</h1>
-      <p class="writing-meta">{metaLine}</p>
+  <div class="writing-index">
+    <header class="page-header">
+      <h1 class="page-header-title">Writing</h1>
+      <p class="page-header-meta">{metaLine}</p>
     </header>
 
     {
@@ -51,19 +51,21 @@ const isoDate = (d: Date) =>
             <h2 class="year-label">{year}</h2>
             <ul class="post-list">
               {yearPosts.map(p => (
-                <li class="post-row">
-                  <time class="post-date" datetime={isoDate(p.data.date)}>
-                    {p.data.date.toLocaleDateString(undefined, {
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                  </time>
-                  <a class="post-link" href={`/${p.slug}/`}>
-                    {p.data.title}
-                  </a>
-                  {p.data.minutesRead && (
-                    <span class="post-read">~{p.data.minutesRead} min read</span>
-                  )}
+                <li>
+                  <div class="post-row">
+                    <time class="post-date" datetime={isoDate(p.data.date)}>
+                      {p.data.date.toLocaleDateString(undefined, {
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </time>
+                    <a class="post-link" href={`/${p.slug}/`}>
+                      {p.data.title}
+                    </a>
+                    {p.data.minutesRead && (
+                      <span class="post-read">~{p.data.minutesRead} min read</span>
+                    )}
+                  </div>
                 </li>
               ))}
             </ul>
@@ -84,37 +86,6 @@ const isoDate = (d: Date) =>
 </Container>
 
 <style>
-  .writing-index {
-    --index-mono:
-      ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
-  }
-
-  .writing-header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 0.5rem 1.5rem;
-    padding-bottom: 1.25rem;
-    border-bottom: 1px solid var(--color-border);
-    margin-bottom: 0.5rem;
-  }
-
-  .writing-title {
-    margin: 0;
-    font-size: clamp(2rem, 1.6rem + 1.6vw, 3rem);
-  }
-
-  .writing-meta {
-    margin: 0;
-    font-family: var(--index-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
-    font-variant-numeric: tabular-nums;
-  }
-
   .empty-state {
     text-align: center;
     padding: 4rem 0;
@@ -123,78 +94,6 @@ const isoDate = (d: Date) =>
   .empty-state-icon {
     font-size: 1.5rem;
     margin-bottom: 0.75rem;
-  }
-
-  .year-group {
-    margin-top: 2.75rem;
-  }
-
-  .year-label {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin: 0 0 0.25rem;
-    font-family: var(--index-mono);
-    font-size: 0.75rem;
-    font-weight: 400;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .year-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--color-border);
-  }
-
-  .post-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .post-row {
-    display: flex;
-    align-items: baseline;
-    gap: 1.25rem;
-    padding: 0.8rem 0;
-  }
-
-  .post-date {
-    flex: none;
-    width: 5.75rem;
-    font-family: var(--index-mono);
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .post-link {
-    flex: 1 1 auto;
-    min-width: 0;
-    color: var(--color-text);
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    text-underline-offset: 5px;
-    transition:
-      color 0.18s ease,
-      text-decoration-color 0.18s ease;
-  }
-
-  .post-link:hover {
-    color: var(--color-accent);
-    text-decoration-color: currentColor;
-  }
-
-  .post-read {
-    flex: none;
-    font-family: var(--index-mono);
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-    font-variant-numeric: tabular-nums;
   }
 
   .index-links {
@@ -217,30 +116,7 @@ const isoDate = (d: Date) =>
     transform: translateX(3px);
   }
 
-  @media (max-width: 640px) {
-    .post-row {
-      flex-wrap: wrap;
-      gap: 0.15rem 0.75rem;
-      padding: 0.75rem 0;
-    }
-
-    .post-date {
-      width: auto;
-    }
-
-    .post-read {
-      margin-left: auto;
-    }
-
-    .post-link {
-      flex-basis: 100%;
-      order: 3;
-      margin-top: 0.1rem;
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .post-link,
     .index-links .arrow {
       transition: none;
     }
