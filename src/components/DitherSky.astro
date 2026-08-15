@@ -1,0 +1,358 @@
+---
+// DitherSky: full-viewport ordered-dither field behind the landing page.
+// One soft luminous arc in the theme accent, a sparse starfield, and a
+// slowly drifting noise field, quantised through an 8x8 Bayer matrix.
+---
+
+<div class="dither-sky" aria-hidden="true">
+  <canvas class="dither-sky-canvas"></canvas>
+</div>
+
+<style>
+  .dither-sky {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    contain: strict;
+  }
+
+  .dither-sky-canvas {
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+    opacity: 0;
+    transition: opacity 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .dither-sky.is-live .dither-sky-canvas {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dither-sky-canvas {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  type RGB = [number, number, number]
+
+  interface Palette {
+    bg: RGB
+    ink: RGB
+    star: RGB
+    coverage: number
+    maxInk: number
+  }
+
+  // 8x8 Bayer ordered-dither thresholds, normalised to (0, 1).
+  const bayer = (() => {
+    let matrix: number[][] = [
+      [0, 2],
+      [3, 1],
+    ]
+    for (let step = 0; step < 2; step++) {
+      const size = matrix.length
+      const next: number[][] = Array.from({ length: size * 2 }, () =>
+        new Array<number>(size * 2).fill(0)
+      )
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          const base = 4 * matrix[y][x]
+          next[y][x] = base
+          next[y][x + size] = base + 2
+          next[y + size][x] = base + 3
+          next[y + size][x + size] = base + 1
+        }
+      }
+      matrix = next
+    }
+    return matrix.flat().map(v => (v + 0.5) / 64)
+  })()
+
+  function hash(n: number): number {
+    let t = n >>> 0
+    t = Math.imul(t ^ (t >>> 16), 2246822519)
+    t = Math.imul(t ^ (t >>> 13), 3266489917)
+    t ^= t >>> 16
+    return (t >>> 0) / 4294967296
+  }
+
+  // Tileable two-octave value noise, sampled with a drifting offset so the
+  // dither field breathes without any per-frame trigonometry cost.
+  const TEX = 128
+  const texture = (() => {
+    const smooth = (x: number) => x * x * (3 - 2 * x)
+    const grid = (gx: number, gy: number, cells: number, seed: number) =>
+      hash(
+        Math.imul(((gx % cells) + cells) % cells, 73856093) ^
+          Math.imul(((gy % cells) + cells) % cells, 19349663) ^
+          seed
+      )
+    const noise = (x: number, y: number, cells: number, seed: number) => {
+      const xi = Math.floor(x)
+      const yi = Math.floor(y)
+      const u = smooth(x - xi)
+      const v = smooth(y - yi)
+      const a = grid(xi, yi, cells, seed)
+      const b = grid(xi + 1, yi, cells, seed)
+      const c = grid(xi, yi + 1, cells, seed)
+      const d = grid(xi + 1, yi + 1, cells, seed)
+      return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v
+    }
+    const out = new Float32Array(TEX * TEX)
+    for (let y = 0; y < TEX; y++) {
+      for (let x = 0; x < TEX; x++) {
+        out[y * TEX + x] =
+          0.66 * noise((x / TEX) * 16, (y / TEX) * 16, 16, 101) +
+          0.34 * noise((x / TEX) * 48, (y / TEX) * 48, 48, 707)
+      }
+    }
+    return out
+  })()
+
+  function parseColor(value: string): RGB | null {
+    const m = value.trim().match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i)
+    if (!m) return null
+    const hex = m[1]
+    if (hex.length === 3) {
+      return [
+        parseInt(hex[0] + hex[0], 16),
+        parseInt(hex[1] + hex[1], 16),
+        parseInt(hex[2] + hex[2], 16),
+      ]
+    }
+    return [
+      parseInt(hex.slice(0, 2), 16),
+      parseInt(hex.slice(2, 4), 16),
+      parseInt(hex.slice(4, 6), 16),
+    ]
+  }
+
+  const mix = (a: RGB, b: RGB, t: number): RGB => [
+    a[0] + (b[0] - a[0]) * t,
+    a[1] + (b[1] - a[1]) * t,
+    a[2] + (b[2] - a[2]) * t,
+  ]
+
+  function readPalette(): Palette {
+    const cs = getComputedStyle(document.documentElement)
+    const bg = parseColor(cs.getPropertyValue('--color-bg')) ?? [255, 255, 255]
+    const ink = parseColor(cs.getPropertyValue('--color-accent')) ?? [16, 63, 234]
+    const text = parseColor(cs.getPropertyValue('--color-text')) ?? [96, 108, 118]
+    const lum = (0.2126 * bg[0] + 0.7152 * bg[1] + 0.0722 * bg[2]) / 255
+    if (lum < 0.4) {
+      // Dark grounds carry light: a faint glow and near-white stars.
+      // Nothing sits over the landing canvas, so it earns a touch more presence.
+      return {
+        bg,
+        ink,
+        star: mix(ink, [255, 255, 255], 0.45),
+        coverage: 0.68,
+        maxInk: 0.55,
+      }
+    }
+    // Light grounds read as halftone ink pressed into paper.
+    return {
+      bg,
+      ink,
+      star: mix(text, ink, 0.3),
+      coverage: 0.56,
+      maxInk: 0.38,
+    }
+  }
+
+  const root = document.querySelector<HTMLElement>('.dither-sky')
+  const canvas = document.querySelector<HTMLCanvasElement>('.dither-sky-canvas')
+  const ctx = canvas?.getContext('2d') ?? null
+
+  if (root && canvas && ctx) {
+    // Capture the narrowed values so hoisted closures keep non-null types.
+    const skyRoot: HTMLElement = root
+    const surface: HTMLCanvasElement = canvas
+    const context: CanvasRenderingContext2D = ctx
+    let W = 0
+    let H = 0
+    let image: ImageData | null = null
+    let palette = readPalette()
+    // Start mid-cycle so the first (possibly only) frame is a composed one.
+    let elapsed = 12.6
+
+    const STAR_CELL = 22
+
+    function resize() {
+      const vw = Math.max(320, window.innerWidth)
+      const vh = Math.max(240, window.innerHeight)
+      // One buffer pixel targets a 2 CSS px cell; cap the buffer for huge windows.
+      const scale = Math.max(1, Math.sqrt((vw * vh) / 4 / 1_300_000))
+      W = Math.max(160, Math.round(vw / 2 / scale))
+      H = Math.max(120, Math.round(vh / 2 / scale))
+      surface.width = W
+      surface.height = H
+      image = context.createImageData(W, H)
+      render(elapsed)
+    }
+
+    function putPixel(x: number, y: number, color: RGB, alpha: number) {
+      if (x < 0 || y < 0 || x >= W || y >= H || !image) return
+      const i = (y * W + x) * 4
+      const d = image.data
+      d[i] += (color[0] - d[i]) * alpha
+      d[i + 1] += (color[1] - d[i + 1]) * alpha
+      d[i + 2] += (color[2] - d[i + 2]) * alpha
+    }
+
+    function render(t: number) {
+      if (!image) return
+      const d = image.data
+      const { bg, ink, star, coverage, maxInk } = palette
+
+      // Per-frame scene parameters.
+      const cx = W * (0.18 + 0.025 * Math.sin(t * 0.05))
+      const cy = H * 1.9
+      const R = H * 1.72
+      const bandW = H * 0.052
+      const haloW = H * 0.36
+      const phaseA = t * 0.055
+      const phaseB = 1.3 - t * 0.034
+      const inner = Math.max(0, R - H * 1.15)
+      const outer = R + H * 1.15
+      const innerSq = inner * inner
+      const outerSq = outer * outer
+      const texX = Math.floor(t * 1.3)
+      const texY = Math.floor(t * -0.9)
+
+      // The broad sky glow depends only on the row.
+      const sky = new Float32Array(H)
+      for (let y = 0; y < H; y++) {
+        sky[y] = 0.2 * Math.exp(-((y / (H * 0.6)) ** 2))
+      }
+
+      for (let y = 0; y < H; y++) {
+        const dy = y - cy
+        const dySq = dy * dy
+        const rowTex = ((y + texY) & (TEX - 1)) * TEX
+        for (let x = 0; x < W; x++) {
+          let v = sky[y]
+          const dx = x - cx
+          const dSq = dx * dx + dySq
+          if (dSq > innerSq && dSq < outerSq) {
+            const dist = Math.sqrt(dSq) - R
+            const ang = Math.atan2(dy, dx)
+            const mod =
+              0.58 + 0.42 * (0.5 + 0.5 * Math.sin(3 * ang + phaseA) * Math.sin(2 * ang + phaseB))
+            const q = dist / bandW
+            v += Math.exp(-q * q) * 1.05 * mod
+            const hq = dist / haloW
+            v += Math.exp(-hq * hq) * 0.33 * mod
+          }
+          const tex = 0.55 + 0.75 * texture[rowTex + ((x + texX) & (TEX - 1))]
+          const c = v * tex * coverage
+          const o = (y * W + x) * 4
+          if (c > bayer[(y & 7) * 8 + (x & 7)]) {
+            const k = Math.min(maxInk, 0.3 + c * 1.1)
+            d[o] = bg[0] + (ink[0] - bg[0]) * k
+            d[o + 1] = bg[1] + (ink[1] - bg[1]) * k
+            d[o + 2] = bg[2] + (ink[2] - bg[2]) * k
+          } else {
+            d[o] = bg[0]
+            d[o + 1] = bg[1]
+            d[o + 2] = bg[2]
+          }
+          d[o + 3] = 255
+        }
+      }
+
+      // Sparse deterministic starfield, layered over the dither field.
+      const cellsX = Math.ceil(W / STAR_CELL)
+      const cellsY = Math.ceil(H / STAR_CELL)
+      for (let sy = 0; sy < cellsY; sy++) {
+        for (let sx = 0; sx < cellsX; sx++) {
+          const id = Math.imul(sx, 668265263) ^ Math.imul(sy, 374761393)
+          const r = hash(id)
+          if (r > 0.055) continue
+          const px = sx * STAR_CELL + Math.floor(hash(id ^ 0x9e3779b9) * STAR_CELL)
+          const py = sy * STAR_CELL + Math.floor(hash(id ^ 0x85ebca6b) * STAR_CELL)
+          if (px >= W || py >= H) continue
+          let brightness = 0.22 + 0.5 * hash(id ^ 0xc2b2ae35)
+          const twinkleSeed = hash(id ^ 0x27d4eb2f)
+          if (twinkleSeed < 0.35) {
+            brightness *= 0.5 + 0.5 * Math.sin(t * (0.25 + twinkleSeed) + r * 37)
+          }
+          const color = hash(id ^ 0x165667b1) < 0.16 ? ink : star
+          putPixel(px, py, color, brightness)
+          if (r < 0.012) {
+            putPixel(px + 1, py, color, brightness * 0.45)
+            putPixel(px, py + 1, color, brightness * 0.45)
+            putPixel(px + 1, py + 1, color, brightness * 0.3)
+          }
+        }
+      }
+
+      context.putImageData(image, 0, 0)
+    }
+
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const FRAME_MS = 100 // ~10fps is enough for a field this slow.
+    let raf = 0
+    let last = 0
+
+    function tick(now: number) {
+      raf = requestAnimationFrame(tick)
+      if (now - last < FRAME_MS) return
+      elapsed += Math.min(now - last, 250) / 1000
+      last = now
+      render(elapsed)
+    }
+
+    function setMotion() {
+      cancelAnimationFrame(raf)
+      if (motionQuery.matches) {
+        render(elapsed)
+      } else {
+        last = performance.now()
+        raf = requestAnimationFrame(tick)
+      }
+    }
+
+    let resizeTimer = 0
+    const onResize = () => {
+      window.clearTimeout(resizeTimer)
+      resizeTimer = window.setTimeout(resize, 150)
+    }
+
+    const themeObserver = new MutationObserver(() => {
+      palette = readPalette()
+      render(elapsed)
+    })
+
+    resize()
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    })
+    window.addEventListener('resize', onResize, { passive: true })
+    motionQuery.addEventListener('change', setMotion)
+
+    // Reveal once the first frame is on the canvas.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        skyRoot.classList.add('is-live')
+      })
+    })
+
+    setMotion()
+
+    window.addEventListener(
+      'pagehide',
+      () => {
+        cancelAnimationFrame(raf)
+        themeObserver.disconnect()
+        window.removeEventListener('resize', onResize)
+      },
+      { once: true }
+    )
+  }
+</script>

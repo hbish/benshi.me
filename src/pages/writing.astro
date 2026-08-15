@@ -1,0 +1,248 @@
+---
+import Container from '../layouts/Container.astro'
+import { getCollection, type CollectionEntry } from 'astro:content'
+
+const twoYearsAgo = new Date()
+twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2)
+
+const posts = (await getCollection('posts'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .filter(p => !p.data.draft)
+  .filter(p => p.data.date >= twoYearsAgo)
+const postsByYear = new Map<number, CollectionEntry<'posts'>[]>()
+posts.forEach(p => {
+  const fullYear = p.data.date.getFullYear()
+  if (postsByYear.get(fullYear)) {
+    postsByYear.set(fullYear, postsByYear.get(fullYear)!.concat(p))
+  } else {
+    postsByYear.set(fullYear, [p])
+  }
+})
+
+const newestYear = posts[0]?.data.date.getFullYear()
+const oldestYear = posts[posts.length - 1]?.data.date.getFullYear()
+const yearRange = newestYear === oldestYear ? `${newestYear}` : `${oldestYear} — ${newestYear}`
+const metaLine = posts.length === 0 ? 'no recent posts' : `${posts.length} posts · ${yearRange}`
+
+const isoDate = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(
+    2,
+    '0'
+  )}`
+---
+
+<Container title="Writing - Ben Shi" description="Recent posts by Ben Shi.">
+  <div class="writing-index px-4 sm:px-0">
+    <header class="writing-header">
+      <h1 class="writing-title">Writing</h1>
+      <p class="writing-meta">{metaLine}</p>
+    </header>
+
+    {
+      posts.length === 0 ? (
+        <div class="empty-state">
+          <div class="empty-state-icon">🌵</div>
+          <p class="text-theme-muted mb-2">Oops! I haven't written anything recently.</p>
+          <p class="text-theme-muted mb-4">I'm probably busy coding or exploring new ideas!</p>
+        </div>
+      ) : (
+        Array.from(postsByYear).map(([year, yearPosts]) => (
+          <section class="year-group" aria-label={`Posts from ${year}`}>
+            <h2 class="year-label">{year}</h2>
+            <ul class="post-list">
+              {yearPosts.map(p => (
+                <li class="post-row">
+                  <time class="post-date" datetime={isoDate(p.data.date)}>
+                    {p.data.date.toLocaleDateString(undefined, {
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </time>
+                  <a class="post-link" href={`/${p.slug}/`}>
+                    {p.data.title}
+                  </a>
+                  {p.data.minutesRead && (
+                    <span class="post-read">~{p.data.minutesRead} min read</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      )
+    }
+
+    <nav class="index-links" aria-label="More writing">
+      <a href="/archive/">
+        View older posts <span class="arrow" aria-hidden="true">→</span>
+      </a>
+      <a href="/notes/">
+        View my scribbles <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </nav>
+  </div>
+</Container>
+
+<style>
+  .writing-index {
+    --index-mono:
+      ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  }
+
+  .writing-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 0.5rem;
+  }
+
+  .writing-title {
+    margin: 0;
+    font-size: clamp(2rem, 1.6rem + 1.6vw, 3rem);
+  }
+
+  .writing-meta {
+    margin: 0;
+    font-family: var(--index-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 4rem 0;
+  }
+
+  .empty-state-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .year-group {
+    margin-top: 2.75rem;
+  }
+
+  .year-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0 0 0.25rem;
+    font-family: var(--index-mono);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .year-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--color-border);
+  }
+
+  .post-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .post-row {
+    display: flex;
+    align-items: baseline;
+    gap: 1.25rem;
+    padding: 0.8rem 0;
+  }
+
+  .post-date {
+    flex: none;
+    width: 5.75rem;
+    font-family: var(--index-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .post-link {
+    flex: 1 1 auto;
+    min-width: 0;
+    color: var(--color-text);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 5px;
+    transition:
+      color 0.18s ease,
+      text-decoration-color 0.18s ease;
+  }
+
+  .post-link:hover {
+    color: var(--color-accent);
+    text-decoration-color: currentColor;
+  }
+
+  .post-read {
+    flex: none;
+    font-family: var(--index-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .index-links {
+    margin-top: 3rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2.5rem;
+  }
+
+  .index-links a {
+    font-size: 0.95rem;
+  }
+
+  .index-links .arrow {
+    display: inline-block;
+    transition: transform 0.18s ease;
+  }
+
+  .index-links a:hover .arrow {
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 640px) {
+    .post-row {
+      flex-wrap: wrap;
+      gap: 0.15rem 0.75rem;
+      padding: 0.75rem 0;
+    }
+
+    .post-date {
+      width: auto;
+    }
+
+    .post-read {
+      margin-left: auto;
+    }
+
+    .post-link {
+      flex-basis: 100%;
+      order: 3;
+      margin-top: 0.1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .post-link,
+    .index-links .arrow {
+      transition: none;
+    }
+  }
+</style>

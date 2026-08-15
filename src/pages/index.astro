@@ -1,68 +1,90 @@
 ---
-import Container from '../layouts/Container.astro'
-import { getCollection, type CollectionEntry } from 'astro:content'
-
-const twoYearsAgo = new Date()
-twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2)
-
-const posts = (await getCollection('posts'))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .filter(p => !p.data.draft)
-  .filter(p => p.data.date >= twoYearsAgo)
-const postsByYear = new Map<number, CollectionEntry<'posts'>[]>()
-posts.forEach(p => {
-  const fullYear = p.data.date.getFullYear()
-  if (postsByYear.get(fullYear)) {
-    postsByYear.set(fullYear, postsByYear.get(fullYear)!.concat(p))
-  } else {
-    postsByYear.set(fullYear, [p])
-  }
-})
+import Header from '../components/Header.astro'
+import DitherSky from '../components/DitherSky.astro'
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
 ---
 
-<Container title="Ben Shi - Product & Technology">
-  <div class="section-title text-center text-2xl my-2 px-4 sm:px-0">Posts</div>
-  <section class="text-center px-4 sm:px-0">
-    {
-      posts.length === 0 ? (
-        <div class="text-center my-8">
-          <div class="text-lg mb-4">🌵</div>
-          <p class="text-theme-muted mb-2">Oops! I haven't written anything recently.</p>
-          <p class="text-theme-muted mb-4">I'm probably busy coding or exploring new ideas!</p>
-        </div>
-      ) : (
-        Array.from(postsByYear).map(([year, yearPosts]) => {
-          return yearPosts.map((p, index) => {
-            return (
-              <div>
-                {index === 0 && <h3 class="text-xl my-6">{year}</h3>}
-                <div class={'row my-2'}>
-                  <div class={'column'}>
-                    <a href={`/${p.slug}/`}>{p.data.title}</a>
-                    ::{' '}
-                    <strong>
-                      {p.data.date.toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}
-                    </strong>
-                  </div>
-                  <div>
-                    {p.data.minutesRead && (
-                      <span class={'time-to-read'}>~{p.data.minutesRead} min read</span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )
-          })
-        })
-      )
+<!doctype html>
+<html lang="en">
+  <Header title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  <body class="bg-theme text-theme transition-colors duration-300">
+    <DitherSky />
+    <main class="landing">
+      <div class="landing-lockup">
+        <h1 class="landing-name">Ben Shi</h1>
+        <nav class="landing-menu" aria-label="Main navigation">
+          <a href="/about/">about</a>
+          <a href="/writing/">writing</a>
+          <a href="/photos/">photos</a>
+        </nav>
+      </div>
+    </main>
+  </body>
+</html>
+
+<style>
+  .landing {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: flex-end;
+    padding: clamp(1.5rem, 4vw, 3.5rem);
+  }
+
+  .landing-name {
+    margin: 0;
+    font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+    line-height: 1.1;
+  }
+
+  .landing-menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.75rem;
+    margin-top: 1.25rem;
+    font-family:
+      ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .landing-menu a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--color-text-secondary);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 6px;
+    transition:
+      color 0.18s ease,
+      text-decoration-color 0.18s ease;
+  }
+
+  .landing-menu a:hover {
+    color: var(--color-accent);
+    text-decoration-color: currentColor;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .landing-lockup {
+      animation: landing-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
-    <div class="text-sm mt-8 flex flex-col gap-2">
-      <a href="/archive/" class="text-blue-600 hover:text-blue-800 underline">
-        View older posts →
-      </a>
-      <a href="/notes/" class="text-blue-600 hover:text-blue-800 underline">
-        View my scribbles →
-      </a>
-    </div>
-  </section>
-</Container>
+
+    .landing-menu {
+      animation: landing-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+    }
+  }
+
+  @keyframes landing-rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

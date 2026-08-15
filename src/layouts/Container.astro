@@ -4,7 +4,6 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Sidebar from "../components/Sidebar.astro";
 import Content from "../components/Content.astro";
-
 export interface Props {
 	title: string;
 	description?: string;
@@ -59,38 +58,6 @@ const {
 			</div>
 		</div>
 	</div>
-	
-	<!-- Site-wide JSON-LD Schema -->
-	<script type="application/ld+json" set:html={JSON.stringify({
-		"@context": "https://schema.org",
-		"@type": "WebSite",
-		"name": SITE_TITLE,
-		"description": SITE_DESCRIPTION,
-		"url": Astro.site?.toString(),
-		"author": {
-			"@type": "Person",
-			"name": "Ben Shi",
-			"url": Astro.site?.toString(),
-			"sameAs": [
-				"https://github.com/hbish",
-				"https://x.com/hbish",
-				"https://linkedin.com/in/hbish"
-			]
-		},
-		"publisher": {
-			"@type": "Organization",
-			"name": SITE_TITLE,
-			"url": Astro.site?.toString()
-		},
-		"potentialAction": {
-			"@type": "SearchAction",
-			"target": {
-				"@type": "EntryPoint",
-				"urlTemplate": `${Astro.site?.toString()}?q={search_term_string}`
-			},
-			"query-input": "required name=search_term_string"
-		}
-	})}>
-	</script>
+
 </body>
 </html>
