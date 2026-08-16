@@ -47,6 +47,7 @@ const themes = [
     z-index: 70;
   }
 
+  /* Bare glyph, no chrome: the corner reads as empty until intent. */
   .theme-menu-button {
     display: inline-flex;
     align-items: center;
@@ -54,19 +55,10 @@ const themes = [
     width: 40px;
     height: 40px;
     padding: 0;
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
+    background: transparent;
+    border: none;
     border-radius: 50%;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    transition:
-      transform 0.18s ease,
-      box-shadow 0.18s ease;
-  }
-
-  .theme-menu-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
   }
 
   @media (max-width: 640px) {
@@ -83,11 +75,21 @@ const themes = [
   }
 
   .theme-menu-wheel {
-    width: 15px;
-    height: 15px;
+    width: 13px;
+    height: 13px;
     border-radius: 50%;
     border: 1px solid var(--color-border);
     background: conic-gradient(#ffffff 0 25%, #292929 25% 50%, #f2e5bc 50% 75%, #272727 75% 100%);
+    opacity: 0.45;
+    transition:
+      opacity 0.18s ease,
+      transform 0.18s ease;
+  }
+
+  .theme-menu-button:hover .theme-menu-wheel,
+  .theme-menu-button:focus-visible .theme-menu-wheel {
+    opacity: 1;
+    transform: scale(1.12);
   }
 
   .theme-menu-popover {
@@ -97,19 +99,19 @@ const themes = [
     z-index: 60;
     display: flex;
     gap: 2px;
-    padding: 5px;
+    padding: 4px;
     background: var(--color-bg);
     border: 1px solid var(--color-border);
     border-radius: 999px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   }
 
   .theme-menu-item {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     padding: 0;
     background: transparent;
     border: none;
@@ -129,8 +131,8 @@ const themes = [
   }
 
   .theme-menu-swatch {
-    width: 12px;
-    height: 12px;
+    width: 11px;
+    height: 11px;
     flex: none;
     border-radius: 50%;
     border: 1px solid var(--color-border);
@@ -139,7 +141,7 @@ const themes = [
   .theme-menu-item[aria-checked='true'] .theme-menu-swatch {
     box-shadow:
       0 0 0 2px var(--color-bg),
-      0 0 0 3.5px var(--color-accent);
+      0 0 0 3px var(--color-accent);
   }
 </style>
 
