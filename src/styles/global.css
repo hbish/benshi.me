@@ -298,14 +298,16 @@ select:hover {
     line-height: 1.5;
   }
 
+  /* Prose bodies set their own sizes (18px via the typography plugin);
+     headings must stay clearly larger than body text on small screens. */
   h1 {
-    font-size: 1.25rem;
+    font-size: 1.75rem;
   }
   h2 {
-    font-size: 1.125rem;
+    font-size: 1.5rem;
   }
   h3 {
-    font-size: 1rem;
+    font-size: 1.25rem;
   }
 
   /* Media and code blocks span the column (~90% of the viewport) on mobile
@@ -319,6 +321,12 @@ select:hover {
     max-width: 100%;
     margin-left: 0;
     margin-right: 0;
+  }
+
+  /* The waterfall reads heavy on narrow screens; keep it but thinner. */
+  .waterfall {
+    width: 6px;
+    min-width: 6px;
   }
 }
 
