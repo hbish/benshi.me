@@ -60,6 +60,7 @@
     bg: RGB
     ink: RGB
     ink2: RGB
+    ink3: RGB
     star: RGB
     coverage: number
     maxInk: number
@@ -204,6 +205,8 @@
         bg,
         ink,
         ink2: hueCompanion(ink),
+        // The bloom tone: near-white carrying a whisper of the accent.
+        ink3: mix([255, 255, 255], ink, 0.15),
         star: mix(ink, [255, 255, 255], 0.45),
         coverage: 0.68,
         maxInk: 0.55,
@@ -214,6 +217,8 @@
       bg,
       ink,
       ink2: hueCompanion(ink),
+      // On paper, blooms read as full-strength deep companion dots.
+      ink3: mix(hueCompanion(ink), [0, 0, 0], 0.12),
       star: mix(text, ink, 0.3),
       coverage: 0.56,
       maxInk: 0.38,
@@ -240,6 +245,7 @@
     uniform vec3 u_bg;
     uniform vec3 u_ink;
     uniform vec3 u_ink2;
+    uniform vec3 u_ink3;
     uniform vec3 u_star;
     uniform float u_coverage;
     uniform float u_maxInk;
@@ -291,6 +297,32 @@
       } else if (cOuter > th) {
         col = u_bg + (u_ink2 - u_bg) * min(u_maxInk, 0.3 + cOuter * 1.1) * 0.8;
       }
+      // Ephemeral blooming stars: a handful of slots, each appearing at a
+      // random spot in the sky, swelling from a pixel into a small dithered
+      // disc, then dissolving.
+      float bloom = 0.0;
+      for (int i = 0; i < 7; i++) {
+        float fi = float(i);
+        float period = 9.0 + h21(vec2(fi, 3.7)) * 7.0;
+        float phase = fi * 0.618;
+        float life = fract(u_time / period + phase);
+        float cycle = floor(u_time / period + phase);
+        vec2 seed = vec2(fi * 17.13 + cycle * 7.31, fi * 3.77 + cycle * 11.7);
+        vec2 center = vec2(h21(seed), h21(seed + vec2(5.5, 9.2)))
+          * vec2(u_res.x, u_res.y * 0.8);
+        vec2 sp = px - center;
+        float dist2 = dot(sp, sp);
+        float radius = 1.5 + 3.5 * life;
+        if (dist2 < radius * radius) {
+          float cov = 1.0 - sqrt(dist2) / radius;
+          float alpha = pow(sin(3.14159 * life), 1.5);
+          bloom = max(bloom, cov * alpha * 0.9);
+        }
+      }
+      if (bloom > th) {
+        col = u_bg + (u_ink3 - u_bg) * min(1.0, 0.4 + bloom);
+      }
+
       // Sparse deterministic starfield with slow twinkle.
       vec2 cell = floor(px / 22.0);
       float r1 = h21(cell);
@@ -348,7 +380,7 @@
       canvas.height = H
       const image = ctx.createImageData(W, H)
       const d = image.data
-      const { bg, ink, ink2, star, coverage, maxInk } = palette
+      const { bg, ink, ink2, ink3, star, coverage, maxInk } = palette
       const cx = W * (0.82 + 0.02 * Math.sin(elapsed * 0.05))
       const cy = H * 1.06
       const R = H * 0.95
@@ -431,6 +463,32 @@
           d[i + 2] += (color[2] - d[i + 2]) * brightness
         }
       }
+      // Ephemeral blooming stars (third tone), matching the shader pass.
+      for (let slot = 0; slot < 7; slot++) {
+        const period = 9 + hash(slot * 71 + 13) * 7
+        const phase = slot * 0.618
+        const life = (((elapsed / period + phase) % 1) + 1) % 1
+        const cycle = Math.floor(elapsed / period + phase)
+        const cx = Math.floor(hash(slot * 1713 + cycle * 731) * W)
+        const cy = Math.floor(hash(slot * 377 + cycle * 1170) * H * 0.8)
+        const radius = 1.5 + 3.5 * life
+        const alpha = Math.sin(Math.PI * life) ** 1.5
+        for (let y = Math.floor(cy - radius); y <= Math.ceil(cy + radius); y++) {
+          if (y < 0 || y >= H) continue
+          for (let x = Math.floor(cx - radius); x <= Math.ceil(cx + radius); x++) {
+            if (x < 0 || x >= W) continue
+            const dist = Math.hypot(x - cx, y - cy)
+            if (dist > radius) continue
+            const cov = (1 - dist / radius) * alpha * 0.9
+            if (cov <= bayer[(y & 7) * 8 + (x & 7)]) continue
+            const k = Math.min(1, 0.4 + cov)
+            const i = (y * W + x) * 4
+            d[i] = bg[0] + (ink3[0] - bg[0]) * k
+            d[i + 1] = bg[1] + (ink3[1] - bg[1]) * k
+            d[i + 2] = bg[2] + (ink3[2] - bg[2]) * k
+          }
+        }
+      }
       ctx.putImageData(image, 0, 0)
     }
 
@@ -503,6 +561,7 @@
         bg: u('u_bg'),
         ink: u('u_ink'),
         ink2: u('u_ink2'),
+        ink3: u('u_ink3'),
         star: u('u_star'),
         coverage: u('u_coverage'),
         maxInk: u('u_maxInk'),
@@ -529,6 +588,12 @@
           palette.ink2[2] / 255
         )
         gl.uniform3f(
+          uniforms.ink3,
+          palette.ink3[0] / 255,
+          palette.ink3[1] / 255,
+          palette.ink3[2] / 255
+        )
+        gl.uniform3f(
           uniforms.star,
           palette.star[0] / 255,
           palette.star[1] / 255,
@@ -546,7 +611,12 @@
 
     // Tiny diagnostic hook (mirrors stencil.so's own): reports the active
     // renderer and measured frames per second.
-    const diagnostics = { mode: renderer ? 'webgl' : 'cpu-static', fps: 0 }
+    const diagnostics = {
+      mode: renderer ? 'webgl' : 'cpu-static',
+      fps: 0,
+      time: elapsed,
+      size: () => [canvas.width, canvas.height],
+    }
     ;(window as unknown as Record<string, unknown>).__dithersky = diagnostics
     let fpsFrames = 0
     let fpsAt = performance.now()
@@ -578,6 +648,7 @@
       last = now
       draw(elapsed)
       fpsFrames++
+      diagnostics.time = elapsed
       if (now - fpsAt >= 1000) {
         diagnostics.fps = Math.round((fpsFrames * 1000) / (now - fpsAt))
         fpsFrames = 0
