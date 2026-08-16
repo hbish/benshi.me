@@ -247,6 +247,11 @@ textarea:focus {
   scroll-behavior: smooth;
 }
 
+/* Fragment targets must clear the sticky nav (~66-77px tall). */
+html {
+  scroll-padding-top: 5.5rem;
+}
+
 /* Enhanced Image Styling */
 img {
   border-radius: 8px;
@@ -389,7 +394,7 @@ select:hover {
 /* Profile picture border styling */
 .profile-pic-border {
   position: relative;
-  padding: 0.3rem;
+  padding: 0.25rem;
   background: linear-gradient(
     140deg,
     var(--color-accent) 0%,
@@ -460,7 +465,7 @@ select:hover {
   display: flex;
   align-items: baseline;
   gap: 1.25rem;
-  padding: 0.8rem 0;
+  padding: 0.75rem 0;
 }
 
 .post-date {
@@ -513,7 +518,7 @@ select:hover {
 @media (max-width: 640px) {
   /* Stacked rows read better with a hairline between them. */
   .post-list > li {
-    padding-bottom: 0.35rem;
+    padding-bottom: 0.25rem;
     border-bottom: 1px solid var(--color-border);
   }
 
@@ -553,16 +558,20 @@ select:hover {
   }
 }
 
-/* Webmention Styles */
-.webmentions {
-  margin-top: 2rem;
+/* Shared empty-state treatment for ledger and photo pages */
+.empty-state {
+  text-align: center;
+  padding: 4rem 0;
 }
 
+/* Webmention Styles — vertical spacing comes from the page (mt-12 on the
+   section), not from here, so Tailwind utilities are never silently
+   outranked by these unlayered rules. */
 .webmentions-container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1rem;
+  padding: 0;
 }
 
 .webmentions-avatars {
@@ -607,7 +616,7 @@ select:hover {
 
 .webmention-fallback {
   display: inline-block;
-  padding: 0.25rem 0.5rem;
+  padding: 0.375rem 0.5rem;
   background: var(--color-bg);
   border-radius: 15px;
   font-size: 0.75rem;
@@ -623,8 +632,8 @@ select:hover {
 }
 
 .webmention-avatar {
-  width: 32px !important;
-  height: 32px !important;
+  width: 40px !important;
+  height: 40px !important;
   border-radius: 50% !important;
   object-fit: cover !important;
   flex-shrink: 0 !important;
@@ -727,8 +736,8 @@ select:hover {
   }
 
   .webmention-avatar {
-    width: 64px !important;
-    height: 64px !important;
+    width: 48px !important;
+    height: 48px !important;
   }
 
   .webmention-action-emoji {
