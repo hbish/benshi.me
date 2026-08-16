@@ -518,10 +518,20 @@ select:hover {
 }
 
 @media (max-width: 640px) {
+  /* Stacked rows read better with a hairline between them. */
+  .post-list > li {
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .post-list > li:last-child {
+    border-bottom: none;
+  }
+
   .post-row {
     flex-wrap: wrap;
     gap: 0.15rem 0.75rem;
-    padding: 0.75rem 0;
+    padding: 0.75rem 0 0.25rem;
   }
 
   .post-date {
@@ -540,6 +550,7 @@ select:hover {
 
   .post-desc {
     margin-left: 0;
+    margin-bottom: 0.25rem;
   }
 }
 

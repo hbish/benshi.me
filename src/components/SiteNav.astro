@@ -37,17 +37,22 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
 </header>
 
 <style>
-  /* Floats above the content while scrolling; the shadow appears only once
-     the bar has left its resting position, so there is no underline at rest. */
+  /* Floats above the content while scrolling; the hairline and shadow appear
+     only once the bar has left its resting position, so there is no underline
+     at rest. The hairline also guarantees separation on dark themes. */
   .site-nav {
     position: sticky;
     top: 0;
     z-index: 50;
     background: var(--color-bg);
-    transition: box-shadow 0.25s ease;
+    border-bottom: 1px solid transparent;
+    transition:
+      box-shadow 0.25s ease,
+      border-color 0.25s ease;
   }
 
   .site-nav.is-scrolled {
+    border-bottom-color: var(--color-border);
     box-shadow: 0 6px 18px -8px rgba(0, 0, 0, 0.18);
   }
 
@@ -115,6 +120,12 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
   .site-nav-menu a:hover,
   .site-nav-menu a[aria-current='page'] {
     color: var(--color-accent);
+  }
+
+  @media (max-width: 640px) {
+    .site-nav-menu a {
+      min-height: 44px;
+    }
   }
 </style>
 
