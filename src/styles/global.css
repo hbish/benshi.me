@@ -391,6 +391,14 @@ select:hover {
   );
 }
 
+/* The gradient frame reads heavy on small screens. Placed after the base
+   rule so the override wins the cascade at equal specificity. */
+@media (max-width: 768px) {
+  .prose a img {
+    border-width: 0.125rem;
+  }
+}
+
 /* Profile picture border styling */
 .profile-pic-border {
   position: relative;
