@@ -13,6 +13,7 @@ export interface Props {
 	type?: 'article' | 'website';
 	url?: string;
 	date?: Date;
+	updated?: Date;
 	author?: string;
 	tags?: string[];
 }
@@ -24,6 +25,7 @@ const {
 	type,
 	url,
 	date,
+	updated,
 	author,
 	tags
 } = Astro.props;
@@ -38,13 +40,14 @@ const {
 	type={type}
 	url={url}
 	date={date}
+	updated={updated}
 	author={author}
 	tags={tags}
 />
 <body class="bg-theme text-theme transition-colors duration-300">
 	<div class="waterfall"></div>
 	<SiteNav />
-	<main class="mx-auto w-full max-w-[46rem] px-4 sm:px-6 py-16 lg:py-20">
+	<main class="mx-auto w-full max-w-[38rem] px-4 sm:px-6 py-16 lg:py-20">
 		<Content>
 			<slot />
 		</Content>

@@ -9,8 +9,8 @@ import { extractFirstImage } from '../utils/extractFirstImage';
 import { Tag } from '@lucide/astro';
 
 export async function getStaticPaths() {
-    const posts = await getCollection('posts');
-    const notes = await getCollection('notes');
+    const posts = (await getCollection('posts')).filter(post => !post.data.draft);
+    const notes = (await getCollection('notes')).filter(note => !note.data.draft);
 
     const postPaths = posts.map((post) => ({
         params: { slug: post.slug },
@@ -81,9 +81,10 @@ const currentUrl = new URL(pathname, Astro.site);
     title={content.data.title}
     description={description}
     image={socialImage}
-    type={type === 'post' ? 'article' : 'website'}
+    type="article"
     url={currentUrl.toString()}
     date={content.data.date}
+    updated={content.data.updated}
     author={content.data.author}
     tags={content.data.tags}
 >
@@ -147,20 +148,28 @@ const currentUrl = new URL(pathname, Astro.site);
         "@context": "https://schema.org",
         "@type": type === 'post' ? "BlogPosting" : "Article",
         "headline": content.data.title,
-        "description": content.data.description || content.data.title,
+        "description": description || content.data.title,
+        "image": socialImage ? new URL(socialImage, Astro.site).toString() : undefined,
+        "inLanguage": "en",
         "author": {
             "@type": "Person",
-            "name": content.data.author
+            "name": content.data.author,
+            "url": new URL('about/', Astro.site).toString()
         },
         "datePublished": formatISODate(content.data.date),
-        "dateModified": formatISODate(content.data.date),
+        "dateModified": formatISODate(content.data.updated || content.data.date),
         "url": currentUrl.toString(),
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": currentUrl.toString()
         },
         "publisher": {
-            "@type": "Organization",
+            "@type": "Person",
+            "name": SITE_TITLE,
+            "url": new URL('about/', Astro.site).toString()
+        },
+        "isPartOf": {
+            "@type": "WebSite",
             "name": SITE_TITLE,
             "url": Astro.site?.toString()
         },

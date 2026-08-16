@@ -3,8 +3,8 @@ import Container from '../../layouts/Container.astro'
 import { type CollectionEntry, getCollection } from 'astro:content'
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts')
-  const notes = await getCollection('notes')
+  const posts = await getCollection('posts', ({ data }) => !data.draft)
+  const notes = await getCollection('notes', ({ data }) => !data.draft)
   const allContent = [...posts, ...notes]
 
   // Get all unique tags
@@ -41,7 +41,7 @@ const isoDate = (d: Date) =>
   )}`
 ---
 
-<Container title={`Tag: ${tag} - Ben Shi`}>
+<Container title={`Tag: ${tag} - Ben Shi`} description={`Posts tagged “${tag}” on hbish.com.`}>
   <div>
     <header class="page-header">
       <h1 class="page-header-title">Posts tagged “{tag}”</h1>

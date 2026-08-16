@@ -1,9 +1,30 @@
 ---
 import { getEntry } from 'astro:content'
 import Page from '../layouts/Page.astro'
+import { SITE_DESCRIPTION } from '../consts'
 
 const page = await getEntry('pages', 'about')
 if (!page) throw new Error('About page not found')
+
+const profileSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  mainEntity: {
+    '@type': 'Person',
+    name: 'Ben Shi',
+    url: 'https://hbish.com/about/',
+    jobTitle: 'Engineering Leader',
+    description: SITE_DESCRIPTION,
+    sameAs: [
+      'https://github.com/hbish',
+      'https://x.com/hbish',
+      'https://au.linkedin.com/in/benshi',
+      'https://keybase.io/hbish',
+    ],
+  },
+})
 ---
 
 <Page page={page} />
+
+<script type="application/ld+json" set:html={profileSchema} />

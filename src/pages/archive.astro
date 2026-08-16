@@ -2,7 +2,7 @@
 import Container from '../layouts/Container.astro'
 import { getCollection, type CollectionEntry } from 'astro:content'
 
-const posts = (await getCollection('posts'))
+const posts = (await getCollection('posts', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .filter(p => !p.data.draft)
 
@@ -28,7 +28,10 @@ const isoDate = (d: Date) =>
   )}`
 ---
 
-<Container title="Archive - Ben Shi">
+<Container
+  title="Archive - Ben Shi"
+  description="Every post Ben Shi has published on hbish.com, newest first."
+>
   <div>
     <header class="page-header">
       <h1 class="page-header-title">Archive</h1>
