@@ -307,6 +307,19 @@ select:hover {
   h3 {
     font-size: 1rem;
   }
+
+  /* Media and code blocks span the column (~90% of the viewport) on mobile
+     instead of the desktop 80% inset. */
+  .prose img,
+  .prose video,
+  .prose iframe,
+  .prose figure img,
+  pre,
+  .astro-code {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 /* Subtle Loading Animation */
