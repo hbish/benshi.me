@@ -1,68 +1,185 @@
 ---
-import Container from '../layouts/Container.astro'
-import { getCollection, type CollectionEntry } from 'astro:content'
+import Header from '../components/Header.astro'
+import DitherSky from '../components/DitherSky.astro'
+import ThemeToggle from '../components/ThemeToggle.astro'
+import { X, Github, Key, Mail, Linkedin } from '@lucide/astro'
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
 
-const twoYearsAgo = new Date()
-twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2)
+const socials = [
+  { href: 'https://x.com/hbish', label: 'follow ben on x', Icon: X },
+  {
+    href: 'https://au.linkedin.com/in/benshi',
+    label: 'connect with ben on linkedin',
+    Icon: Linkedin,
+  },
+  { href: 'https://github.com/hbish', label: 'follow ben on github', Icon: Github },
+  { href: 'mailto:ben@hbish.com', label: 'email ben', Icon: Mail },
+  { href: 'https://keybase.io/hbish', label: 'auth ben on keybase', Icon: Key },
+]
 
-const posts = (await getCollection('posts'))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .filter(p => !p.data.draft)
-  .filter(p => p.data.date >= twoYearsAgo)
-const postsByYear = new Map<number, CollectionEntry<'posts'>[]>()
-posts.forEach(p => {
-  const fullYear = p.data.date.getFullYear()
-  if (postsByYear.get(fullYear)) {
-    postsByYear.set(fullYear, postsByYear.get(fullYear)!.concat(p))
-  } else {
-    postsByYear.set(fullYear, [p])
-  }
-})
+const menu = [
+  { href: '/about/', label: 'about' },
+  { href: '/writing/', label: 'writing' },
+  { href: '/photos/', label: 'photos' },
+]
 ---
 
-<Container title="Ben Shi - Product & Technology">
-  <div class="section-title text-center text-2xl my-2 px-4 sm:px-0">Posts</div>
-  <section class="text-center px-4 sm:px-0">
-    {
-      posts.length === 0 ? (
-        <div class="text-center my-8">
-          <div class="text-lg mb-4">🌵</div>
-          <p class="text-theme-muted mb-2">Oops! I haven't written anything recently.</p>
-          <p class="text-theme-muted mb-4">I'm probably busy coding or exploring new ideas!</p>
+<!doctype html>
+<html lang="en">
+  <Header title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  <body class="bg-theme text-theme transition-colors duration-300">
+    <DitherSky />
+    <ThemeToggle />
+    <main class="landing">
+      <div class="landing-lockup">
+        <h1 class="landing-name">
+          Ben Shi
+          <a
+            href="/now/"
+            class="landing-sparkle"
+            aria-label="What I'm doing now"
+            title="What I'm doing now"
+          >
+            ✨
+          </a>
+        </h1>
+        <p class="landing-headline">Pragmatic notes on product, engineering, and learning</p>
+        <nav class="landing-menu" aria-label="Main navigation">
+          {menu.map(item => <a href={item.href}>{item.label}</a>)}
+        </nav>
+        <div class="landing-socials">
+          {
+            socials.map(({ href, label, Icon }) => (
+              <a href={href} aria-label={label} title={label} rel="me">
+                <Icon />
+              </a>
+            ))
+          }
         </div>
-      ) : (
-        Array.from(postsByYear).map(([year, yearPosts]) => {
-          return yearPosts.map((p, index) => {
-            return (
-              <div>
-                {index === 0 && <h3 class="text-xl my-6">{year}</h3>}
-                <div class={'row my-2'}>
-                  <div class={'column'}>
-                    <a href={`/${p.slug}/`}>{p.data.title}</a>
-                    ::{' '}
-                    <strong>
-                      {p.data.date.toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}
-                    </strong>
-                  </div>
-                  <div>
-                    {p.data.minutesRead && (
-                      <span class={'time-to-read'}>~{p.data.minutesRead} min read</span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )
-          })
-        })
-      )
+      </div>
+    </main>
+  </body>
+</html>
+
+<style>
+  .landing {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: flex-end;
+    padding: clamp(1.5rem, 4vw, 3.5rem);
+  }
+
+  .landing-name {
+    margin: 0;
+    font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+    line-height: 1.1;
+  }
+
+  .landing-sparkle {
+    font-size: 0.45em;
+    vertical-align: 0.65em;
+    margin-left: 0.3rem;
+    text-decoration: none;
+    transition: transform 0.18s ease;
+  }
+
+  .landing-sparkle:hover {
+    transform: rotate(12deg) scale(1.2);
+  }
+
+  .landing-headline {
+    margin: 0.9rem 0 0;
+    max-width: 38ch;
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+    font-style: italic;
+    line-height: 1.45;
+    color: var(--color-text-secondary);
+  }
+
+  .landing-menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.75rem;
+    margin-top: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .landing-menu a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color 0.18s ease;
+  }
+
+  .landing-menu a:hover {
+    color: var(--color-accent);
+  }
+
+  .landing-socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 1.25rem;
+  }
+
+  .landing-socials a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: var(--color-text-secondary);
+    border-radius: 8px;
+    transition:
+      color 0.18s ease,
+      transform 0.18s ease;
+  }
+
+  .landing-socials a:hover {
+    color: var(--color-accent);
+    transform: translateY(-2px);
+  }
+
+  .landing-socials :global(svg) {
+    width: 17px;
+    height: 17px;
+  }
+
+  @media (max-width: 640px) {
+    .landing-socials a {
+      width: 44px;
+      height: 44px;
     }
-    <div class="text-sm mt-8 flex flex-col gap-2">
-      <a href="/archive/" class="text-blue-600 hover:text-blue-800 underline">
-        View older posts →
-      </a>
-      <a href="/notes/" class="text-blue-600 hover:text-blue-800 underline">
-        View my scribbles →
-      </a>
-    </div>
-  </section>
-</Container>
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .landing-lockup {
+      animation: landing-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .landing-menu {
+      animation: landing-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+    }
+
+    .landing-socials {
+      animation: landing-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+    }
+  }
+
+  @keyframes landing-rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

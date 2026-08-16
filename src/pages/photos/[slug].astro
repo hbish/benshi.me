@@ -40,22 +40,27 @@ const CDN_BASE = 'https://cdn.hbish.com'
 </style>
 
 <Container title={`${collection.data.title} - Photos - Ben Shi`}>
-  <div class="section-title text-center text-2xl my-2 px-4 sm:px-0">{collection.data.title}</div>
+  <div>
+    <header class="page-header">
+      <h1 class="page-header-title">{collection.data.title}</h1>
+      <p class="page-header-meta">{photos.length} photos</p>
+    </header>
 
-  {
-    collection.data.description && (
-      <div class="text-center text-gray-600 mb-4 px-4 sm:px-0">{collection.data.description}</div>
-    )
-  }
+    {
+      collection.data.description && (
+        <div class="text-theme-muted mt-6">{collection.data.description}</div>
+      )
+    }
+  </div>
 
-  <section class="px-4 sm:px-0">
+  <section class="mt-6">
     {
       photos.length === 0 ? (
-        <div class="text-center text-gray-500 my-8">
+        <div class="text-center text-theme-muted my-8">
           <p>No photos in this album yet.</p>
         </div>
       ) : (
-        <div class="max-w-[60%] mx-auto">
+        <div>
           <div class="grid grid-cols-1 gap-4">
             {photos.map(photo => {
               const imageUrl = `${CDN_BASE}/${photo.data.id}`

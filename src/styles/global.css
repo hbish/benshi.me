@@ -11,6 +11,9 @@
 
 /* Theme Variables */
 :root {
+  --font-mono:
+    ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono',
+    monospace;
   /* Default Light Theme - matching hbish.com */
   --color-bg: #fff;
   --color-bg-secondary: #f4f5f6;
@@ -175,7 +178,8 @@ a:hover {
   --tw-prose-td-borders: var(--color-border);
 }
 
-/* Waterfall element */
+/* Waterfall element: runs the full viewport height, floating above the
+   sticky header so the bar never cuts it off at the top. */
 .waterfall {
   background-image: linear-gradient(
     to bottom,
@@ -189,7 +193,7 @@ a:hover {
   position: fixed;
   top: 0;
   width: 10px;
-  z-index: -1;
+  z-index: 55;
 }
 
 /* Enhanced Typography */
@@ -288,160 +292,41 @@ select:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Improved Mobile Responsiveness */
-@media (max-width: 1024px) {
-  .container {
-    padding: 1rem;
-  }
-
-  /* Force mobile layout for main containers only */
-  .container.flex.flex-col,
-  main.flex.flex-col,
-  nav.flex.flex-col {
-    flex-direction: column !important;
-  }
-
-  /* Full width on mobile */
-  .w-full {
-    margin: 0 0 2rem 0 !important;
-  }
-}
-
-/* Mobile Navigation Enhancements */
-@media (max-width: 1024px) {
-  /* Mobile navigation toggle button */
-  #mobile-nav-toggle {
-    min-height: 44px;
-    font-size: 1rem;
-    font-weight: 500;
-  }
-
-  /* Mobile navigation menu */
-  #mobile-nav-menu {
-    animation: slideDown 0.2s ease-out;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-
-  #mobile-nav-menu.hidden {
-    animation: slideUp 0.2s ease-out;
-  }
-
-  /* Ensure adequate touch targets for mobile navigation */
-  #mobile-nav-menu a {
-    min-height: 44px;
-    font-size: 1.1rem;
-    font-weight: 500;
-    text-decoration: none;
-    position: relative;
-  }
-
-  /* Mobile social icons in hamburger menu */
-  #mobile-nav-menu .social a {
-    min-height: 44px;
-    min-width: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-  }
-
-  #mobile-nav-menu .social a:hover {
-    background-color: var(--color-bg-secondary);
-    transform: translateY(-1px);
-  }
-
-  /* Active page indicator */
-  #mobile-nav-menu a[aria-current='page'],
-  #mobile-nav-menu a.active {
-    background-color: var(--color-accent);
-    color: var(--color-bg);
-  }
-
-  /* Improved hover states for mobile navigation links */
-  #mobile-nav-menu .space-y-2 a:hover {
-    background-color: var(--color-accent);
-    color: var(--color-bg);
-  }
-
-  /* Theme toggle in mobile menu */
-  #mobile-nav-menu .theme-section select {
-    min-height: 44px;
-    font-size: 1rem;
-    padding: 12px;
-    min-width: 120px;
-  }
-}
-
-/* Slide animations for mobile menu */
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    max-height: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    max-height: 500px;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 1;
-    max-height: 500px;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    max-height: 0;
-    transform: translateY(-10px);
-  }
-}
-
-/* Enhanced touch targets for all interactive elements */
-@media (max-width: 1024px) {
-  /* Social icons touch targets */
-  .social a {
-    min-height: 44px;
-    min-width: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-  }
-
-  /* Theme toggle touch target */
-  .theme-section select {
-    min-height: 44px;
-    font-size: 1rem;
-    padding: 12px;
-  }
-
-  /* Ensure profile image is large enough for touch */
-  .h-card a:first-child {
-    min-height: 44px;
-    min-width: 44px;
-  }
-}
-
 @media (max-width: 768px) {
   body {
     font-size: 0.875rem;
     line-height: 1.5;
   }
 
+  /* Prose bodies set their own sizes (18px via the typography plugin);
+     headings must stay clearly larger than body text on small screens. */
   h1 {
-    font-size: 1.25rem;
+    font-size: 1.75rem;
   }
   h2 {
-    font-size: 1.125rem;
+    font-size: 1.5rem;
   }
   h3 {
-    font-size: 1rem;
+    font-size: 1.25rem;
+  }
+
+  /* Media and code blocks span the column (~90% of the viewport) on mobile
+     instead of the desktop 80% inset. */
+  .prose img,
+  .prose video,
+  .prose iframe,
+  .prose figure img,
+  pre,
+  .astro-code {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /* The waterfall reads heavy on narrow screens; keep it but thinner. */
+  .waterfall {
+    width: 6px;
+    min-width: 6px;
   }
 }
 
@@ -459,44 +344,6 @@ select:hover {
 
 .content > * {
   animation: fadeIn 0.5s ease-out;
-}
-
-/* Improved Sidebar Styling */
-.social a {
-  transition: all 0.2s ease;
-}
-
-.social a:hover {
-  transform: translateY(-2px);
-  opacity: 0.8;
-}
-
-/* Social icons should inherit text color for theme compatibility */
-.social svg {
-  stroke: var(--color-text);
-  margin: 0 0 0 0.8rem;
-  transition: stroke 0.3s ease;
-}
-
-/* Ensure SVG icons are white in dark themes */
-.dark .social svg,
-.gruv-dark .social svg {
-  stroke: #ffffff;
-}
-
-/* Enhanced Theme Toggle Styling */
-.theme-section select {
-  background-color: var(--color-bg-secondary);
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
-  padding: 0.5rem;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-}
-
-.theme-section select:hover {
-  background-color: var(--color-bg);
-  border-color: var(--color-accent);
 }
 
 /* Better spacing and rhythm */
@@ -531,17 +378,6 @@ select:hover {
   margin-left: auto;
   margin-right: auto;
   max-width: 80%;
-}
-
-/* Image border styling like hbish.com */
-.prose a img {
-  border: 0.3rem solid;
-  border-image-slice: 60 30;
-  border-image-source: linear-gradient(
-    140deg,
-    var(--color-accent) 0%,
-    var(--color-bg) 80%
-  );
 }
 
 /* Profile picture border styling */
@@ -579,47 +415,159 @@ select:hover {
   font-weight: 600;
 }
 
-/* Section title with gradient underline */
-.section-title {
-  position: relative;
-  padding-bottom: 1rem;
+/* Standard page header + ledger list, shared across content pages */
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 0.5rem;
 }
 
-.section-title::after {
+.page-header-title {
+  margin: 0;
+  font-size: clamp(2rem, 1.6rem + 1.6vw, 3rem);
+}
+
+.page-header-meta {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.year-group {
+  margin-top: 2.75rem;
+}
+
+.year-label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.year-label::after {
   content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 3px;
-  background: linear-gradient(
-    90deg,
-    var(--color-accent) 0%,
-    var(--color-bg) 100%
-  );
-  border-radius: 2px;
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
 }
 
-/* Page title with gradient underline */
-.page-title {
-  position: relative;
-  padding-bottom: 1rem;
+.post-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.page-title::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 60px;
-  height: 3px;
-  background: linear-gradient(
-    90deg,
-    var(--color-accent) 0%,
-    var(--color-bg) 100%
-  );
-  border-radius: 2px;
+.post-row {
+  display: flex;
+  align-items: baseline;
+  gap: 1.25rem;
+  padding: 0.8rem 0;
+}
+
+.post-date {
+  flex: none;
+  width: 5.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.post-link {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--color-text);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 5px;
+  transition:
+    color 0.18s ease,
+    text-decoration-color 0.18s ease;
+}
+
+.post-link:hover {
+  color: var(--color-accent);
+  text-decoration-color: currentColor;
+}
+
+.post-kind {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.post-desc {
+  margin: -0.25rem 0 0.25rem 7rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.post-read {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+  /* Stacked rows read better with a hairline between them. */
+  .post-list > li {
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .post-list > li:last-child {
+    border-bottom: none;
+  }
+
+  .post-row {
+    flex-wrap: wrap;
+    gap: 0.15rem 0.75rem;
+    padding: 0.75rem 0 0.25rem;
+  }
+
+  .post-date {
+    width: auto;
+  }
+
+  .post-read {
+    margin-left: auto;
+  }
+
+  .post-link {
+    flex-basis: 100%;
+    order: 3;
+    margin-top: 0.1rem;
+  }
+
+  .post-desc {
+    margin-left: 0;
+    margin-bottom: 0.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-link {
+    transition: none;
+  }
 }
 
 /* Webmention Styles */

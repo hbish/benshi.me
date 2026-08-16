@@ -2,10 +2,13 @@
 import Container from '../layouts/Container.astro'
 import { getCollection, type CollectionEntry } from 'astro:content'
 
+const twoYearsAgo = new Date()
+twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2)
+
 const posts = (await getCollection('posts'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .filter(p => !p.data.draft)
-
+  .filter(p => p.data.date >= twoYearsAgo)
 const postsByYear = new Map<number, CollectionEntry<'posts'>[]>()
 posts.forEach(p => {
   const fullYear = p.data.date.getFullYear()
@@ -19,7 +22,7 @@ posts.forEach(p => {
 const newestYear = posts[0]?.data.date.getFullYear()
 const oldestYear = posts[posts.length - 1]?.data.date.getFullYear()
 const yearRange = newestYear === oldestYear ? `${newestYear}` : `${oldestYear} — ${newestYear}`
-const metaLine = posts.length === 0 ? 'no posts' : `${posts.length} posts · ${yearRange}`
+const metaLine = posts.length === 0 ? 'no recent posts' : `${posts.length} posts · ${yearRange}`
 
 const isoDate = (d: Date) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(
@@ -28,16 +31,20 @@ const isoDate = (d: Date) =>
   )}`
 ---
 
-<Container title="Archive - Ben Shi">
-  <div>
+<Container title="Writing - Ben Shi" description="Recent posts by Ben Shi.">
+  <div class="writing-index">
     <header class="page-header">
-      <h1 class="page-header-title">Archive</h1>
+      <h1 class="page-header-title">Writing</h1>
       <p class="page-header-meta">{metaLine}</p>
     </header>
 
     {
       posts.length === 0 ? (
-        <div class="empty-state text-theme-muted">No archived posts found.</div>
+        <div class="empty-state">
+          <div class="empty-state-icon">🌵</div>
+          <p class="text-theme-muted mb-2">Oops! I haven't written anything recently.</p>
+          <p class="text-theme-muted mb-4">I'm probably busy coding or exploring new ideas!</p>
+        </div>
       ) : (
         Array.from(postsByYear).map(([year, yearPosts]) => (
           <section class="year-group" aria-label={`Posts from ${year}`}>
@@ -59,7 +66,6 @@ const isoDate = (d: Date) =>
                       <span class="post-read">~{p.data.minutesRead} min read</span>
                     )}
                   </div>
-                  {p.data.description && <p class="post-desc">{p.data.description}</p>}
                 </li>
               ))}
             </ul>
@@ -67,6 +73,15 @@ const isoDate = (d: Date) =>
         ))
       )
     }
+
+    <nav class="index-links" aria-label="More writing">
+      <a href="/archive/">
+        View older posts <span class="arrow" aria-hidden="true">→</span>
+      </a>
+      <a href="/notes/">
+        View my scribbles <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </nav>
   </div>
 </Container>
 
@@ -74,5 +89,36 @@ const isoDate = (d: Date) =>
   .empty-state {
     text-align: center;
     padding: 4rem 0;
+  }
+
+  .empty-state-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .index-links {
+    margin-top: 3rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2.5rem;
+  }
+
+  .index-links a {
+    font-size: 0.95rem;
+  }
+
+  .index-links .arrow {
+    display: inline-block;
+    transition: transform 0.18s ease;
+  }
+
+  .index-links a:hover .arrow {
+    transform: translateX(3px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .index-links .arrow {
+      transition: none;
+    }
   }
 </style>

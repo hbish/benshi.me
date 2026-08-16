@@ -2,9 +2,9 @@
 import Container from '../layouts/Container.astro'
 import { getCollection, type CollectionEntry } from 'astro:content'
 
-const notes = (await getCollection('notes')).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-)
+const notes = (await getCollection('notes'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .filter(n => !n.data.draft)
 
 const notesByYear = new Map<number, CollectionEntry<'notes'>[]>()
 notes.forEach(note => {
@@ -15,38 +15,91 @@ notes.forEach(note => {
     notesByYear.set(fullYear, [note])
   }
 })
+
+const newestYear = notes[0]?.data.date.getFullYear()
+const oldestYear = notes[notes.length - 1]?.data.date.getFullYear()
+const yearRange = newestYear === oldestYear ? `${newestYear}` : `${oldestYear} — ${newestYear}`
+const metaLine = notes.length === 0 ? 'no scribbles' : `${notes.length} scribbles · ${yearRange}`
+
+const isoDate = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(
+    2,
+    '0'
+  )}`
 ---
 
 <Container title="Notes - Ben Shi">
-  <div class="section-title text-center text-2xl my-2 px-4 sm:px-0">Notes</div>
-  <section class="text-center px-4 sm:px-0">
+  <div>
+    <header class="page-header">
+      <h1 class="page-header-title">Notes</h1>
+      <p class="page-header-meta">{metaLine}</p>
+    </header>
+
     {
-      Array.from(notesByYear).map(([year, yearNotes]) => {
-        return yearNotes.map((note, index) => {
-          return (
-            <div>
-              {index === 0 && <h3 class="text-xl my-6">{year}</h3>}
-              <div class={'row my-2'}>
-                <div class={'column'}>
-                  <a href={`/notes/${note.slug}/`}>{note.data.title}</a>
-                  ::{' '}
-                  <strong>
-                    {note.data.date.toLocaleDateString(undefined, {
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                  </strong>
-                </div>
-                <div>
-                  {note.data.minutesRead && (
-                    <span class={'time-to-read'}>~{note.data.minutesRead} min read</span>
-                  )}
-                </div>
-              </div>
-            </div>
-          )
-        })
-      })
+      notes.length === 0 ? (
+        <div class="empty-state text-theme-muted">No scribbles yet.</div>
+      ) : (
+        Array.from(notesByYear).map(([year, yearNotes]) => (
+          <section class="year-group" aria-label={`Notes from ${year}`}>
+            <h2 class="year-label">{year}</h2>
+            <ul class="post-list">
+              {yearNotes.map(note => (
+                <li>
+                  <div class="post-row">
+                    <time class="post-date" datetime={isoDate(note.data.date)}>
+                      {note.data.date.toLocaleDateString(undefined, {
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </time>
+                    <a class="post-link" href={`/notes/${note.slug}/`}>
+                      {note.data.title}
+                    </a>
+                    {note.data.minutesRead && (
+                      <span class="post-read">~{note.data.minutesRead} min read</span>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      )
     }
-  </section>
+
+    <nav class="index-links" aria-label="More writing">
+      <a href="/archive/">
+        View all posts <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </nav>
+  </div>
 </Container>
+
+<style>
+  .empty-state {
+    text-align: center;
+    padding: 4rem 0;
+  }
+
+  .index-links {
+    margin-top: 3rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2.5rem;
+  }
+
+  .index-links .arrow {
+    display: inline-block;
+    transition: transform 0.18s ease;
+  }
+
+  .index-links a:hover .arrow {
+    transform: translateX(3px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .index-links .arrow {
+      transition: none;
+    }
+  }
+</style>

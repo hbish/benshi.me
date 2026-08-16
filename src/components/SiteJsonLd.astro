@@ -1,0 +1,35 @@
+---
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
+
+const siteUrl = Astro.site?.toString()
+
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  url: siteUrl,
+  author: {
+    '@type': 'Person',
+    name: 'Ben Shi',
+    url: siteUrl,
+    sameAs: ['https://github.com/hbish', 'https://x.com/hbish', 'https://linkedin.com/in/hbish'],
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: SITE_TITLE,
+    url: siteUrl,
+  },
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${siteUrl}?q={search_term_string}`,
+    },
+    'query-input': 'required name=search_term_string',
+  },
+})
+---
+
+<!-- Site-wide JSON-LD Schema -->
+<script type="application/ld+json" set:html={schema} />
