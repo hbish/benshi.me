@@ -380,25 +380,6 @@ select:hover {
   max-width: 80%;
 }
 
-/* Image border styling like hbish.com */
-.prose a img {
-  border: 0.3rem solid;
-  border-image-slice: 60 30;
-  border-image-source: linear-gradient(
-    140deg,
-    var(--color-accent) 0%,
-    var(--color-bg) 80%
-  );
-}
-
-/* The gradient frame reads heavy on small screens. Placed after the base
-   rule so the override wins the cascade at equal specificity. */
-@media (max-width: 768px) {
-  .prose a img {
-    border-width: 0.125rem;
-  }
-}
-
 /* Profile picture border styling */
 .profile-pic-border {
   position: relative;
