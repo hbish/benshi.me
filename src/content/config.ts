@@ -11,6 +11,11 @@ const postCollection = defineCollection({
       .string()
       .or(z.date())
       .transform(val => new Date(val)),
+    updated: z
+      .string()
+      .or(z.date())
+      .transform(val => new Date(val))
+      .optional(),
     slug: z.string().optional(),
     tags: z.array(z.string()).optional(),
     minutesRead: z.string().optional(),
@@ -40,6 +45,11 @@ const noteCollection = defineCollection({
       .string()
       .or(z.date())
       .transform(val => new Date(val)),
+    updated: z
+      .string()
+      .or(z.date())
+      .transform(val => new Date(val))
+      .optional(),
     slug: z.string().optional(),
     categories: z.array(z.string()).optional(),
     tags: z.array(z.string()).optional(),

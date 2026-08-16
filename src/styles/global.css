@@ -4,9 +4,8 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: Cardo, Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --font-serif:
-    'Playfair Display', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-sans: Cardo, 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+  --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
 }
 
 /* Theme Variables */
@@ -198,8 +197,7 @@ a:hover {
 
 /* Enhanced Typography */
 body {
-  font-family:
-    'Cardo', 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  font-family: 'Cardo', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
   font-size: 1.2rem;
   line-height: 1.6;
   letter-spacing: 0.01em;
@@ -212,17 +210,25 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Headings use Playfair Display like hbish.com */
+/* Headings use Playfair Display like hbish.com. Tracking is em-based so it
+   scales with heading size; small headings firm up to 600 where Playfair's
+   hairlines thin out below ~24px. */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-family:
-    'Playfair Display', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
   font-weight: 400;
-  letter-spacing: -0.1rem;
+  letter-spacing: -0.015em;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
 }
 
 /* Improved Focus States */
@@ -239,6 +245,11 @@ textarea:focus {
 /* Smooth Animations */
 * {
   scroll-behavior: smooth;
+}
+
+/* Fragment targets must clear the sticky nav (~66-77px tall). */
+html {
+  scroll-padding-top: 5.5rem;
 }
 
 /* Enhanced Image Styling */
@@ -294,7 +305,7 @@ select:hover {
 
 @media (max-width: 768px) {
   body {
-    font-size: 0.875rem;
+    font-size: 1rem;
     line-height: 1.5;
   }
 
@@ -383,36 +394,13 @@ select:hover {
 /* Profile picture border styling */
 .profile-pic-border {
   position: relative;
-  padding: 0.3rem;
+  padding: 0.25rem;
   background: linear-gradient(
     140deg,
     var(--color-accent) 0%,
     var(--color-bg) 80%
   );
   border-radius: 50%;
-}
-
-/* Article metadata styling */
-.article-meta {
-  font-size: 0.875rem;
-  color: var(--color-text-muted);
-  margin-bottom: 1.5rem;
-}
-
-.article-meta svg {
-  flex-shrink: 0;
-}
-
-/* Comments section enhancement */
-.comments {
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--color-border);
-}
-
-.comments h3 {
-  margin-bottom: 1.5rem;
-  font-weight: 600;
 }
 
 /* Standard page header + ledger list, shared across content pages */
@@ -436,7 +424,7 @@ select:hover {
   margin: 0;
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-text-muted);
   font-variant-numeric: tabular-nums;
@@ -477,7 +465,7 @@ select:hover {
   display: flex;
   align-items: baseline;
   gap: 1.25rem;
-  padding: 0.8rem 0;
+  padding: 0.75rem 0;
 }
 
 .post-date {
@@ -530,7 +518,7 @@ select:hover {
 @media (max-width: 640px) {
   /* Stacked rows read better with a hairline between them. */
   .post-list > li {
-    padding-bottom: 0.35rem;
+    padding-bottom: 0.25rem;
     border-bottom: 1px solid var(--color-border);
   }
 
@@ -570,16 +558,20 @@ select:hover {
   }
 }
 
-/* Webmention Styles */
-.webmentions {
-  margin-top: 2rem;
+/* Shared empty-state treatment for ledger and photo pages */
+.empty-state {
+  text-align: center;
+  padding: 4rem 0;
 }
 
+/* Webmention Styles — vertical spacing comes from the page (mt-12 on the
+   section), not from here, so Tailwind utilities are never silently
+   outranked by these unlayered rules. */
 .webmentions-container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1rem;
+  padding: 0;
 }
 
 .webmentions-avatars {
@@ -624,7 +616,7 @@ select:hover {
 
 .webmention-fallback {
   display: inline-block;
-  padding: 0.25rem 0.5rem;
+  padding: 0.375rem 0.5rem;
   background: var(--color-bg);
   border-radius: 15px;
   font-size: 0.75rem;
@@ -640,8 +632,8 @@ select:hover {
 }
 
 .webmention-avatar {
-  width: 32px !important;
-  height: 32px !important;
+  width: 40px !important;
+  height: 40px !important;
   border-radius: 50% !important;
   object-fit: cover !important;
   flex-shrink: 0 !important;
@@ -744,8 +736,8 @@ select:hover {
   }
 
   .webmention-avatar {
-    width: 64px !important;
-    height: 64px !important;
+    width: 48px !important;
+    height: 48px !important;
   }
 
   .webmention-action-emoji {

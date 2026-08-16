@@ -5,7 +5,7 @@ import { getCollection, type CollectionEntry } from 'astro:content'
 const twoYearsAgo = new Date()
 twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2)
 
-const posts = (await getCollection('posts'))
+const posts = (await getCollection('posts', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .filter(p => !p.data.draft)
   .filter(p => p.data.date >= twoYearsAgo)
@@ -86,11 +86,6 @@ const isoDate = (d: Date) =>
 </Container>
 
 <style>
-  .empty-state {
-    text-align: center;
-    padding: 4rem 0;
-  }
-
   .empty-state-icon {
     font-size: 1.5rem;
     margin-bottom: 0.75rem;

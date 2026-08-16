@@ -1,9 +1,10 @@
 import rss from '@astrojs/rss'
+import { marked } from 'marked'
 import { getCollection } from 'astro:content'
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts'
 
 export async function GET(context) {
-  const posts = await getCollection('posts')
+  const posts = await getCollection('posts', ({ data }) => !data.draft)
 
   // Sort posts by date (newest first)
   const sortedPosts = posts.sort(
@@ -14,25 +15,30 @@ export async function GET(context) {
   const latestPostDate =
     sortedPosts.length > 0 ? sortedPosts[0].data.date : new Date()
 
+  const items = await Promise.all(
+    sortedPosts.map(async post => ({
+      title: post.data.title,
+      pubDate: post.data.date,
+      description: post.data.description || post.data.title,
+      link: `/${post.slug}/`,
+      content: await marked.parse(post.body || '', { async: true }),
+      author: post.data.author || 'Ben Shi',
+      ...(post.data.tags && {
+        categories: post.data.tags,
+      }),
+    }))
+  )
+
   return rss({
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     site: context.site,
-    items: sortedPosts.map(post => ({
-      title: post.data.title,
-      pubDate: post.data.date,
-      description: post.data.description || post.data.title,
-      author: post.data.author || 'Ben Shi',
-      link: `/${post.slug}/`,
-      ...(post.data.tags && {
-        categories: post.data.tags,
-      }),
-    })),
+    items,
     customData: `<language>en-us</language>
     <lastBuildDate>${latestPostDate.toUTCString()}</lastBuildDate>
     <managingEditor>benshi@hbish.com (Ben Shi)</managingEditor>
     <webMaster>benshi@hbish.com (Ben Shi)</webMaster>
     <ttl>1440</ttl>
-    <generator>Astro v4.x with @astrojs/rss</generator>`,
+    <generator>Astro with @astrojs/rss</generator>`,
   })
 }

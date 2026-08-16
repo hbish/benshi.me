@@ -2,6 +2,7 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css'
+import { SITE_TITLE } from '../consts'
 import SiteJsonLd from './SiteJsonLd.astro'
 
 export interface Props {
@@ -11,6 +12,7 @@ export interface Props {
   type?: 'article' | 'website'
   url?: string
   date?: Date
+  updated?: Date
   author?: string
   tags?: string[]
 }
@@ -22,6 +24,7 @@ const {
   type = 'website',
   url,
   date,
+  updated,
   author,
   tags,
 } = Astro.props
@@ -42,7 +45,7 @@ const imageUrl = new URL(image, Astro.site)
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
-  href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+  href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600&display=swap"
   rel="stylesheet"
 />
 
@@ -54,7 +57,8 @@ const imageUrl = new URL(image, Astro.site)
 <link rel="canonical" href={canonicalURL} />
 
 <!-- RSS Feed -->
-<link rel="alternate" type="application/rss+xml" title={title} href="/rss.xml" />
+<link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href="/rss.xml" />
+<link rel="alternate" type="application/feed+json" title={SITE_TITLE} href="/feed.json" />
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
@@ -70,12 +74,27 @@ const imageUrl = new URL(image, Astro.site)
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={imageUrl} />
+<meta property="og:image:alt" content={`Social preview image for ${title}`} />
 <meta property="og:site_name" content="Ben Shi" />
 <meta property="og:locale" content="en_US" />
 
 {
+  image === '/og-default.jpg' && (
+    <>
+      <meta property="og:image:width" content="512" />
+      <meta property="og:image:height" content="512" />
+    </>
+  )
+}
+
+{
   type === 'article' && date && (
     <meta property="article:published_time" content={date.toISOString()} />
+  )
+}
+{
+  type === 'article' && updated && (
+    <meta property="article:modified_time" content={updated.toISOString()} />
   )
 }
 {type === 'article' && author && <meta property="article:author" content={author} />}

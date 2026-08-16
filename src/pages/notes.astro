@@ -2,7 +2,7 @@
 import Container from '../layouts/Container.astro'
 import { getCollection, type CollectionEntry } from 'astro:content'
 
-const notes = (await getCollection('notes'))
+const notes = (await getCollection('notes', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .filter(n => !n.data.draft)
 
@@ -28,7 +28,10 @@ const isoDate = (d: Date) =>
   )}`
 ---
 
-<Container title="Notes - Ben Shi">
+<Container
+  title="Notes - Ben Shi"
+  description="Short technical notes and how-tos Ben Shi has collected over the years."
+>
   <div>
     <header class="page-header">
       <h1 class="page-header-title">Notes</h1>
@@ -76,11 +79,6 @@ const isoDate = (d: Date) =>
 </Container>
 
 <style>
-  .empty-state {
-    text-align: center;
-    padding: 4rem 0;
-  }
-
   .index-links {
     margin-top: 3rem;
     display: flex;

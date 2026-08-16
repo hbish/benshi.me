@@ -17,7 +17,7 @@ const CDN_BASE = 'https://cdn.hbish.com'
 <style>
   @reference "../styles/global.css";
   .tag-pill {
-    @apply px-3 py-1 rounded-full text-sm transition-colors;
+    @apply px-2.5 py-1.5 rounded-full text-sm transition-colors;
     @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
   }
   .tag-pill.active {
@@ -34,7 +34,7 @@ const CDN_BASE = 'https://cdn.hbish.com'
   }
 </style>
 
-<Container title="Photos - Ben Shi">
+<Container title="Photos - Ben Shi" description="Photo albums and collections by Ben Shi.">
   <div>
     <header class="page-header">
       <h1 class="page-header-title">Albums</h1>
@@ -60,7 +60,7 @@ const CDN_BASE = 'https://cdn.hbish.com'
 
     <section>
       <div>
-        <div id="no-results" class="no-results hidden text-center text-theme-muted my-8">
+        <div id="no-results" class="no-results hidden empty-state text-theme-muted">
           <p>No albums with photos matching the selected tag.</p>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
