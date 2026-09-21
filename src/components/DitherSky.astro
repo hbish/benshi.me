@@ -447,90 +447,95 @@
   }
 
   /*
-   * The composed print: seven deterministic ink drops, ring-modulated so
-   * each carries its own contour banding, placed with their mass in the
-   * upper-right register; two slow opposing stirring currents comb them
-   * into chevron veins; then the water stills. Shared verbatim by the
-   * WebGL path and the CPU static fallback, so the frozen print is the
-   * same painting either way.
+   * The composed print: an ensō — one brush circle in the upper
+   * register, authored in the density field. The stroke lands heavy,
+   * thins through its reach, pools again where the brush lifts, and
+   * leaves an opening at the upper right; washi noise wobbles the edge
+   * so no arc reads as a compass line. A small dense seal — the artist's
+   * hanko — sits below the circle's opening. A gentle current stirs the
+   * water just enough to make the stroke hand-made, then stills. Shared
+   * verbatim by the WebGL path and the CPU static fallback, so the
+   * frozen print is the same painting either way.
    */
-  const SEED = 0x5eed
   const seedPrint = (fluid: Fluid) => {
     density.fill(0)
     fluid.vx.fill(0)
     fluid.vy.fill(0)
-    const drops: { x: number; y: number; r: number; a: number }[] = []
-    for (let k = 0; k < 7; k++) {
-      drops.push({
-        x: DC * (0.4 + 0.44 * hash(SEED + k * 17)),
-        // Keep every drop's disc fully inside the grid: a clipped disc
-        // prints a hard straight seam at the paper's edge.
-        y: DR * (0.22 + 0.3 * hash(SEED + k * 31 + 7)),
-        r: DC * (0.05 + 0.05 * hash(SEED + k * 53 + 11)),
-        a: 0.62 + 0.45 * hash(SEED + k * 71 + 3),
-      })
+
+    // Brush geometry, in density-grid cells.
+    const cx = DC * 0.68
+    const cy = DR * 0.34
+    const R = DC * 0.19
+    const w0 = DC * 0.042
+    const gapCenter = -0.38 // radians; the opening sits at the upper right
+    const gapFrac = 0.11 // fraction of the circle the brush is off the paper
+    const smoothstep01 = (lo: number, hi: number, x: number) => {
+      const t = Math.max(0, Math.min(1, (x - lo) / (hi - lo)))
+      return t * t * (3 - 2 * t)
     }
-    for (const drop of drops) {
-      const gr = Math.ceil(drop.r * 1.6)
-      const cx = Math.round(drop.x)
-      const cy = Math.round(drop.y)
-      for (let dy = -gr; dy <= gr; dy++)
-        for (let dx = -gr; dx <= gr; dx++) {
-          const x = cx + dx
-          const y = cy + dy
-          if (x < 0 || x >= DC || y < 0 || y >= DR) continue
-          const r = Math.hypot(dx, dy) / drop.r
-          if (r > 1.6) continue
-          // Ring-modulated drop: contour banding before any stirring.
-          const ring = 0.55 + 0.45 * Math.cos(r * 18.0)
-          const fall = Math.exp(-r * r * 1.6)
-          // Drops layer by max, not sum: overlapping domes must keep
-          // their gradients, or the field plateaus and the contour
-          // rings vanish into tonal stipple.
-          density[y * DC + x] = Math.max(density[y * DC + x], drop.a * ring * fall)
-        }
-    }
-    // Two broad opposing currents, weakening as the print settles.
+
+    const gr = Math.ceil(R + w0 * 2.4)
+    for (let dy = -gr; dy <= gr; dy++)
+      for (let dx = -gr; dx <= gr; dx++) {
+        const x = Math.round(cx) + dx
+        const y = Math.round(cy) + dy
+        if (x < 0 || x >= DC || y < 0 || y >= DR) continue
+        const r = Math.hypot(dx, dy)
+        if (r > R + w0 * 2.4 || r < R - w0 * 2.4) continue
+        const a = Math.atan2(dy, dx)
+        // Stroke progress: 0 where the brush lands (just past the gap),
+        // rising to 1 where it lifts (just before the gap again).
+        const p = ((((a - gapCenter) / (Math.PI * 2)) % 1) + 1) % 1
+        const on = 1 - smoothstep01(1 - gapFrac - 0.05, 1 - gapFrac, p)
+        if (on <= 0) continue
+        // Brush pressure: heavy landing, light middle, pooling exit.
+        const width = w0 * (1.35 - 0.62 * p + 0.5 * smoothstep01(0.82, 1, p))
+        const amp = 1.15 - 0.62 * p + 0.62 * smoothstep01(0.85, 1, p)
+        // Washi wobble along the stroke's length and across its width.
+        const wob =
+          0.82 +
+          0.36 * sampleGrid(noise, TEX, TEX, ((x * 0.37) % 128) / 128, ((y * 0.37) % 128) / 128)
+        const radial = Math.exp(-(((r - R) / width) ** 2) * 1.5)
+        density[y * DC + x] = Math.min(2, Math.max(density[y * DC + x], amp * radial * wob * on))
+      }
+
+    // The hanko: a small dense seal inside the circle's lower-left, on
+    // clear paper where whitespace separates it from the stroke.
+    const sx = Math.round(cx - R * 0.38)
+    const sy = Math.round(cy + R * 0.42)
+    const sHalf = Math.round(DC * 0.028)
+    for (let dy = -sHalf - 1; dy <= sHalf + 1; dy++)
+      for (let dx = -sHalf - 1; dx <= sHalf + 1; dx++) {
+        const x = sx + dx
+        const y = sy + dy
+        if (x < 0 || x >= DC || y < 0 || y >= DR) continue
+        const ex = Math.max(0, Math.abs(dx) - sHalf)
+        const ey = Math.max(0, Math.abs(dy) - sHalf)
+        const edge = Math.exp(-(ex * ex + ey * ey) * 0.9)
+        density[y * DC + x] = Math.min(2, Math.max(density[y * DC + x], 1.45 * edge))
+      }
+
+    // A gentle current, weakening as the print settles: enough advection
+    // to make the stroke organic, not enough to unmake the circle.
     const stir = (k: number, steps: number) => {
       const fade = 1 - k / steps
-      const swirl = (cx: number, cy: number, rad: number, dir: number) => {
+      const swirl = (scx: number, scy: number, rad: number, dir: number) => {
         for (let y = 1; y < FR - 1; y++)
           for (let x = 1; x < FC - 1; x++) {
-            const dx = x - cx
-            const dy = y - cy
+            const dx = x - scx
+            const dy = y - scy
             const r = Math.hypot(dx, dy)
             if (r > rad) continue
-            const f = Math.exp(-((r / rad) ** 2)) * 0.028 * fade * dir
+            const f = Math.exp(-((r / rad) ** 2)) * 0.00045 * fade * dir
             fluid.vx[fluid.fi(x, y)] += -dy * f
             fluid.vy[fluid.fi(x, y)] += dx * f
           }
       }
-      swirl(FC * 0.68, FR * 0.3, FC * 0.42, 1)
-      swirl(FC * 0.3, FR * 0.62, FC * 0.36, -1)
+      swirl(FC * 0.66, FR * 0.36, FC * 0.5, 1)
+      swirl(FC * 0.3, FR * 0.72, FC * 0.4, -0.6)
     }
-    // Later drops: a second hand adds ink partway through the marbling,
-    // so the finished print holds passages of younger, denser ink.
-    const dropAt = (k: number, wave: number) => {
-      const gr = Math.ceil(DC * 0.11 * 1.6)
-      const cx = Math.round(DC * (0.4 + 0.44 * hash(SEED + k * 17 + wave * 97)))
-      const cy = Math.round(DR * (0.24 + 0.28 * hash(SEED + k * 31 + wave * 51)))
-      const rad = DC * (0.045 + 0.05 * hash(SEED + k * 53 + wave * 29))
-      const amp = 0.72 + 0.4 * hash(SEED + k * 71 + wave * 13)
-      for (let dy = -gr; dy <= gr; dy++)
-        for (let dx = -gr; dx <= gr; dx++) {
-          const x = cx + dx
-          const y = cy + dy
-          if (x < 0 || x >= DC || y < 0 || y >= DR) continue
-          const r = Math.hypot(dx, dy) / rad
-          if (r > 1.6) continue
-          const ring = 0.55 + 0.45 * Math.cos(r * 18.0)
-          const fall = Math.exp(-r * r * 1.6)
-          density[y * DC + x] = Math.max(density[y * DC + x], amp * ring * fall)
-        }
-    }
-    const steps = 96
+    const steps = 24
     for (let k = 0; k < steps; k++) {
-      if (k === 44 || k === 62) dropAt(k === 44 ? 20 : 21, 2)
       stir(k, steps)
       fluid.step()
       advectDensity(fluid)
