@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-21T11:45:00+10:00",
+  "title": "Design System: benshi.me",
+  "extensions": {
+    "colorMeta": {
+      "fountain-pen-blue": {
+        "role": "primary",
+        "displayName": "Fountain-pen Blue",
+        "canonical": "#103fea",
+        "tonalRamp": [
+          "#060f3d",
+          "#0a1f6e",
+          "#0d2c9c",
+          "#103fea",
+          "#4a68f0",
+          "#7d90f4",
+          "#a0b3f8",
+          "#d3dbfc"
+        ]
+      },
+      "paper-light": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#f4f5f6",
+          "#e9eaec",
+          "#d9dbde",
+          "#c2c5ca",
+          "#a8acb3",
+          "#858a93",
+          "#5c616b",
+          "#3a3e46"
+        ]
+      },
+      "paper-dark": {
+        "role": "neutral",
+        "displayName": "Dark Paper",
+        "canonical": "#292929",
+        "tonalRamp": [
+          "#111111",
+          "#1a1a1a",
+          "#222222",
+          "#292929",
+          "#3a3a3a",
+          "#555555",
+          "#8a8a8a",
+          "#dcdee0"
+        ]
+      },
+      "graphite-text": {
+        "role": "neutral",
+        "displayName": "Graphite",
+        "canonical": "#606c76",
+        "tonalRamp": [
+          "#1d2226",
+          "#2f373d",
+          "#414c54",
+          "#606c76",
+          "#7e8994",
+          "#9da6af",
+          "#c0c6cc",
+          "#e4e7ea"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "body": { "displayName": "Body — Cardo", "purpose": "Reading voice across all content." },
+      "display": {
+        "displayName": "Display — Playfair Display",
+        "purpose": "Cover-page names and headlines."
+      },
+      "label": {
+        "displayName": "Label — JetBrains Mono",
+        "purpose": "Wayfinding: nav, small labels, uppercase tracked."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "reveal",
+        "value": "opacity 1.6s cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "DitherSky canvas fade-in once the first frame is composed."
+      },
+      {
+        "name": "landing-rise",
+        "value": "0.6s cubic-bezier(0.16, 1, 0.3, 1) both, staggered 0/0.12/0.2s",
+        "purpose": "Lockup entrance; the only UI entrance in the system."
+      },
+      {
+        "name": "state",
+        "value": "color/transform 0.18s ease",
+        "purpose": "Hover and focus transitions on links and icons."
+      }
+    ],
+    "breakpoints": [
+      { "name": "portrait", "value": "(max-aspect-ratio: 3/4)" },
+      { "name": "touch", "value": "(max-width: 640px)" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Landing Nav",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Mono uppercase menu over the marbled print's clear margin.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Main navigation\"><a href=\"/about/\">about</a><a href=\"/writing/\">writing</a><a href=\"/photos/\">photos</a></nav>",
+      "css": ".ds-nav { display: flex; gap: 0.5rem 1.75rem; font-family: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; } .ds-nav a { display: inline-flex; align-items: center; min-height: 44px; color: #606c76; text-decoration: none; transition: color 0.18s ease; } .ds-nav a:hover, .ds-nav a:focus-visible { color: #103fea; }"
+    },
+    {
+      "name": "Social Icon",
+      "kind": "custom",
+      "refersTo": "social-icon",
+      "description": "40px icon affordance, hairline-quiet until hovered.",
+      "html": "<a class=\"ds-social\" href=\"#\" aria-label=\"email ben\"><svg viewBox=\"0 0 24 24\" width=\"17\" height=\"17\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2\" y=\"4\" width=\"20\" height=\"16\" rx=\"2\"/><path d=\"m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7\"/></svg></a>",
+      "css": ".ds-social { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 8px; color: #606c76; transition: color 0.18s ease, transform 0.18s ease; } .ds-social:hover, .ds-social:focus-visible { color: #103fea; transform: translateY(-2px); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Marbled Notebook",
+    "overview": "The site is a living notebook: paper grounds, one fountain-pen ink per theme, and a hand-marbled suminagashi print as the homepage's opening page. Engineering is the water beneath the paper — a real fluid simulation renders the print, and the visitor's pointer is the stylus. Nothing is decorated; everything that moves is either the visitor's own hand or the ink settling from it. Density is airy: generous margins, sparse ink, text always on clear paper.",
+    "keyCharacteristics": [
+      "Paper-first grounds in four themes; every theme is a first-class citizen",
+      "One accent ink per theme from CSS custom properties; hue-rotated companion only inside the print",
+      "Fibre-jittered Bayer halftone dots as the texture language",
+      "The engineering is the aesthetic: effects are real mechanics, never canned decoration"
+    ],
+    "rules": [
+      {
+        "name": "The One Ink Rule",
+        "body": "Exactly one accent hue per theme carries every accent use on a surface; the companion hue may appear only inside the marbled print's duo-tone.",
+        "section": "colors"
+      },
+      {
+        "name": "The Notebook Hand Rule",
+        "body": "Serif carries voice; mono carries wayfinding. Mono never sets sentences.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Sheet Rule",
+        "body": "Surfaces are flat paper; nothing floats above the page. Depth is tonal, never shadowed.",
+        "section": "elevation"
+      },
+      {
+        "name": "Water Only Under Hand",
+        "body": "Motion is earned by the visitor's hand. The marbling is the system's one authored mechanic; UI chrome stays still.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do derive every accent use from theme CSS custom properties",
+      "Do keep motion earned: water only under the visitor's hand",
+      "Do use the halftone dot language for any texture",
+      "Do budget effects as real mechanics with reduced-motion and no-WebGL parity"
+    ],
+    "donts": [
+      "Don't introduce a second accent hue, gradients, shadows, or glass",
+      "Don't animate UI chrome",
+      "Don't cover the lockup's clear lower-left margin",
+      "Don't simulate at frame-rate: fixed 16ms wall-clock substeps"
+    ]
+  }
+}
