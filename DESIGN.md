@@ -135,12 +135,13 @@ the print's contour rings; UI geometry stays rectangular and quiet.
 
 The living suminagashi print: a 240×180 pigment density field advected by an 80×60 Navier–Stokes
 solver, rendered as contour-ring veins through an 8×8 Bayer halftone with fibre jitter, in theme
-inks. Loads as an ensō — one authored brush circle with an opening at the upper right, a heavy
-pooled landing, a delicate thin sweep, and a small hanko seal on clear paper inside the lower left;
-pointer strokes drop wet ink (darker cores) that the water combs into veins; the field relaxes back
-to the frozen print (~11.5s half-life). Reduced motion and no-WebGL: the same print, static, painted
-by a CPU path sharing the density field and banding math. WebGL context loss degrades to transparent
-(paper shows through).
+inks. Each visit opens on one of five composed artworks, chosen at random: the ensō brush circle
+(with its hanko seal), open drop-marbling, ink-wash mountain ranges, combed chevrons, or instrument
+traces — contour-ring suminagashi for four, direct tonal wash for the mountains. Pointer strokes
+drop wet ink (darker cores) that the water combs into veins; the field relaxes back to the frozen
+print (~11.5s half-life). Reduced motion and no-WebGL: the same print, static, painted by a CPU path
+sharing the density field and banding math. WebGL context loss degrades to transparent (paper shows
+through).
 
 ## Do's and Don'ts
 

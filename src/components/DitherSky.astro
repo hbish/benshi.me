@@ -457,7 +457,7 @@
    * verbatim by the WebGL path and the CPU static fallback, so the
    * frozen print is the same painting either way.
    */
-  const seedPrint = (fluid: Fluid) => {
+  const seedEnso = (fluid: Fluid) => {
     density.fill(0)
     fluid.vx.fill(0)
     fluid.vy.fill(0)
@@ -544,6 +544,257 @@
     fluid.vy.fill(0)
   }
 
+  /*
+   * Drops: the original suminagashi open marbling — seven drops and a
+   * second hand, combed by two broad opposing currents.
+   */
+  const SEED = 0x5eed
+  const seedDrops = (fluid: Fluid) => {
+    density.fill(0)
+    fluid.vx.fill(0)
+    fluid.vy.fill(0)
+    const smoothstep01 = (lo: number, hi: number, x: number) => {
+      const t = Math.max(0, Math.min(1, (x - lo) / (hi - lo)))
+      return t * t * (3 - 2 * t)
+    }
+    const paintDrop = (cx: number, cy: number, rad: number, amp: number) => {
+      const gr = Math.ceil(rad * 1.6)
+      for (let dy = -gr; dy <= gr; dy++)
+        for (let dx = -gr; dx <= gr; dx++) {
+          const x = Math.round(cx) + dx
+          const y = Math.round(cy) + dy
+          if (x < 0 || x >= DC || y < 0 || y >= DR) continue
+          const r = Math.hypot(dx, dy) / rad
+          if (r > 1.6) continue
+          const ring = 0.55 + 0.45 * Math.cos(r * 18.0)
+          const fall = Math.exp(-r * r * 1.6)
+          density[y * DC + x] = Math.max(density[y * DC + x], amp * ring * fall)
+        }
+    }
+    for (let k = 0; k < 7; k++) {
+      paintDrop(
+        DC * (0.4 + 0.44 * hash(SEED + k * 17)),
+        DR * (0.22 + 0.3 * hash(SEED + k * 31 + 7)),
+        DC * (0.05 + 0.05 * hash(SEED + k * 53 + 11)),
+        0.62 + 0.45 * hash(SEED + k * 71 + 3)
+      )
+    }
+    const stir = (k: number, steps: number) => {
+      const fade = 1 - k / steps
+      const swirl = (scx: number, scy: number, rad: number, dir: number) => {
+        for (let y = 1; y < FR - 1; y++)
+          for (let x = 1; x < FC - 1; x++) {
+            const dx = x - scx
+            const dy = y - scy
+            const r = Math.hypot(dx, dy)
+            if (r > rad) continue
+            const f = Math.exp(-((r / rad) ** 2)) * 0.028 * fade * dir
+            fluid.vx[fluid.fi(x, y)] += -dy * f
+            fluid.vy[fluid.fi(x, y)] += dx * f
+          }
+      }
+      swirl(FC * 0.68, FR * 0.3, FC * 0.42, 1)
+      swirl(FC * 0.3, FR * 0.62, FC * 0.36, -1)
+    }
+    const dropAt = (k: number, wave: number) => {
+      paintDrop(
+        DC * (0.4 + 0.44 * hash(SEED + k * 17 + wave * 97)),
+        DR * (0.24 + 0.28 * hash(SEED + k * 31 + wave * 51)),
+        DC * (0.045 + 0.05 * hash(SEED + k * 53 + wave * 29)),
+        0.72 + 0.4 * hash(SEED + k * 71 + wave * 13)
+      )
+    }
+    const steps = 96
+    for (let k = 0; k < steps; k++) {
+      if (k === 44 || k === 62) dropAt(k === 44 ? 20 : 21, 2)
+      stir(k, steps)
+      fluid.step()
+      advectDensity(fluid)
+    }
+    fluid.vx.fill(0)
+    fluid.vy.fill(0)
+    void smoothstep01
+  }
+
+  /*
+   * Mountains: misty ink-wash ridges. Each ridge is a wandering skyline;
+   * ink is densest just above the skyline and fades upward into mist, so
+   * the contour banding draws the ridge-lines. Near ridges bold, far
+   * ridges pale; all dissolving toward the lower-left margin.
+   */
+  const seedMountains = (fluid: Fluid) => {
+    density.fill(0)
+    fluid.vx.fill(0)
+    fluid.vy.fill(0)
+    const ridges = [
+      { base: 0.56, amp: 0.15, freq: 2.1, phase: 0.7, strength: 1.15, mist: 0.17 },
+      { base: 0.47, amp: 0.12, freq: 3.3, phase: 3.9, strength: 0.95, mist: 0.14 },
+      { base: 0.39, amp: 0.09, freq: 4.6, phase: 1.9, strength: 0.8, mist: 0.12 },
+    ]
+    for (let y = 0; y < DR; y++) {
+      for (let x = 0; x < DC; x++) {
+        const u = x / DC
+        // The sheet fades toward the lower-left lockup margin.
+        // Clear below the diagonal that guards the lockup margin.
+        const sheet = Math.max(0, Math.min(1, (u + y / DR - 0.95) * 2.5))
+        if (sheet <= 0) continue
+        let d = 0
+        for (const rg of ridges) {
+          const skyline =
+            DR *
+            (rg.base -
+              rg.amp *
+                (0.55 * Math.sin(u * rg.freq * 6.283 + rg.phase) +
+                  0.3 * Math.sin(u * rg.freq * 13.7 + rg.phase * 2.3) +
+                  0.15 * Math.sin(u * rg.freq * 29.1 + rg.phase * 4.1)))
+          // The mountain hangs below its skyline: a narrow solid crest,
+          // then the body dissolving downward into mist. Sky above.
+          const below = (y - skyline) / (DR * rg.mist)
+          if (below < 0 || below > 1.25) continue
+          const crest = Math.exp(-below * below * 30)
+          const wash = Math.exp(-below * 3.4)
+          // Ranges fade in and out along their length so each reads as
+          // its own range, not one continuous landmass.
+          const extent = 0.68 + 0.32 * Math.sin(u * 9.42 + rg.phase * 2.3)
+          d = Math.max(d, rg.strength * (1.55 * crest + 0.62 * wash) * Math.max(0.15, extent))
+        }
+        const wob =
+          0.95 +
+          0.1 * sampleGrid(noise, TEX, TEX, ((x * 0.31) % 128) / 128, ((y * 0.31) % 128) / 128)
+        density[y * DC + x] = Math.min(1.6, d * sheet * wob)
+      }
+    }
+    const steps = 10
+    for (let k = 0; k < steps; k++) {
+      fluid.step()
+      advectDensity(fluid)
+    }
+    fluid.vx.fill(0)
+    fluid.vy.fill(0)
+  }
+
+  /*
+   * Chevrons: the authentic suminagashi studio pattern — concentric V
+   * stripes combed across the sheet by hand, dissolving toward the
+   * lower-left margin.
+   */
+  const seedChevrons = (fluid: Fluid) => {
+    density.fill(0)
+    fluid.vx.fill(0)
+    fluid.vy.fill(0)
+    const comb = DC * 0.62 // the comb's pivot x
+    const period = DR * 0.16 // stripe spacing
+    for (let y = 0; y < DR; y++) {
+      for (let x = 0; x < DC; x++) {
+        const u = x / DC
+        const sheet = Math.max(0, Math.min(1, (u + y / DR - 0.98) * 2.5))
+        if (sheet <= 0) continue
+        // Nested V lines opening toward the lower-left.
+        const v = (Math.abs(x - comb) * 0.72 + (DR - y) * 1.0) / period
+        const band = 0.5 + 0.5 * Math.cos(v * Math.PI * 2)
+        const stripe = Math.max(0, band - 0.25) / 0.75
+        const wob =
+          0.85 +
+          0.3 * sampleGrid(noise, TEX, TEX, ((x * 0.33) % 128) / 128, ((y * 0.33) % 128) / 128)
+        density[y * DC + x] = Math.min(2, 0.95 * stripe * sheet * wob)
+      }
+    }
+    const steps = 10
+    for (let k = 0; k < steps; k++) {
+      fluid.step()
+      advectDensity(fluid)
+    }
+    fluid.vx.fill(0)
+    fluid.vy.fill(0)
+  }
+
+  /*
+   * Traces: instrument paper — recording-sheet lines wandering across
+   * the register like a strip-chart's stylus, with faint calibration
+   * ticks along the top edge.
+   */
+  const seedTraces = (fluid: Fluid) => {
+    density.fill(0)
+    fluid.vx.fill(0)
+    fluid.vy.fill(0)
+    const traces = [
+      { base: 0.3, amp: 0.07, freq: 1.7, phase: 0.4, w: 0.028, a: 1.05 },
+      { base: 0.44, amp: 0.05, freq: 2.6, phase: 2.2, w: 0.022, a: 0.85 },
+      { base: 0.56, amp: 0.06, freq: 3.4, phase: 4.4, w: 0.02, a: 0.68 },
+    ]
+    for (let x = 0; x < DC; x++) {
+      const u = x / DC
+      const sheet = Math.max(0, Math.min(1, ((u + 0.5) / 1.35 - 0.2) * 2.4))
+      for (const tr of traces) {
+        const line =
+          DR *
+          (tr.base -
+            tr.amp *
+              (0.6 * Math.sin(u * tr.freq * 6.283 + tr.phase) +
+                0.4 * Math.sin(u * tr.freq * 17.3 + tr.phase * 3.1)))
+        const wCells = DR * tr.w
+        for (
+          let y = Math.max(0, Math.floor(line - wCells * 3));
+          y < Math.min(DR, Math.ceil(line + wCells * 3));
+          y++
+        ) {
+          const q = (y - line) / wCells
+          const fall = Math.exp(-q * q * 1.6)
+          const wob =
+            0.85 +
+            0.3 * sampleGrid(noise, TEX, TEX, ((x * 0.35) % 128) / 128, ((y * 0.35) % 128) / 128)
+          density[y * DC + x] = Math.min(
+            2,
+            Math.max(density[y * DC + x], tr.a * fall * sheet * wob)
+          )
+        }
+      }
+    }
+    // Calibration ruler along the top edge: solid major ticks every
+    // 48 cells (dense enough for the wet-ink core fill), short minor
+    // ticks between them.
+    for (let x = 0; x < DC; x += 12) {
+      const major = x % 48 === 0
+      const h = major ? 16 : 7
+      const amp = major ? 1.45 : 0.95
+      for (let y = 1; y < h; y++) {
+        const t = amp * (1 - (y - 1) / h)
+        density[y * DC + x] = Math.max(density[y * DC + x], t)
+      }
+    }
+    const steps = 10
+    for (let k = 0; k < steps; k++) {
+      fluid.step()
+      advectDensity(fluid)
+    }
+    fluid.vx.fill(0)
+    fluid.vy.fill(0)
+  }
+
+  /*
+   * The opening artwork: one of five composed prints, chosen at random
+   * on each visit — every arrival opens on a different painting. The
+   * ?sky= param forces a variant for debugging and demos. Mountains
+   * render as a direct tonal wash; the others as contour-ring
+   * suminagashi.
+   */
+  const VARIANTS = ['enso', 'drops', 'mountains', 'chevrons', 'traces'] as const
+  type Variant = (typeof VARIANTS)[number]
+  const seeds: Record<Variant, (fluid: Fluid) => void> = {
+    enso: seedEnso,
+    drops: seedDrops,
+    mountains: seedMountains,
+    chevrons: seedChevrons,
+    traces: seedTraces,
+  }
+  const skyParam = new URLSearchParams(location.search).get('sky') as Variant | null
+  const variant: Variant =
+    skyParam && VARIANTS.includes(skyParam)
+      ? skyParam
+      : VARIANTS[(Math.random() * VARIANTS.length) | 0]
+  const seedPrint = seeds[variant]
+  const bandedMode = variant === 'mountains' ? 0 : 1
+
   const VERT = `
     attribute vec2 a_pos;
     void main() {
@@ -565,6 +816,9 @@
     uniform vec3 u_deep;
     uniform float u_thinK;
     uniform float u_deepK;
+    // 1.0 = suminagashi contour rings; 0.0 = direct tonal wash (ink
+    // paintings whose fields must not become isoline maps).
+    uniform float u_banded;
     uniform sampler2D u_density;
     uniform sampler2D u_noise;
     uniform sampler2D u_bayer;
@@ -581,7 +835,9 @@
       // nested rings with paper between them, stretched wherever the
       // water ran. Paper dominates; ink is the exception.
       float rings = 0.5 + 0.5 * cos(d * 46.0);
-      float vein = smoothstep(0.58, 0.97, rings) * smoothstep(0.07, 0.22, d);
+      float banded = smoothstep(0.58, 0.97, rings) * smoothstep(0.07, 0.22, d);
+      float wash = smoothstep(0.05, 0.85, d);
+      float vein = mix(wash, banded, u_banded);
       // Only genuinely wet ink — fresh strokes — carries body; the
       // seeded print stays all ring and paper.
       float core = smoothstep(1.05, 1.4, d);
@@ -596,8 +852,12 @@
         // Wet ink: the densest passages carry body.
         col = u_paper + (u_deep - u_paper) * u_deepK;
       } else if (covVein > th) {
-        float k = u_thinK * (0.5 + 0.5 * smoothstep(0.25, 0.85, d));
-        col = u_paper + (u_ink - u_paper) * k;
+        // Banded prints keep a compressed ink band; tonal washes use
+        // the density's full range, with the densest passages turning
+        // toward the deep ink for true darks.
+        float k = min(0.85, u_thinK * mix(1.15 * (0.35 + 0.65 * smoothstep(0.15, 1.25, d)), 0.5 + 0.5 * smoothstep(0.25, 0.85, d), u_banded));
+        vec3 inkCol = mix(u_ink, u_deep, mix(smoothstep(0.7, 1.4, d), 0.0, u_banded));
+        col = u_paper + (inkCol - u_paper) * k;
       }
       gl_FragColor = vec4(col, 1.0);
     }
@@ -661,7 +921,9 @@
           const sy = Math.max(0, Math.min(H - 1.001, y + fibre))
           const dn = Math.min(1.6, sampleGrid(density, DC, DR, sx / W, sy / H) * 2.0)
           const rings = 0.5 + 0.5 * Math.cos(dn * 46.0)
-          const vein = smoothstep01(0.58, 0.97, rings) * smoothstep01(0.07, 0.22, dn)
+          const banded = smoothstep01(0.58, 0.97, rings) * smoothstep01(0.07, 0.22, dn)
+          const wash = smoothstep01(0.05, 0.85, dn)
+          const vein = banded * bandedMode + wash * (1 - bandedMode)
           const core = smoothstep01(1.05, 1.4, dn)
           const jig = Math.round((noiseAt(x * 3.7 + 77, y * 3.7 + 77) - 0.5) * 6.0)
           const jigX = jig
@@ -675,7 +937,18 @@
             k = deepK
           } else if (vein * tooth > th) {
             color = ink
-            k = thinK * (0.5 + 0.5 * smoothstep01(0.25, 0.85, dn))
+            k =
+              bandedMode === 1
+                ? thinK * (0.5 + 0.5 * smoothstep01(0.25, 0.85, dn))
+                : Math.min(0.85, thinK * 1.15 * (0.35 + 0.65 * smoothstep01(0.15, 1.25, dn)))
+            if (bandedMode === 0) {
+              const dm = smoothstep01(0.7, 1.4, dn)
+              color = [
+                ink[0] + (deep[0] - ink[0]) * dm,
+                ink[1] + (deep[1] - ink[1]) * dm,
+                ink[2] + (deep[2] - ink[2]) * dm,
+              ]
+            }
           }
           if (color) {
             d[o] = paper[0] + (color[0] - paper[0]) * k
@@ -808,6 +1081,7 @@
         deep: u('u_deep'),
         thinK: u('u_thinK'),
         deepK: u('u_deepK'),
+        banded: u('u_banded'),
         noise: u('u_noise'),
         bayer: u('u_bayer'),
         density: u('u_density'),
@@ -838,6 +1112,7 @@
         )
         gl.uniform1f(uniforms.thinK, palette.thinK)
         gl.uniform1f(uniforms.deepK, palette.deepK)
+        gl.uniform1f(uniforms.banded, bandedMode)
 
         gl.activeTexture(gl.TEXTURE2)
         gl.bindTexture(gl.TEXTURE_2D, densityTex)
